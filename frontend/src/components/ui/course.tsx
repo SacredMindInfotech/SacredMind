@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -7,6 +7,7 @@ const Course = () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [course, setCourse] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -20,7 +21,7 @@ const Course = () => {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [id]);
-    
+
 
     return (
         <div>
@@ -40,16 +41,18 @@ const Course = () => {
                         </span>
                         <p className="text-xl text-gray-600">{course.description}</p>
                         <div className="mt-8 flex flex-col items-center gap-6">
-                            <span className="text-xl font-bold text-gray-900 montserrat-700">${course.price}/-</span>
-                            <button className=" cursor-pointer px-12 py-3 rounded-md border border-white bg-gray-900 text-white text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
-                                Enroll Now
+                            {/* <span className="text-xl font-bold text-gray-900 montserrat-700">&#8377;{course.price}/-</span> */}
+                            <button
+                                onClick={() => navigate("/contact")}
+                                className=" cursor-pointer px-12 py-3 rounded-md border border-white bg-gray-900 text-white text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
+                                Contact Us
                             </button>
                         </div>
                     </div>
 
                     {/* Course Details Section */}
                     <div className="flex flex-col gap-8 max-w-7xl mx-auto px-4 py-16">
-                        
+
                         <div className="text-2xl font-semibold mb-4 montserrat-500">~Course Overview~</div>
 
                         {/* Course Features Grid */}

@@ -21,7 +21,7 @@ const Navbar = () => {
             const res = await axios.get(`${backendUrl}api/v1/category/`);
             //@ts-ignore
             setCategories(res.data);
-            
+
         };
         fetchCategories();
     }, []);
@@ -73,7 +73,10 @@ const Navbar = () => {
             className="flex justify-between items-center min-h-[8vh] px-8 md:px-52 py-2 border-b border-gray-100 bg-white text-gray-900 sticky top-0 z-40 shadow-md"
         >
             <div className="flex items-center gap-4">
-                <span className="montserrat-700 text-base cursor-pointer hover:text-gray-600 transition-colors" onClick={() => navigate("/")}>SACRED MIND INFOTECH</span>
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
+                    <img src="/logo.svg" alt="logo" className="w-10 h-10" />
+                    <span className="montserrat-700  font-bold text-lg  hover:text-gray-600 transition-colors" >SACRED MIND INFOTECH</span>
+                </div>
                 <div className="relative group">
                     <button
                         className="text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2  hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer "
@@ -110,11 +113,11 @@ const Navbar = () => {
                     >
                         Teach with us
                     </button>
-                   
+
                     <SignedOut>
                         <button
                             onClick={() => navigate("?sign-in=true")}
-                             className="px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer"
+                            className="px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer"
                         >
                             Join
                         </button>

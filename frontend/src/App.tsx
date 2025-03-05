@@ -4,7 +4,7 @@ import './App.css'
 import Landing from './pages/landing'
 import Footer from './components/ui/footer'
 import Teaching from './components/ui/teaching'
-
+import Contact from './components/ui/contact'
 import Navbar from './components/ui/navbar'
 import Category from './components/ui/category'
 import Course from './components/ui/course'
@@ -50,6 +50,14 @@ function App() {
       path: "/admin",
       element: <>
         <Admin></Admin>
+      </>
+    },
+    {
+      path: "/contact",
+      element: <>
+        <Navbar></Navbar>
+        <Contact></Contact>
+        <Footer />
       </>
     }
   ])
