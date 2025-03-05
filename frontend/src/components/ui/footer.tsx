@@ -52,7 +52,7 @@ const Footer = () => {
 
                             <h2 className="mt-4 text-base font-medium text-gray-800 dark:text-white">Phone</h2>
                             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">Mon-Sat from 9am to 5pm.</p>
-                            <p className="mt-2 text-sm text-blue-500 dark:text-blue-400">+91 90567-23483</p>
+                            <p className="mt-2 text-sm text-blue-500 dark:text-blue-400">+91 90567-23482</p>
                         </div>
                     </div>
 

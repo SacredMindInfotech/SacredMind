@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Carousel } from "./carousel";
 
 const Services = () => {
     const [selectedTopic, setSelectedTopic] = useState<string>("hands-on");
