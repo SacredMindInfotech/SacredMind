@@ -70,11 +70,11 @@ const Category = () => {
         <div>
             <div className="max-w-7xl mx-auto px-4 py-16">
                 {/* Hero Section */}
-                <div className="text-center mb-16 min-h-[50vh] flex flex-col justify-center items-center bg-gray-100">
+                <div className="text-center mb-8 md:mb-16 min-h-[30vh] md:min-h-[50vh] flex flex-col justify-center items-center bg-gray-100 px-2 md:px-4">
                     {category && (
                         <>
-                            <h1 className="text-6xl font-bold mb-4 montserrat-700">{category.name}</h1>
-                            <p className="text-xl text-gray-600">Explore our courses and start learning today</p>
+                            <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold mb-2 md:mb-4 montserrat-700">{category.name}</h1>
+                            <p className="text-sm sm:text-lg md:text-xl text-gray-600">Explore our courses and start learning today</p>
                         </>
                     )}
                 </div>
@@ -88,13 +88,12 @@ const Category = () => {
                                 <div key={index}>
                                     <button
                                         key={subcategory.id}
-                                        className={` cursor-pointer px-6 py-2 rounded-md border text-sm hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary ${selectedSubcategory === subcategory.id ? 'shadow-[2px_2px_0px_0px_rgba(0,0,0)] border-gray-900 bg-white text-black' : 'border-white bg-gray-900 text-white'
+                                        className={`cursor-pointer px-3 sm:px-6 py-1 sm:py-2 rounded-md border text-xs sm:text-sm hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary ${selectedSubcategory === subcategory.id ? 'shadow-[2px_2px_0px_0px_rgba(0,0,0)] border-gray-900 bg-white text-black' : 'border-white bg-gray-900 text-white'
                                             }`}
                                         onClick={() => setSelectedSubcategory(subcategory.id)}
                                     >
                                         {subcategory.name}
                                     </button>
-
                                 </div>
                             ))}
                         </div>
@@ -104,14 +103,14 @@ const Category = () => {
                 {/* Courses Grid Section */}
                 {courses.length > 0 && (
                     <div className="flex flex-col gap-8 max-w-7xl mx-auto px-4 py-16">
-                        <div className="text-2xl font-semibold mb-4 montserrat-500">~Available Courses~</div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="text-xl sm:text-2xl font-semibold mb-4 montserrat-500">~Available Courses~</div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
                             {courses.map((course) => (
-                                <div key={course.id} className=" p-6 rounded-md border border-white bg-gray-900 text-white text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
-                                    <h2 className="text-2xl font-semibold mb-4 montserrat-500">
+                                <div key={course.id} className="p-4 sm:p-6 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
+                                    <h2 className="text-lg sm:text-2xl font-semibold mb-2 sm:mb-4 montserrat-500">
                                         {course.title}
                                     </h2>
-                                    <p className="text-gray-600 mb-6 line-clamp-2 montserrat-400">
+                                    <p className="text-gray-600 mb-4 sm:mb-6 line-clamp-2 montserrat-400 text-sm sm:text-base">
                                         {course.description}
                                     </p>
                                     <div className="flex justify-between items-center">
@@ -120,7 +119,7 @@ const Category = () => {
                                         </span> */}
                                         <button
                                             onClick={() => navigate(`/course/${course.title}`)}
-                                            className=" cursor-pointer px-8 py-2 rounded-md border border-white bg-gray-900 text-white text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary"
+                                            className="cursor-pointer px-4 sm:px-8 py-1.5 sm:py-2 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary"
                                         >
                                             View Course
                                         </button>
@@ -137,10 +136,12 @@ const Category = () => {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
                     </div>
                 ) : (
-                    <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100">
-                        <h2 className="text-2xl font-semibold mb-4 montserrat-500">No courses available yet</h2>
+                    courses.length === 0 && (
+                        <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100">
+                            <h2 className="text-2xl font-semibold mb-4 montserrat-500">No courses available yet</h2>
                         <p className="text-gray-600 montserrat-400">Check back soon for new courses in this category</p>
-                    </div>
+                        </div>
+                    )
                 )}
 
             </div>

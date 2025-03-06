@@ -13,21 +13,23 @@ const Partners = () => {
     ];
 
     return (
-        <div className="w-full py-5 px-2 bg-indigo-200 ">
-            <div className="max-w-7xl mx-auto text-center">
-                <h2 className="text-3xl montserrat-500 font-bold mb-6">
+        <div className="w-full py-8 sm:py-12 px-4 sm:px-6 lg:px-8 ">
+            <div className="max-w-7xl mx-auto">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl montserrat-500 font-bold mb-8 sm:mb-12 text-center">
                     We collaborate with <span className="text-blue-600">leading companies</span>
                 </h2>
                 
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
                     {companies.map((company) => (
-                        <div key={company.name} className="flex flex-col  gap-2 p-2 hover:scale-105 transition-all duration-300">
+                        <div 
+                            key={company.name} 
+                            className="flex items-center justify-center p-4 bg-indigo-200 rounded-lg shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300"
+                        >
                             <img
                                 src={company.logo}
                                 alt={`${company.name} logo`}
-                                className="h-7 object-contain  hover:grayscale-0 transition-all duration-300"
+                                className="h-6 sm:h-8 md:h-10 w-auto object-contain  transition-all duration-300"
                             />
-                            {/* <p className="text-sm  montserrat-400 " >{company.name}</p> */}
                         </div>
                     ))}
                 </div>

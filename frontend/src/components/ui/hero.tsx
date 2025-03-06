@@ -13,12 +13,8 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
 
     return (
         <div className="w-full">
-
-
-            <div className="flex flex-col md:flex-row min-h-[80vh] mt-28 justify-between max-w-7xl mx-auto px-4 gap-40 relative">
-
-
-                <div className="flex flex-col gap-5 items-start text-left md:w-1/2">
+            <div className="flex flex-col md:flex-row min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] lg:min-h-[90vh] mt-28 justify-between max-w-7xl mx-auto px-4 gap-40 relative">
+                <div className="flex flex-col gap-5 items-start text-left w-full lg:w-1/2">
                     <h1 className="montserrat-700 text-5xl md:text-7xl font-black " >Beyond Limits, Beyond Learning</h1>
                     <p className="text-xl md:text-4xl montserrat-400 mt-3 text-gray-700">
                         A platform that helps you grow in your career
@@ -46,12 +42,11 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
                     </p>
                 </div>
 
-                <div className="md:w-1/2 flex justify-center">
+                <div className="hidden lg:flex lg:w-1/2 justify-center">
                     <img
                         src="/hero.png"
                         alt="Learning Illustration"
-                        className="w-full max-w-lg h-96 border-2  rounded-lg"
-                    // style={{height: "100vh", width: "100vw"}}
+                        className="w-full max-w-lg h-96 border-2 rounded-lg"
                     />
                 </div>
             </div>

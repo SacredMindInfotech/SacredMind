@@ -40,14 +40,9 @@ const Contact = (props: any) => {
         <section ref={props.ref} className="bg-white py-12">
             <Toaster />
             <div className="container max-w-7xl mx-auto px-4">
-                <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100  ">
-
-                    <h1 className="text-6xl font-bold mb-4 montserrat-700">Get in Touch</h1>
-
+                <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">Get in Touch</h1>
                     <p className="text-xl text-gray-600">Have questions? Send us a message and we'll get back to you shortly.</p>
-
-                    
-
                 </div>
                 <div className="max-w-3xl mt-10 mb-10 mx-auto bg-white rounded-lg shadow-md p-6">
                         <form onSubmit={onSubmit}>
