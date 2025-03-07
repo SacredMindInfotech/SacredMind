@@ -35,6 +35,7 @@ model Course {
   imageUrl    String?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  published   Boolean?      @default(false)
   users       UserCourse[]
   categoryId  Int
   category    Category     @relation(fields: [categoryId], references: [id])
@@ -43,7 +44,7 @@ model Course {
 model Category {
   id            Int         @id @default(autoincrement())
   name          String      @unique
-  parentId      Int? // Optional parent category
+  parentId      Int? 
   parent        Category?   @relation("Subcategories",fields: [parentId], references: [id]) 
   subcategories Category[] @relation("Subcategories") 
   courses       Course[]

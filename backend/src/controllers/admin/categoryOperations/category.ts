@@ -12,27 +12,24 @@ export const createCategoryController = async (req: Request, res: Response) => {
     }
     const { name, parentId } = validatedData.data;
 
-    const existingCategory = await prisma.category.findUnique({
-      where: {
-        name,
-      },
-    });
-    if (existingCategory) {
-      res.status(400).json({ error: "Category already exists" });
-      return;
-    }
+  
     const category = await prisma.category.create({
       data: {
         name,
         parentId: parentId ? parentId : null,
       },
     });
-    if (!category) {
-      res.status(400).json({ error: "Failed to create category" });
+
+    res.status(201).json(category);
+    return;
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      res.status(400).json({ error: "Category already exists" });
       return;
     }
-    res.status(201).json(category);
-  } catch (error) {}
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
 };
 
 export const updateCategoryByIdController = async (
@@ -49,9 +46,19 @@ export const updateCategoryByIdController = async (
     const { id } = req.params;
     const { name, parentId } = validatedData.data;
 
+    const isCategoryExists = await prisma.category.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (!isCategoryExists) {
+      res.status(404).json({ error: "Category not found" });
+      return;
+    }
+
     const category = await prisma.category.update({
       where: {
-        id: parseInt(id),
+        id: Number(id),
       },
       data: { name, parentId: parentId ? parentId : null },
     });
@@ -61,8 +68,10 @@ export const updateCategoryByIdController = async (
       return;
     }
     res.status(200).json(category);
-  } catch (error) {
+    return; 
+  } catch (error: any) {
     res.status(500).json({ error: "Internal server error" });
+    return;
   }
 };
 
@@ -74,32 +83,38 @@ export const deleteCategoryByIdController = async (
     const { id } = req.params;
 
     const existingCategory = await prisma.category.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: Number(id) },
     });
     if (!existingCategory) {
       res.status(404).json({ error: "Category not found" });
       return;
     }
 
-    const subcategories = await prisma.category.findMany({
+    const isConnectedToCourse = await prisma.course.findFirst({
       where: {
-        parentId: parseInt(id),
+        categoryId: Number(id),
       },
     });
+
+    if (isConnectedToCourse) {
+      res.status(400).json({ error: "Category is connected to a course" });
+      return;
+    }
+
+    const subcategories = await prisma.category.findMany({
+      where: {
+        parentId: Number(id),
+      },
+    });
+
     if (subcategories.length > 0) {
-      await prisma.category.updateMany({
-        where: {
-          parentId: parseInt(id),
-        },
-        data: {
-          parentId: null,
-        },
-      });
+      res.status(400).json({ error: "Category has subcategories" });
+      return;
     }
 
     const category = await prisma.category.delete({
       where: {
-        id: parseInt(id),
+        id: Number(id),
       },
     });
 
@@ -108,7 +123,9 @@ export const deleteCategoryByIdController = async (
       return;
     }
     res.status(200).json(category);
-  } catch (error) {
+    return;
+  } catch (error: any) {
     res.status(500).json({ error: "Internal server error" });
+    return;
   }
 };

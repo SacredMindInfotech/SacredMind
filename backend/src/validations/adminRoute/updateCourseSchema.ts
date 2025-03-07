@@ -6,6 +6,7 @@ export const updateCourseSchema = z.object({
     price: z.coerce.number().min(0, "Price must be a positive number").optional(),
     imageUrl: z.string().url("Invalid image URL").optional(),
     categoryId: z.coerce.number().int().positive("Invalid category ID").optional(),
+    published: z.boolean().optional(),
   }).refine(data => Object.keys(data).length > 0, {
     message: "At least one field is required for update",
   });

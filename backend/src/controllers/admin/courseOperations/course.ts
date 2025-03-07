@@ -12,39 +12,39 @@ export const createCourseController = async (req: Request, res: Response) => {
     }
 
     // Destructure after validation
-    const { title, description, price, imageUrl, categoryId } =
+    const { title, description, price, imageUrl, categoryId, published } =
       validatedData.data;
-
-    const existingCategory = await prisma.category.findUnique({
-      where: { id: categoryId },
-    });
-
-    if (!existingCategory) {
-      res.status(400).json({ error: "Invalid category ID" });
-      return;
-    }
 
     const course = await prisma.course.create({
       data: {
         title,
         description,
-        price: (price),
+        price,
         imageUrl,
         category: {
           connect: { id: categoryId },
         },
+        published,
       },
     });
 
-    if (!course) {
-      res.status(400).json({ error: "Failed to create course" });
+    res.status(201).json(course);
+    return;
+  } catch (e: any) {
+    console.error(e);
+
+    if (e.code === "P2002") {
+      res.status(400).json({ error: "Course title already exists" });
       return;
     }
 
-    res.status(201).json(course);
-  } catch (error) {
-    console.error("Create Course Error:", error);
+    if (e.code === "P2025") {
+      res.status(400).json({ error: "Invalid category ID" });
+      return;
+    }
+
     res.status(500).json({ error: "Internal server error" });
+    return;
   }
 };
 
@@ -59,14 +59,6 @@ export const updateCourseByIdController = async (
       return;
     }
 
-    const existingCourse = await prisma.course.findUnique({
-      where: { id: Number(id) },
-    });
-    if (!existingCourse) {
-      res.status(404).json({ error: "Course not found" });
-      return;
-    }
-
     const validatedData = updateCourseSchema.safeParse(req.body);
 
     if (!validatedData.success) {
@@ -74,8 +66,8 @@ export const updateCourseByIdController = async (
       return;
     }
 
-    const { title, description, price, imageUrl, categoryId } = validatedData.data; 
-
+    const { title, description, price, imageUrl, categoryId, published } =
+      validatedData.data;
 
     // update data object with only provided fields
     const updateData: any = {};
@@ -83,21 +75,36 @@ export const updateCourseByIdController = async (
     if (description) updateData.description = description;
     if (price) updateData.price = price;
     if (imageUrl) updateData.imageUrl = imageUrl;
-    if (categoryId) updateData.categoryId = categoryId;
+    if (categoryId) {
+      updateData.category = { connect: { id: Number(categoryId) } };
+    }
+    if (typeof published !== "undefined") updateData.published = published;
 
     const updatedCourse = await prisma.course.update({
       where: { id: Number(id) },
       data: updateData,
     });
 
-    if (!updatedCourse) {
-      res.status(400).json({ error: "Failed to update course" });
+    res.status(200).json(updatedCourse);
+    return;
+  } catch (error: any) {
+    if (error.code === "P2025") {
+      res.status(404).json({ error: "Category or course not found" });
       return;
     }
 
-    res.status(200).json(updatedCourse);
-  } catch (error) {
+    if (error.code === "P2002") {
+      res.status(400).json({ error: "Course title already exists" });
+      return;
+    }
+
+    if (error.code === "P2003") {
+      res.status(400).json({ error: "Invalid category ID" });
+      return;
+    }
+
     res.status(500).json({ error: "Internal server error" });
+    return;
   }
 };
 
@@ -112,20 +119,21 @@ export const deleteCourseByIdController = async (
       return;
     }
 
-    const existingCourse = await prisma.course.findUnique({
-      where: { id: parseInt(id) },
-    });
-    if (!existingCourse) {
-      res.status(404).json({ error: "Course not found" });
-      return;
-    }
-
     await prisma.course.delete({
       where: { id: parseInt(id) },
     });
 
     res.status(200).json({ message: "Course deleted successfully" });
-  } catch (error) {
+    return;
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.code === "P2025") {
+      res.status(404).json({ error: "Course not found" });
+      return;
+    }
+
     res.status(500).json({ error: "Internal server error" });
+    return;
   }
 };
