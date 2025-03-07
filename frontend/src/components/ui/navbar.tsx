@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, SignIn, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignIn, useAuth, UserButton, useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -13,6 +13,35 @@ const Navbar = () => {
     const [lastScrollY, setLastScrollY] = useState(0);
     const [categories, setCategories] = useState<any[]>([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const { isLoaded, user } = useUser();
+    const {getToken} = useAuth();
+    
+
+    useEffect(() => {
+        const fetchAdminStatus = async () => {
+            if (!isLoaded || !user?.id) return; // Ensure user is loaded
+            try {
+                const token = await getToken();
+                const response = (await axios.get(`${backendUrl}api/v1/user/${user.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }));
+                console.log(response);
+                //@ts-ignore
+                setIsAdmin(response.data.role === "ADMIN");
+            } catch (error) {
+                console.error("Error fetching admin status:", error);
+            }
+        };
+
+        fetchAdminStatus();
+    }, [isLoaded, user]);
+
+
+
+
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -72,15 +101,15 @@ const Navbar = () => {
         >
             <div className="flex items-center gap-4">
                 {/* Hamburger Menu for Mobile */}
-                <button 
+                <button
                     className="md:hidden text-gray-600 p-2"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         {isMenuOpen ? (
-                            <path d="M18 6L6 18M6 6l12 12"/>
+                            <path d="M18 6L6 18M6 6l12 12" />
                         ) : (
-                            <path d="M3 12h18M3 6h18M3 18h18"/>
+                            <path d="M3 12h18M3 6h18M3 18h18" />
                         )}
                     </svg>
                 </button>
@@ -93,12 +122,14 @@ const Navbar = () => {
 
                     {/* Desktop Explore Menu */}
                     <div className="hidden md:block relative group">
-                        <button className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer">
-                            Explore
+                        {categories.length > 0 && (
+                            <button className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer">
+                                Explore
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180">
                                 <path d="m6 9 6 6 6-6" />
                             </svg>
                         </button>
+                        )}
 
                         <div className="absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 invisible group-hover:visible transition-all">
                             <div className="py-2" role="menu">
@@ -144,6 +175,9 @@ const Navbar = () => {
                                 </div>
                             </div>
                         </div>
+                        <div>
+
+                        </div>
                         <div className="border-t border-gray-100 mt-2">
                             <button
                                 className="px-4 py-2 text-gray-600 hover:bg-gray-50 w-full text-left"
@@ -177,6 +211,14 @@ const Navbar = () => {
                     </button>
                 </SignedOut>
                 <SignedIn>
+                    {isAdmin && (
+                        <button
+                            onClick={() => navigate("/admin")}
+                            className="px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                        >
+                            Dashboard
+                        </button>
+                    )}
                     <UserButton
                         appearance={{ elements: { avatarBox: "w-8 h-8" } }}
                     />
