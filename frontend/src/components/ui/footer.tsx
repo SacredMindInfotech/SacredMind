@@ -7,7 +7,7 @@ const Footer = () => {
                     <p className="font-medium text-blue-500 dark:text-blue-400">Contact us</p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8 mt-6 montserrat-400 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-8 mt-6 montserrat-400 md:grid-cols-2 lg:grid-cols-3">
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-1">
                         <div>
                             <span className="inline-block p-2 text-blue-500 rounded-full bg-blue-100/80 dark:bg-gray-800">
@@ -49,8 +49,14 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    <div className="overflow-hidden rounded-lg lg:col-span-2 ml-40 -mt-8 h-48 lg:h-auto">
-                        <iframe width="100%" height="100%" frameBorder="0" title="map" scrolling="no" src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d201.97305239501404!2d76.82542242006092!3d30.64230343961996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzDCsDM4JzMyLjAiTiA3NsKwNDknMzEuNiJF!5e1!3m2!1sen!2sin!4v1740806407662!5m2!1sen!2sin"></iframe>
+                    <div className="overflow-hidden rounded-lg lg:col-span-2 mx-auto mt-8 lg:mt-0 w-full h-[300px] md:h-[400px] lg:h-full">
+                        <iframe 
+                            className="w-full h-full"
+                            frameBorder="0" 
+                            title="map" 
+                            scrolling="no" 
+                            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d201.97305239501404!2d76.82542242006092!3d30.64230343961996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzDCsDM4JzMyLjAiTiA3NsKwNDknMzEuNiJF!5e1!3m2!1sen!2sin!4v1740806407662!5m2!1sen!2sin">
+                        </iframe>
                     </div>
                 </div>
             </div>
