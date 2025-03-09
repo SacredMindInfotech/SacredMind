@@ -1,22 +1,27 @@
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Landing from './pages/landing'
 import Footer from './components/ui/footer'
-import Teaching from './components/ui/teaching'
 import Contact from './components/ui/contact'
 import Navbar from './components/ui/navbar'
 import Category from './components/ui/category'
 import Course from './components/ui/course'
-import Admin from './pages/admin'
-// import ProtectedRoutes from './components/protected-routes'
+import AdminLayout from './pages/adminLayout'
+import UserManagement from './components/ui/userManagement'
+import CourseManagement from './components/ui/courseManagement'
+import OrderManagement from './components/ui/orderManagement'
+import AdminDashboard from './components/ui/adminDashboard'
+import Careers from './components/ui/careers'
+import ProtectedRoutes from './components/protected-routes'
+import JobDetails from './components/ui/jobDetails'
 
 function App() {
   const Router = createBrowserRouter([
     {
       path: "/",
       element: <>
-        
+
         <Navbar></Navbar>
         <Landing></Landing>
         <Footer />
@@ -39,24 +44,36 @@ function App() {
       </>
     },
     {
-      path: "/teaching",
-      element: <>
-        <Navbar></Navbar>
-        <Teaching></Teaching>
-        <Footer />
-      </>
-    },
-    {
       path: "/admin",
-      element: <>
-        <Admin></Admin>
-      </>
+      element: <ProtectedRoutes><AdminLayout /></ProtectedRoutes>,
+      children: [
+        { path: "", element: <AdminDashboard /> },
+        { path: "users", element: <UserManagement /> },
+        { path: "courses", element: <CourseManagement /> },
+        { path: "orders", element: <OrderManagement /> },
+      ]
     },
     {
       path: "/contact",
       element: <>
         <Navbar></Navbar>
         <Contact></Contact>
+        <Footer />
+      </>
+    },
+    {
+      path: "/careers",
+      element: <>
+        <Navbar></Navbar>
+        <Careers></Careers>
+        <Footer />
+      </>
+    },
+    {
+      path: "/careers/:id",
+      element: <>
+        <Navbar></Navbar>
+        <JobDetails />
         <Footer />
       </>
     }

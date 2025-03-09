@@ -1,8 +1,9 @@
 import Services from "../components/ui/services";
-import Contact from "../components/ui/contact";
 import Hero from "../components/ui/hero";
 import Partners from "../components/ui/partners";
 import { useRef } from "react";
+import About from "../components/ui/about";
+import CareerContact from "../components/ui/career&contact";
 const Landing = () => {
 
     const contactRef=useRef<HTMLDivElement>(null);
@@ -13,9 +14,6 @@ const Landing = () => {
     return (
         <div className="relative overflow-hidden w-full">
 
-            {/* <div className="absolute -right-28 top-15 transform translate-x-1/4 -translate-y-1/4 w-[1000px] h-[1000px] rounded-full bg-[#116bfb] -z-10 opacity-60">
-            </div> */}
-
             <div className="flex flex-col">
 
                 {/* Hero Section */}
@@ -24,11 +22,14 @@ const Landing = () => {
                 {/* parternship */}
                 <Partners></Partners>
 
+                {/* about */}
+                <About></About>
+
                 {/* Services */}
                 <Services></Services>
 
                 {/* Contact */}
-                <Contact ref={contactRef}></Contact>
+                <CareerContact ref={contactRef}></CareerContact>
 
             </div>
         </div>

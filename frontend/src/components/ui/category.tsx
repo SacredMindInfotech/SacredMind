@@ -51,7 +51,7 @@ const Category = () => {
 
     //use to list popular courses in the category
     // useEffect(() => {
-    //    we have to fetch courses of the category whose parentId is the id in the url
+    //    we have to fetch courses of the categories whose parentId is the id in the url
     // }, [id]);
 
 

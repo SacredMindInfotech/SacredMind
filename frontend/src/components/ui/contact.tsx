@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 
 const Contact = (props: any) => {
@@ -7,7 +7,7 @@ const Contact = (props: any) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY_CONTACTUS_FORM;
 
     const onSubmit = async (event: any) => {
         // alert("sending message")
@@ -36,90 +36,97 @@ const Contact = (props: any) => {
         }
     };
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
     return (
-        <section ref={props.ref} className="bg-white py-12">
-            <Toaster />
-            <div className="container max-w-7xl mx-auto px-4">
-                <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">Get in Touch</h1>
-                    <p className="text-xl text-gray-600">Have questions? Send us a message and we'll get back to you shortly.</p>
-                </div>
-                <div className="max-w-3xl mt-10 mb-10 mx-auto bg-white rounded-lg shadow-md p-6">
-                        <form onSubmit={onSubmit}>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <section ref={props.ref} className="relative text-black">
+
+            {/* Content */}
+            <div className="relative z-10 container mx-auto">
+                <div className="flex flex-col gap-12">
+
+                    {/* Left Section - Hero Content */}
+                    <div className="flex flex-col p-8 md:p-16 lg:p-28 bg-gray-100 justify-center">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 montserrat-700">
+                            Contact Us
+                        </h1>
+                        <p className="text-lg md:text-xl lg:text-2xl mb-8 max-w-xl">
+                            Let's talk.
+                        </p>
+                        <div className="flex items-center gap-4 text-gray-900 montserrat-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                            </svg>
+                            <span className="text-base md:text-lg lg:text-xl">+91 90567-23482</span>
+                        </div>
+                    </div>
+
+                    {/* Right Section - Form */}
+                    <div className="flex px-4 md:px-16 lg:p-28 flex-col justify-center py-8 md:py-16">
+                        <div className="bg-white/10 backdrop-blur-md p-4 md:p-8 rounded-lg max-w-2xl mx-auto w-full">
+                            <form onSubmit={onSubmit} className="space-y-4 md:space-y-6">
+                                <div className="space-y-2">
+                                    <span className="text-red-500">* required</span>
+                                </div>
+
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Full Name
-                                    </label>
+                                    <label htmlFor="name" className="block mb-2">Full Name *</label>
                                     <input
                                         type="text"
                                         name="name"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="John Doe"
+                                        className="w-full px-4 py-3 border border-gray-900 placeholder-gray-400"
+                                        placeholder="Full Name"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Email Address
-                                    </label>
+                                    <label htmlFor="email" className="block mb-2">Email Address *</label>
                                     <input
                                         type="email"
                                         name="email"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="john@example.com"
+                                        className="w-full px-4 py-3 border border-gray-900 placeholder-gray-400"
+                                        placeholder="Email Address"
                                         required
                                     />
                                 </div>
-                            </div>
-
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Phone Number
-                                </label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="+91 98765 43210"
-                                    required
-                                />
-                            </div>
-
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Message
-                                </label>
-                                <textarea
-                                    name="message"
-                                    rows={4}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                                    placeholder="Your message here..."
-                                    required
-                                ></textarea>
-                            </div>
-
-                            <div className="text-center">
-                                {isLoading ? (
+                                <div>
+                                    <label htmlFor="phone" className="block mb-2">Phone Number *</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        className="w-full px-4 py-3 border border-gray-900 placeholder-gray-400"
+                                        placeholder="Phone Number"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="message" className="block mb-2">Message *</label>
+                                    <textarea
+                                        name="message"
+                                        rows={5}
+                                        className="w-full px-4 py-3 border border-gray-900 placeholder-gray-400 resize-none"
+                                        placeholder="Your message here..."
+                                        required
+                                    ></textarea>
+                                </div>
+                                <div className="flex justify-center">
                                     <button
                                         type="submit"
-                                        disabled
-                                         className="px-12 py-3 rounded-md border border-white bg-gray-900 text-white text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary"
+                                        disabled={isLoading}
+                                        className="w-full md:w-48 px-6 py-4 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 montserrat-500"
                                     >
-                                        Sending...
+                                        {isLoading ? 'SENDING...' : 'SPEAK WITH US'}
                                     </button>
-                                ) : (
-                                    <button
-                                        type="submit"
-                                         className="px-12 py-3 rounded-md border border-white bg-gray-900 text-white text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer"
-                                    >
-                                        Send Message
-                                    </button>
-                                )}
-                            </div>
-                        </form>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+
+                </div>
             </div>
+            <Toaster />
         </section>
     );
 }

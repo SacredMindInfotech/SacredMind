@@ -34,6 +34,8 @@
   font-style: normal;
 }
 
+
+
 .montserrat-500 {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
@@ -48,3 +50,9 @@
   font-weight:700;
   font-style: normal;
 }
+
+
+/* .cl-avatarBox {
+  width: 5rem;
+  height: 5rem;
+} */

@@ -3,7 +3,7 @@ import {
   getCategoryByIdController,
   getCoursesByCategoryIdController,
   getParentCategoriesController,
-} from "../controllers/category/categoryController";
+} from "../controllers/courseCategory/categoryController";
 
 const categoryRouter = express.Router();
 

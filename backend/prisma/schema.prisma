@@ -61,8 +61,48 @@ model UserCourse {
   @@unique([userId, courseId])
 }
 
+model Job {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  responsibilities String[]
+  requirements String[]
+  skills      String[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  published   Boolean?      @default(false)
+  location    JobLocation
+  salary      String?
+  type        JobType
+  experience  String
+  education   String
+  jobCategoryId Int
+  jobCategory   JobCategory @relation(fields: [jobCategoryId], references: [id])
+}
+
+model JobCategory {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  jobs        Job[]
+}
+
+
 enum Role {
   ADMIN
   MANAGER
   USER
 }
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+}
+
+enum JobLocation {
+  REMOTE
+  HYBRID
+  ON_SITE
+}
+

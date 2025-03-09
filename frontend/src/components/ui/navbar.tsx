@@ -15,8 +15,8 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const { isLoaded, user } = useUser();
-    const {getToken} = useAuth();
-    
+    const { getToken } = useAuth();
+
 
     useEffect(() => {
         const fetchAdminStatus = async () => {
@@ -125,10 +125,10 @@ const Navbar = () => {
                         {categories.length > 0 && (
                             <button className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer">
                                 Explore
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180">
-                                <path d="m6 9 6 6 6-6" />
-                            </svg>
-                        </button>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180">
+                                    <path d="m6 9 6 6 6-6" />
+                                </svg>
+                            </button>
                         )}
 
                         <div className="absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 invisible group-hover:visible transition-all">
@@ -177,35 +177,27 @@ const Navbar = () => {
                         </div>
                         <div>
 
-                        </div>
-                        <div className="border-t border-gray-100 mt-2">
-                            <button
-                                className="px-4 py-2 text-gray-600 hover:bg-gray-50 w-full text-left"
-                                onClick={() => {
-                                    setIsMenuOpen(false);
-                                    navigate("/teaching");
-                                }}
-                            >
-                                Teach with us
-                            </button>
-                        </div>
+                        </div>  
+                        
+                        {isAdmin && (
+                        <button
+                            onClick={() => navigate("/admin")}
+                            className="px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                        >
+                            Dashboard
+                        </button>
+                    )}
                     </div>
                 </div>
             )}
 
             {/* Desktop Navigation */}
             <div className="flex justify-end items-center gap-8">
-                <button
-                    onClick={() => navigate("/teaching")}
-                    className="hidden md:block text-sm lg:text-base text-gray-600 hover:text-gray-900 cursor-pointer whitespace-nowrap"
-                >
-                    Teach with us
-                </button>
 
                 <SignedOut>
                     <button
                         onClick={() => navigate("?sign-in=true")}
-                        className="px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                        className= " px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                     >
                         Join
                     </button>
@@ -214,13 +206,17 @@ const Navbar = () => {
                     {isAdmin && (
                         <button
                             onClick={() => navigate("/admin")}
-                            className="px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                            className="hidden sm:block px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                         >
                             Dashboard
                         </button>
                     )}
                     <UserButton
-                        appearance={{ elements: { avatarBox: "w-8 h-8" } }}
+                        appearance={{
+                            elements: { avatarBox: "w-8 h-8" }, layout: {
+                                termsPageUrl: 'https://clerk.com/terms'
+                            }
+                        }}
                     />
                 </SignedIn>
             </div>

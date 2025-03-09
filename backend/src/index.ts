@@ -5,7 +5,9 @@ import adminRouter from "./routers/adminRouter";
 import { isAdmin, isUser } from "./middleware/authMiddleware";
 import WebhookController from "./controllers/clerk-webhook/webhook-controller";
 import courseRouter from "./routers/courseRouter";
-import categoryRouter from "./routers/categoryRouter";
+import categoryRouter from "./routers/courseCategoryRouter";
+import jobRouter from "./routers/jobRouter";
+import jobCategoryRouter from "./routers/jobCategoryRouter";
 
 const app = express();
 
@@ -26,6 +28,12 @@ app.use("/api/v1/course", courseRouter);
 
 //category routes
 app.use("/api/v1/category", categoryRouter);
+
+//job routes
+app.use("/api/v1/job", jobRouter);
+
+//job category routes
+app.use("/api/v1/jobCategory", jobCategoryRouter);
 
 app.listen(3000, () => {
   console.log("server listening on port 3000");

@@ -13,7 +13,7 @@ const Partners = () => {
     ];
 
     return (
-        <div className="w-full py-8 sm:py-12 px-4 sm:px-6 lg:px-8 ">
+        <div className="w-full mt-20 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 ">
             <div className="max-w-7xl mx-auto">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl montserrat-500 font-bold mb-8 sm:mb-12 text-center">
                     We collaborate with <span className="text-blue-600">leading companies</span>
