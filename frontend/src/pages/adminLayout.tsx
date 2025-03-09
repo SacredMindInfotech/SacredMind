@@ -1,10 +1,7 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { UserButton } from "@clerk/clerk-react";
-import { useUser } from "@clerk/clerk-react";
 
 const AdminLayout = () => {
   const location = useLocation();
-  const { user } = useUser();
 
   const navItems = [
     { path: "/admin", label: "Dashboard" },

@@ -18,28 +18,28 @@ interface Course {
 const columns = [
     {
         name: 'Title',
-        selector: row => row.title,
+        selector: (row:any) => row.title,
         sortable: true,
     },
     {
         name: 'Description',
-        selector: row => row.description,
+        selector: (row:any) => row.description,
         sortable: true,
-        cell: row => (
+        cell: (row:any) => (
             <div className="max-w-[200px] truncate">{row.description}</div>
         ),
     },
     {
         name: 'Price',
-        selector: row => row.price,
+        selector: (row:any) => row.price,
         sortable: true,
-        cell: row => `$${row.price}`,
+        cell: (row:any) => `$${row.price}`,
     },
     {
         name: 'Status',
-        selector: row => row.published,
+        selector: (row:any) => row.published,
         sortable: true,
-        cell: row => (
+        cell: (row:any) => (
             <span className={`px-2 py-1 rounded-full text-xs ${
                 row.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
             }`}>
@@ -49,7 +49,7 @@ const columns = [
     },
 ];
 
-const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
+const ExpandedComponent = ({ data }:any) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
 const CourseManagement = () => {
     const [courses, setCourses] = useState<Course[]>([]);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { FiUsers, FiBookOpen,  FiShoppingCart } from 'react-icons/fi';
+import { FiUsers, FiBookOpen } from 'react-icons/fi';
 import { useAuth } from '@clerk/clerk-react';
 
 interface DashboardStats {
