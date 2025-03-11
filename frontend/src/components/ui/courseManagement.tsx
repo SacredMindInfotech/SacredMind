@@ -395,6 +395,7 @@ const CourseManagement = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
+            console.log(response);
         } catch (error) {
             console.error('Failed to save changes:', error);
         }   
