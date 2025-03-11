@@ -128,7 +128,7 @@ const Navbar = () => {
                                 onClick={() => setIsExploreOpen(!isExploreOpen)}
                                 className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer"
                             >
-                                Explore
+                                Explore Courses
                                 <svg 
                                     xmlns="http://www.w3.org/2000/svg" 
                                     width="20" 
@@ -172,7 +172,7 @@ const Navbar = () => {
                         <div className="px-4 py-2">
                             <div className="relative group">
                                 <button className="text-gray-600 w-full text-left">
-                                    Explore
+                                    Explore Courses
                                 </button>
                                 <div className="pl-4 mt-2 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                                     {categories?.map((category) => (
