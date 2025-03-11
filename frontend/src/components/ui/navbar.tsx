@@ -14,6 +14,7 @@ const Navbar = () => {
     const [categories, setCategories] = useState<any[]>([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isExploreOpen, setIsExploreOpen] = useState(false);
     const { isLoaded, user } = useUser();
     const { getToken } = useAuth();
 
@@ -121,17 +122,31 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Explore Menu */}
-                    <div className="hidden md:block relative group">
+                    <div className="hidden md:block relative">
                         {categories.length > 0 && (
-                            <button className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer">
+                            <button 
+                                onClick={() => setIsExploreOpen(!isExploreOpen)}
+                                className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer"
+                            >
                                 Explore
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180">
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    width="20" 
+                                    height="20" 
+                                    viewBox="0 0 24 24" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    strokeWidth="2" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    className={`transition-transform ${isExploreOpen ? 'rotate-180' : ''}`}
+                                >
                                     <path d="m6 9 6 6 6-6" />
                                 </svg>
                             </button>
                         )}
 
-                        <div className="absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 invisible group-hover:visible transition-all">
+                        <div className={`absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 transition-all ${isExploreOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
                             <div className="py-2" role="menu">
                                 {categories?.map((category) => (
                                     <button

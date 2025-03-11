@@ -40,6 +40,9 @@ const Careers = (props: any) => {
     }, []);
 
     return (
+        <div className="relative w-full h-full">
+
+        <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
         <section ref={props.ref} className="relative text-black">
             {/* Content */}
             <div className="relative z-10 container mx-auto">
@@ -73,7 +76,7 @@ const Careers = (props: any) => {
                                             <h3 className="text-xl font-bold mb-2 montserrat-600">{job.title}</h3>
                                             <p className="text-gray-600 mb-4">{job.location} | {job.type} | {job.experience} | {job.education}</p>
                                             <button onClick={() => { router(`/careers/${job.id}`) }} className="px-6 py-3 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 montserrat-500">
-                                                Apply Now
+                                                View Job
                                             </button>
                                         </div>
                                     ))
@@ -88,6 +91,8 @@ const Careers = (props: any) => {
                 </div>
             </div>
         </section>
+            </div>
+            </div>
     );
 }
 
