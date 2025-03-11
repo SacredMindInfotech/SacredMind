@@ -1,5 +1,8 @@
+import { useNavigate } from "react-router-dom";
 const Footer = () => {
+    const router = useNavigate();
     return (
+        <div className="flex flex-col">
         <section className="bg-gray-100 min-h-[200px]">
             <div className="container px-3 py-2 mx-auto">
                 <div>
@@ -62,6 +65,20 @@ const Footer = () => {
                 </div>
             </div>
         </section>
+        <hr className="border-gray-600 max-w-[100vw]" />
+        <div className="bg-gray-100 px-3 py-2 montserrat-400">
+            <div className="container px-3 py-2 mx-auto">
+                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <div className="flex flex-col md:flex-row gap-4 items-center">
+                        <button onClick={() => router("/privacy-policy")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Privacy Policy</button>
+                        <button onClick={() => router("/terms-and-conditions")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Terms & Conditions</button>
+                        <button onClick={() => router("/sales-and-refunds")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Sales and Refunds</button>
+                    </div>
+                    <p className="text-sm text-gray-600 text-center md:text-left">© 2025 Sacred Mind Infotech Private Limited. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+        </div>
     );
 };
 

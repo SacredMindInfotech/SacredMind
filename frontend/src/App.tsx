@@ -15,6 +15,10 @@ import AdminDashboard from './components/ui/adminDashboard'
 import Careers from './components/ui/careers'
 import ProtectedRoutes from './components/protected-routes'
 import JobDetails from './components/ui/jobDetails'
+import JobManagement from './components/ui/jobManagement'
+import PrivacyPolicy from './components/ui/PrivacyPolicy'
+import TermsAndConditions from './components/ui/TermsAndConditions'
+import SalesAndRefunds from './components/ui/SalesAndRefunds'
 
 function App() {
   const Router = createBrowserRouter([
@@ -51,6 +55,7 @@ function App() {
         { path: "users", element: <UserManagement /> },
         { path: "courses", element: <CourseManagement /> },
         { path: "orders", element: <OrderManagement /> },
+        { path: "jobs", element: <JobManagement /> },
       ]
     },
     {
@@ -74,6 +79,29 @@ function App() {
       element: <>
         <Navbar></Navbar>
         <JobDetails />
+        <Footer />
+      </>
+    },{
+      path: "/privacy-policy",
+      element: <>
+        <Navbar></Navbar>
+        <PrivacyPolicy />
+        <Footer />
+      </>
+    },
+    {
+      path: "/terms-and-conditions",
+      element: <>
+        <Navbar></Navbar>
+        <TermsAndConditions />
+        <Footer />
+      </>
+    },
+    {
+      path: "/sales-and-refunds",
+      element: <>
+        <Navbar></Navbar>
+        <SalesAndRefunds />
         <Footer />
       </>
     }
