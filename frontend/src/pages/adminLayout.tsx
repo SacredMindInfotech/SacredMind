@@ -8,6 +8,7 @@ const AdminLayout = () => {
     { path: "/admin/users", label: "Users" },
     { path: "/admin/courses", label: "Courses" },
     { path: "/admin/orders", label: "Orders" },
+    { path: "/admin/jobs", label: "Jobs" },
   ];
 
   return (
