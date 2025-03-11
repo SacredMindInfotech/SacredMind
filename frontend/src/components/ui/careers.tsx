@@ -24,6 +24,7 @@ const Careers = (props: any) => {
 
     const [jobs, setJobs] = useState<Job[]>([]);
     const router = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -35,6 +36,7 @@ const Careers = (props: any) => {
             const response = await axios.get(`${backendUrl}api/v1/job`);
             //@ts-ignore
             setJobs(response.data);
+            setLoading(false);
         };
         fetchJobs();
     }, []);
@@ -66,9 +68,20 @@ const Careers = (props: any) => {
                         </div>
                     </div>
                     {/* Right Section - Job Listings */}
+                    
+                    {loading ? (
+                        <div className="flex justify-center items-center h-full">
+                            <p className="text-gray-500">Loading...</p>
+                        </div>
+                    ) : (
                     <div className="flex px-4 md:px-16 lg:p-28 flex-col justify-center py-8 md:py-16">
                         <div className="bg-white/10 backdrop-blur-md p-4 md:p-8 rounded-lg max-w-2xl mx-auto w-full">
                             <div className="space-y-6">
+                                {jobs.length < 1 && (
+                                    <div className="flex justify-center items-center h-full">
+                                        <p className="text-gray-500">No jobs found</p>
+                                    </div>
+                                ) }
 
                                 {jobs.length > 0 ? (
                                     jobs.map((job: Job) => (
@@ -88,6 +101,9 @@ const Careers = (props: any) => {
                             </div>
                         </div>
                     </div>
+                    )}
+
+
                 </div>
             </div>
         </section>
