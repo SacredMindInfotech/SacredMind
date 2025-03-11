@@ -34,7 +34,7 @@ const Footer = () => {
 
                             <h2 className="mt-2 text-xs font-medium text-gray-8900 ">Office</h2>
                             <p className="mt-0.5 text-xs text-gray-500">Come say hello at our office.</p>
-                            <p className="mt-0.5 text-xs text-blue-500">Showroom No. 6, Second Floor, Garg Complex, Lajpat Nagar, Bishanpura, Zirakpur, Punjab</p>
+                            <p className="mt-0.5 text-xs text-blue-500">Zirakpur, Punjab</p>
                         </div>
 
                         <div className="w-full md:w-1/3">
