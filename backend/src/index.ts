@@ -8,6 +8,8 @@ import courseRouter from "./routers/courseRouter";
 import categoryRouter from "./routers/courseCategoryRouter";
 import jobRouter from "./routers/jobRouter";
 import jobCategoryRouter from "./routers/jobCategoryRouter";
+import coursePaymentRouter from "./routers/coursePaymentRouter";
+import paymentVerifyRouter from "./routers/paymentVerifyRouter";
 
 const app = express();
 
@@ -34,6 +36,13 @@ app.use("/api/v1/job", jobRouter);
 
 //job category routes
 app.use("/api/v1/jobCategory", jobCategoryRouter);
+
+
+//to generare order 
+app.use("/api/v1/payment",  coursePaymentRouter);
+//to verify payment
+app.use("/api/v1/paymentVerify",  paymentVerifyRouter);
+
 
 app.listen(3000, () => {
   console.log("server listening on port 3000");

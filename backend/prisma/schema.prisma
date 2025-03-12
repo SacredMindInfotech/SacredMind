@@ -26,27 +26,31 @@ model User {
   courses     UserCourse[]
 }
 
-
 model Course {
-  id          Int          @id @default(autoincrement())
-  title       String       @unique
-  description String
-  price       Float
-  imageUrl    String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  published   Boolean?      @default(false)
-  users       UserCourse[]
-  categoryId  Int
-  category    Category     @relation(fields: [categoryId], references: [id])
+  id               Int          @id @default(autoincrement())
+  title            String       @unique
+  description      String
+  price            Float
+  imageUrl         String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  published        Boolean?     @default(false)
+  users            UserCourse[]
+  categoryId       Int
+  category         Category     @relation(fields: [categoryId], references: [id])
+  overview         String[]
+  learningOutcomes String[]
+  requirements     String[]
+  forwhom          String[]
+  language         String       @default("English")
 }
 
 model Category {
-  id            Int         @id @default(autoincrement())
-  name          String      @unique
-  parentId      Int? 
-  parent        Category?   @relation("Subcategories",fields: [parentId], references: [id]) 
-  subcategories Category[] @relation("Subcategories") 
+  id            Int        @id @default(autoincrement())
+  name          String     @unique
+  parentId      Int?
+  parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
+  subcategories Category[] @relation("Subcategories")
   courses       Course[]
 }
 
@@ -62,30 +66,29 @@ model UserCourse {
 }
 
 model Job {
-  id          Int          @id @default(autoincrement())
-  title       String
-  description String
+  id               Int         @id @default(autoincrement())
+  title            String
+  description      String
   responsibilities String[]
-  requirements String[]
-  skills      String[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  published   Boolean?      @default(false)
-  location    JobLocation
-  salary      String?
-  type        JobType
-  experience  String
-  education   String
-  jobCategoryId Int
-  jobCategory   JobCategory @relation(fields: [jobCategoryId], references: [id])
+  requirements     String[]
+  skills           String[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  published        Boolean?    @default(false)
+  location         JobLocation
+  salary           String?
+  type             JobType
+  experience       String
+  education        String
+  jobCategoryId    Int
+  jobCategory      JobCategory @relation(fields: [jobCategoryId], references: [id])
 }
 
 model JobCategory {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  jobs        Job[]
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  jobs Job[]
 }
-
 
 enum Role {
   ADMIN
@@ -105,4 +108,3 @@ enum JobLocation {
   HYBRID
   ON_SITE
 }
-

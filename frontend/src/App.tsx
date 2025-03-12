@@ -19,13 +19,15 @@ import JobManagement from './components/ui/jobManagement'
 import PrivacyPolicy from './components/ui/PrivacyPolicy'
 import TermsAndConditions from './components/ui/TermsAndConditions'
 import SalesAndRefunds from './components/ui/SalesAndRefunds'
+import Purchases from './components/ui/purchases'
+import CourseContent from './components/ui/courseContent'
 
 function App() {
   const Router = createBrowserRouter([
+
     {
       path: "/",
       element: <>
-
         <Navbar></Navbar>
         <Landing></Landing>
         <Footer />
@@ -44,6 +46,14 @@ function App() {
       element: <>
         <Navbar></Navbar>
         <Course></Course>
+        <Footer />
+      </>
+    },
+    {
+      path: "/course/:id/content",
+      element: <>
+        <Navbar></Navbar>
+        <CourseContent></CourseContent>
         <Footer />
       </>
     },
@@ -81,7 +91,7 @@ function App() {
         <JobDetails />
         <Footer />
       </>
-    },{
+    }, {
       path: "/privacy-policy",
       element: <>
         <Navbar></Navbar>
@@ -102,6 +112,14 @@ function App() {
       element: <>
         <Navbar></Navbar>
         <SalesAndRefunds />
+        <Footer />
+      </>
+    },
+    {
+      path: "/purchases",
+      element: <>
+        <Navbar></Navbar>
+        <Purchases />
         <Footer />
       </>
     }

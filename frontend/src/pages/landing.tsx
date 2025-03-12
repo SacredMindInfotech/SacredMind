@@ -4,17 +4,19 @@ import Partners from "../components/ui/partners";
 import { useRef } from "react";
 import About from "../components/ui/about";
 import CareerContact from "../components/ui/career&contact";
+import UpcomingCourses from "../components/ui/upcomingCourses";
+import { useNavigate } from "react-router-dom";
 const Landing = () => {
-
+    const navigate = useNavigate();
     const contactRef=useRef<HTMLDivElement>(null);
     const scrollToContact = () => {
         contactRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     return (
-        <div className="relative overflow-hidden w-full">
+        <div className="w-full">
 
-            <div className="flex flex-col">
+            <div className="flex flex-col">                
 
                 {/* Hero Section */}
                 <Hero scrollToContact={scrollToContact} ></Hero>
@@ -28,8 +30,18 @@ const Landing = () => {
                 {/* Services */}
                 <Services></Services>
 
+                {/* Upcoming Courses */}
+                <UpcomingCourses></UpcomingCourses>
+
                 {/* Contact */}
                 <CareerContact ref={contactRef}></CareerContact>
+
+                <div className="fixed flex flex-col gap-2 bottom-4 montserrat-700 right-4 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white p-2 sm:p-3 rounded-lg shadow-lg w-[280px] sm:w-[320px] md:w-[360px]">
+                    <p className="text-xs sm:text-sm md:text-base animate-pulse">🎉 Get enrolled in our HR Payroll Course | Special Festive Offer !!</p>
+                    <button onClick={() => navigate("/course/20")} className="bg-white w-full sm:max-w-[200px] cursor-pointer text-purple-600 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold hover:bg-purple-100 transition-colors">
+                        Enroll Now
+                    </button>
+                </div>
 
             </div>
         </div>

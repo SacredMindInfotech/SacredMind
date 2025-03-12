@@ -1,15 +1,15 @@
-import { SignedOut, useAuth } from "@clerk/clerk-react";
+import { SignedOut } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
 const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
-    const { getToken } = useAuth();
+    // const { getToken } = useAuth();
     const router = useNavigate();
 
-    async function tokenProvider() {
-        const token = await getToken();
-        console.log(token);
-    }
-    tokenProvider();
+    // async function tokenProvider() {
+    //     const token = await getToken();
+    //     console.log(token);
+    // }
+    // tokenProvider();
 
     return (
         <div className="w-full">

@@ -91,157 +91,182 @@ const Navbar = () => {
     }
 
     return (
-        <motion.div
-            initial={{ y: -100, opacity: 0 }}
-            animate={{
-                y: visible ? 0 : -100,
-                opacity: visible ? 1 : 0
-            }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="flex justify-between items-center min-h-[8vh] px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-2 border-b border-gray-100 bg-white text-gray-900 sticky top-0 z-40 shadow-md"
-        >
-            <div className="flex items-center gap-4">
-                {/* Hamburger Menu for Mobile */}
-                <button
-                    className="md:hidden text-gray-600 p-2"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        {isMenuOpen ? (
-                            <path d="M18 6L6 18M6 6l12 12" />
-                        ) : (
-                            <path d="M3 12h18M3 6h18M3 18h18" />
-                        )}
-                    </svg>
-                </button>
+        <div className="w-full flex flex-col">
 
-                <div className="flex items-center gap-8">
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-                        <img src="/logo.svg" alt="logo" className="w-8 h-8 md:w-10 md:h-10" />
-                        <span className="montserrat-700 font-bold text-sm md:text-base lg:text-lg hover:text-gray-600 transition-colors">SACRED MIND</span>
-                    </div>
-
-                    {/* Desktop Explore Menu */}
-                    <div className="hidden md:block relative">
-                        {categories.length > 0 && (
-                            <button 
-                                onClick={() => setIsExploreOpen(!isExploreOpen)}
-                                className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer"
-                            >
-                                Explore Courses
-                                <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    width="20" 
-                                    height="20" 
-                                    viewBox="0 0 24 24" 
-                                    fill="none" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round" 
-                                    className={`transition-transform ${isExploreOpen ? 'rotate-180' : ''}`}
-                                >
-                                    <path d="m6 9 6 6 6-6" />
-                                </svg>
-                            </button>
-                        )}
-
-                        <div className={`absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 transition-all ${isExploreOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
-                            <div className="py-2" role="menu">
-                                {categories?.map((category) => (
-                                    <button
-                                        key={category.id}
-                                        onClick={() => window.location.href = `/category/${category.name}`}
-                                        className="w-full text-left px-6 py-3 text-sm lg:text-base text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer"
-                                        role="menuitem"
-                                    >
-                                        <p className="montserrat-500">{category.name}</p>
-                                        <span className="text-gray-600">&#8594;</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+             <div  onClick={() => navigate("/course/20")} className="flex justify-center items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-2 cursor-pointer">
+                <p className="montserrat-700 text-sm md:text-base animate-pulse">🎉 Special Holi Offer is Live! 🎨</p>
             </div>
 
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="absolute top-full left-0 right-0 bg-white border-b border-gray-100 md:hidden">
-                    <div className="flex flex-col py-4">
-                        <div className="px-4 py-2">
-                            <div className="relative group">
-                                <button className="text-gray-600 w-full text-left">
+            <motion.div
+                initial={{ y: -100, opacity: 0 }}
+                animate={{
+                    y: visible ? 0 : -100,
+                    opacity: visible ? 1 : 0
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="flex justify-between items-center min-h-[8vh] px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-2 border-b border-gray-100 bg-white text-gray-900 sticky top-0 z-40 shadow-md"
+            >
+                <div className="flex items-center gap-4">
+                    {/* Hamburger Menu for Mobile */}
+                    <button
+                        className="md:hidden text-gray-600 p-2"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            {isMenuOpen ? (
+                                <path d="M18 6L6 18M6 6l12 12" />
+                            ) : (
+                                <path d="M3 12h18M3 6h18M3 18h18" />
+                            )}
+                        </svg>
+                    </button>
+
+                    <div className="flex items-center gap-8">
+                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
+                            <img src="/logo.svg" alt="logo" className="w-8 h-8 md:w-10 md:h-10" />
+                            <span className="montserrat-700 font-bold text-sm md:text-base lg:text-lg hover:text-gray-600 transition-colors">SACRED MIND</span>
+                        </div>
+
+                        {/* Desktop Explore Menu */}
+                        <div className="hidden md:block relative">
+                            {categories.length > 0 && (
+                                <button
+                                    onClick={() => setIsExploreOpen(!isExploreOpen)}
+                                    className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer"
+                                >
                                     Explore Courses
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className={`transition-transform ${isExploreOpen ? 'rotate-180' : ''}`}
+                                    >
+                                        <path d="m6 9 6 6 6-6" />
+                                    </svg>
                                 </button>
-                                <div className="pl-4 mt-2 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                            )}
+
+                           
+                            <div className={`absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 transition-all ${isExploreOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+                                <div className="py-2" role="menu">
                                     {categories?.map((category) => (
                                         <button
                                             key={category.id}
-                                            onClick={() => {
-                                                setIsMenuOpen(false);
-                                                window.location.href = `/category/${category.name}`;
-                                            }}
-                                            className="block w-full py-2 text-gray-600 hover:bg-gray-50"
+                                            onClick={() => window.location.href = `/category/${category.name}`}
+                                            className="w-full text-left px-6 py-3 text-sm lg:text-base text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer"
+                                            role="menuitem"
                                         >
-                                            {category.name}
+                                            <p className="montserrat-500">{category.name}</p>
+                                            <span className="text-gray-600">&#8594;</span>
                                         </button>
                                     ))}
                                 </div>
                             </div>
                         </div>
-                        <div>
-
-                        </div>  
-                        
-                        {isAdmin && (
-                        <button
-                            onClick={() => navigate("/admin")}
-                            className="px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
-                        >
-                            Dashboard
-                        </button>
-                    )}
+                         
                     </div>
                 </div>
-            )}
 
-            {/* Desktop Navigation */}
-            <div className="flex justify-end items-center gap-8">
+                {/* Mobile Menu */}
+                {isMenuOpen && (
+                    <div className="absolute top-full left-0 right-0 bg-white border-b border-gray-100 md:hidden">
+                        <div className="flex flex-col py-4">
+                            <div className="px-4 py-2">
+                                <div className="relative group">
+                                    <button className="text-gray-600 w-full text-left">
+                                        Explore Courses
+                                    </button>
+                                    <div className="pl-4 mt-2 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                                        {categories?.map((category) => (
+                                            <button
+                                                key={category.id}
+                                                onClick={() => {
+                                                    setIsMenuOpen(false);
+                                                    window.location.href = `/category/${category.name}`;
+                                                }}
+                                                className="block w-full py-2 text-gray-600 hover:bg-gray-50"
+                                            >
+                                                {category.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        navigate("/purchases");
+                                    }}
+                                    className="px-4 py-2 text-gray-600 hover:bg-gray-50 w-full text-left"
+                                >
+                                    My Purchases
+                                </button>
+                            </div>
 
-                <SignedOut>
-                    <button
-                        onClick={() => navigate("?sign-in=true")}
-                        className= " px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
-                    >
-                        Join
-                    </button>
-                </SignedOut>
-                <SignedIn>
-                    {isAdmin && (
+                            {isAdmin && (
+                                <button
+                                    onClick={() => navigate("/admin")}
+                                    className="px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                                >
+                                    Dashboard
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {/* Desktop Navigation */}
+                <div className="flex justify-end items-center gap-8">
+
+                    <SignedOut>
                         <button
-                            onClick={() => navigate("/admin")}
+                            onClick={() => navigate("?sign-in=true")}
+                            className=" px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                        >
+                            Join
+                        </button>
+                    </SignedOut>
+                    <SignedIn>
+                        {isAdmin && (
+                            <button
+                                onClick={() => navigate("/admin")}
+                                className="hidden sm:block px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                            >
+                                Dashboard
+                            </button>
+                        )}
+                        <button
+                            onClick={() => navigate("/purchases")}
                             className="hidden sm:block px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                         >
-                            Dashboard
+                            My Purchases
                         </button>
-                    )}
-                    <UserButton
-                        appearance={{
-                            elements: { avatarBox: "w-8 h-8" }, layout: {
-                                termsPageUrl: 'https://clerk.com/terms'
-                            }
-                        }}
-                    />
-                </SignedIn>
-            </div>
-
-            {showSignIn && (
-                <div onClick={handleOverlayClick} className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600/60 backdrop-blur-lg">
-                    <SignIn fallbackRedirectUrl="/" signUpFallbackRedirectUrl="/" />
+                        <UserButton
+                            appearance={{
+                                elements: { avatarBox: "w-8 h-8" }, layout: {
+                                    termsPageUrl: 'https://clerk.com/terms'
+                                }
+                            }}
+                        />
+                    </SignedIn>
                 </div>
-            )}
-        </motion.div>
+
+                {showSignIn && (
+                    <div onClick={handleOverlayClick} className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600/60 backdrop-blur-lg">
+                        <SignIn fallbackRedirectUrl="/" signUpFallbackRedirectUrl="/" />
+                    </div>
+                )}
+            </motion.div>
+           
+        </div>
+
     );
 };
 

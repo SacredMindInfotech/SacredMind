@@ -12,7 +12,7 @@ export const createCourseController = async (req: Request, res: Response) => {
     }
 
     // Destructure after validation
-    const { title, description, price, imageUrl, categoryId, published } =
+    const { title, description, price, imageUrl, categoryId, published, overview, learningOutcomes, requirements, forwhom, language } =
       validatedData.data;
 
     const course = await prisma.course.create({
@@ -25,6 +25,11 @@ export const createCourseController = async (req: Request, res: Response) => {
           connect: { id: categoryId },
         },
         published,
+        overview,
+        learningOutcomes,
+        requirements,
+        forwhom,
+        language,
       },
     });
 

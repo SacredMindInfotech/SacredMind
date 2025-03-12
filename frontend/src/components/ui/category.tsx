@@ -118,7 +118,7 @@ const Category = () => {
                                             ${course.price}
                                         </span> */}
                                         <button
-                                            onClick={() => navigate(`/course/${course.title}`)}
+                                            onClick={() => navigate(`/course/${course.id}`)}
                                             className="cursor-pointer px-4 sm:px-8 py-1.5 sm:py-2 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary"
                                         >
                                             View Course

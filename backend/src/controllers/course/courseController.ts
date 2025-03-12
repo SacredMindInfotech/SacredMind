@@ -18,7 +18,7 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const course = await prisma.course.findUnique({
-      where: { title: id },
+      where: { id: Number(id) },
       include: {
         category: true,
       },
@@ -32,5 +32,3 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-

@@ -7,5 +7,10 @@ export const createCourseSchema = z.object({
   published: z.boolean().optional(),
   imageUrl: z.string().url("Invalid image URL").optional(),
   categoryId: z.coerce.number().int().positive("Invalid category ID"),
+  overview: z.array(z.string()).optional(),
+  learningOutcomes: z.array(z.string()).optional(),
+  requirements: z.array(z.string()).optional(),
+  forwhom: z.array(z.string()).optional(),
+  language: z.string().optional(),
 });
 
