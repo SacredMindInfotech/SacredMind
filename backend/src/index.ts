@@ -38,6 +38,7 @@ app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/jobCategory", jobCategoryRouter);
 
 
+//razorpay routes
 //to generare order 
 app.use("/api/v1/payment",  coursePaymentRouter);
 //to verify payment

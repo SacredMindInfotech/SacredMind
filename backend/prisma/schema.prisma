@@ -24,6 +24,7 @@ model User {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   courses     UserCourse[]
+  transactions Transaction[]
 }
 
 model Course {
@@ -43,6 +44,7 @@ model Course {
   requirements     String[]
   forwhom          String[]
   language         String       @default("English")
+  transactions     Transaction[]
 }
 
 model Category {
@@ -90,6 +92,22 @@ model JobCategory {
   jobs Job[]
 }
 
+model Transaction {
+  id                Int       @id @default(autoincrement())
+  userId            Int
+  courseId          Int
+  razorpayOrderId   String   @unique
+  razorpayPaymentId String?  // Null if payment fails
+  razorpaySignature String?
+  amount            Float
+  currency          String   @default("INR")
+  status            TransactionStatus @default(PENDING) // SUCCESS, FAILED, PENDING
+  createdAt         DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+}
+
 enum Role {
   ADMIN
   MANAGER
@@ -107,4 +125,10 @@ enum JobLocation {
   REMOTE
   HYBRID
   ON_SITE
+}
+
+enum TransactionStatus {
+  SUCCESS
+  FAILED
+  PENDING
 }
