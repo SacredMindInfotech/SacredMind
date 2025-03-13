@@ -25,6 +25,7 @@ import {
 } from "../controllers/admin/ordersOperations/order";
 import { createJobController, updateJobByIdController, deleteJobByIdController } from "../controllers/admin/jobOperations/job";
 import { createJobCategoryController, deleteJobCategoryByIdController, updateJobCategoryByIdController } from "../controllers/admin/jobCategoryOperations/jobCategory";
+import  { createDiscountTokenController, deleteDiscountTokenByIdController, getAllDiscountTokensController, updateDiscountTokenByIdController } from "../controllers/discountTokens/discountTokenController";
 
 const adminRouter = Router();
 
@@ -75,5 +76,14 @@ adminRouter.post("/jobCategories", createJobCategoryController);
 adminRouter.put("/jobCategories/:id", updateJobCategoryByIdController);
 // DELETE	/api/v1/admin/jobCategories/:id	Delete a job category
 adminRouter.delete("/jobCategories/:id", deleteJobCategoryByIdController);
+
+// POST	/api/v1/admin/discountTokens	Create a new discount token
+adminRouter.post("/discountTokens", createDiscountTokenController);
+// GET	/api/v1/admin/discountTokens	Get all discount tokens
+adminRouter.get("/discountTokens", getAllDiscountTokensController);
+// PUT	/api/v1/admin/discountTokens/:id	Update discount token details
+adminRouter.put("/discountTokens/:id", updateDiscountTokenByIdController);
+// DELETE	/api/v1/admin/discountTokens/:id	Delete a discount token
+adminRouter.delete("/discountTokens/:id", deleteDiscountTokenByIdController);
 
 export default adminRouter;

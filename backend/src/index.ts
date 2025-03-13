@@ -10,6 +10,7 @@ import jobRouter from "./routers/jobRouter";
 import jobCategoryRouter from "./routers/jobCategoryRouter";
 import coursePaymentRouter from "./routers/coursePaymentRouter";
 import paymentVerifyRouter from "./routers/paymentVerifyRouter";
+import tokenRouter from "./routers/tokenRouter";
 
 const app = express();
 
@@ -37,6 +38,8 @@ app.use("/api/v1/job", jobRouter);
 //job category routes
 app.use("/api/v1/jobCategory", jobCategoryRouter);
 
+//validate discount token
+app.use("/api/v1/discountToken", tokenRouter);
 
 //razorpay routes
 //to generare order 

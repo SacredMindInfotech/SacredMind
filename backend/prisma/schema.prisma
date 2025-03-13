@@ -108,6 +108,19 @@ model Transaction {
   course Course @relation(fields: [courseId], references: [id])
 }
 
+
+model DiscountToken{
+  id Int @id @default(autoincrement())
+  token String @unique
+  discountPercentage Float     @default(0) 
+  courseIds         Int[]
+  expiresAt         DateTime
+  isActive          Boolean   @default(true)
+  createdAt         DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
 enum Role {
   ADMIN
   MANAGER
