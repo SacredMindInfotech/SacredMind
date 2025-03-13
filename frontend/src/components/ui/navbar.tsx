@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { holiOfferBannerClickedEvent } from "../../lib/pixel-event";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -91,9 +92,12 @@ const Navbar = () => {
     }
 
     return (
-                <div className="w-full flex flex-col">                        
+        <div className="w-full flex flex-col">
 
-             <div  onClick={() => navigate("/course/20")} className="flex justify-center items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-2 cursor-pointer">
+            <div onClick={() => {
+                holiOfferBannerClickedEvent();
+                navigate("/course/20")
+                }} className="flex justify-center items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-2 cursor-pointer">
                 <p className="montserrat-700 text-sm md:text-base animate-pulse">🎉 Special Holi Offer is Live! 🎨</p>
             </div>
 
@@ -152,7 +156,7 @@ const Navbar = () => {
                                 </button>
                             )}
 
-                           
+
                             <div className={`absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 transition-all ${isExploreOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
                                 <div className="py-2" role="menu">
                                     {categories?.map((category) => (
@@ -169,7 +173,7 @@ const Navbar = () => {
                                 </div>
                             </div>
                         </div>
-                         
+
                     </div>
                 </div>
 
@@ -264,7 +268,7 @@ const Navbar = () => {
                     </div>
                 )}
             </motion.div>
-           
+
         </div>
 
     );

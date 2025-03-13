@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { SignInButton, useAuth, useUser } from "@clerk/clerk-react";
+import { enrolledClickedEvent, enrolledSuccessEvent } from "../../lib/pixel-event";
 
 interface Course {
     id: number;
@@ -91,6 +92,7 @@ const Course = () => {
 
     const coursePayment = async () => {
         try {
+            enrolledClickedEvent();
 
             if (!isSignedIn) {
                 document.querySelector("[data-testid='clerk-signin-button']")?.dispatchEvent(new Event('click', { bubbles: true }));
@@ -133,8 +135,10 @@ const Course = () => {
                     })
                     // @ts-ignore
                     if (res.status === 200) {
+                        enrolledSuccessEvent();
                         setIsPurchased(true);
                         // window.location.reload();
+
                     }
                     else {
                         alert("Payment Failed");
