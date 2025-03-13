@@ -105,8 +105,6 @@ const Course = () => {
                 currency: res.data.order.currency,
                 // @ts-ignore
                 name: "SacredMind Infotech",
-                // @ts-ignore
-                order_id: res.data.order.id,
                 handler: async (response: any) => {
 
                     const razorpay_order_id=response.razorpay_order_id;

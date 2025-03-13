@@ -4,7 +4,7 @@ import Partners from "../components/ui/partners";
 import { useRef } from "react";
 import About from "../components/ui/about";
 import CareerContact from "../components/ui/career&contact";
-import UpcomingCourses from "../components/ui/upcomingCourses";
+// import UpcomingCourses from "../components/ui/upcomingCourses";
 import { useNavigate } from "react-router-dom";
 const Landing = () => {
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ const Landing = () => {
                 <Services></Services>
 
                 {/* Upcoming Courses */}
-                <UpcomingCourses></UpcomingCourses>
+                {/* <UpcomingCourses></UpcomingCourses> */}
 
                 {/* Contact */}
                 <CareerContact ref={contactRef}></CareerContact>
