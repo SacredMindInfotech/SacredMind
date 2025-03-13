@@ -91,7 +91,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className="w-full flex flex-col">
+                <div className="w-full flex flex-col">                        
 
              <div  onClick={() => navigate("/course/20")} className="flex justify-center items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-2 cursor-pointer">
                 <p className="montserrat-700 text-sm md:text-base animate-pulse">🎉 Special Holi Offer is Live! 🎨</p>

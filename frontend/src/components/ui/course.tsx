@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {  useAuth, useUser } from "@clerk/clerk-react";
+import { SignInButton, useAuth, useUser } from "@clerk/clerk-react";
 
 interface Course {
     id: number;
@@ -31,14 +31,14 @@ const Course = () => {
     const navigate = useNavigate();
     const { isSignedIn } = useAuth();
     const { getToken } = useAuth();
-    const { user,isLoaded } = useUser();
+    const { user, isLoaded } = useUser();
     const [isPurchased, setIsPurchased] = useState<boolean>(false);
     const [discountToken, setDiscountToken] = useState<string | null>(null);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const discountCode = urlParams.get("discount_code");
-        if(discountCode){
+        if (discountCode) {
             setDiscountToken(discountCode);
         }
     }, [id]);
@@ -46,9 +46,9 @@ const Course = () => {
     useEffect(() => {
         const fetchIsPurchased = async () => {
             if (!isLoaded || !user) return;
-        
+
             const token = await getToken();
-        
+
             const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ const Course = () => {
             setIsPurchased(res.data.purchased);
         }
         fetchIsPurchased();
-    }, [id,isLoaded,user]);
+    }, [id, isLoaded, user]);
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -75,7 +75,7 @@ const Course = () => {
     }, []);
 
 
-    const loadScript=(src:string)=>{
+    const loadScript = (src: string) => {
         return new Promise((resolve) => {
             const script = document.createElement('script');
             script.src = src;
@@ -89,23 +89,23 @@ const Course = () => {
         loadScript("https://checkout.razorpay.com/v1/checkout.js");
     }, []);
 
-    const coursePayment =  async() => {
+    const coursePayment = async () => {
         try {
 
             if (!isSignedIn) {
-                navigate('/?sign-in=true');
+                document.querySelector("[data-testid='clerk-signin-button']")?.dispatchEvent(new Event('click', { bubbles: true }));
                 return;
             }
 
             const token = await getToken();
-            const res = await axios.post(`${backendUrl}api/v1/payment/${id}`,{}, {
+            const res = await axios.post(`${backendUrl}api/v1/payment/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     discountToken: discountToken
                 }
             });
 
-            const paymentObject=new (window as any).Razorpay({
+            const paymentObject = new (window as any).Razorpay({
                 key: import.meta.env.VITE_RAZORPAY_KEY_ID,
                 // @ts-ignore
                 order_id: res.data.order.id,
@@ -117,26 +117,26 @@ const Course = () => {
                 name: "SacredMind Infotech",
                 handler: async (response: any) => {
 
-                    const razorpay_order_id=response.razorpay_order_id;
-                    const razorpay_payment_id=response.razorpay_payment_id;
-                    const razorpay_signature=response.razorpay_signature;
+                    const razorpay_order_id = response.razorpay_order_id;
+                    const razorpay_payment_id = response.razorpay_payment_id;
+                    const razorpay_signature = response.razorpay_signature;
 
-                    
+
                     console.log(user?.id);
 
-                    const res=await axios.post(`${backendUrl}api/v1/paymentVerify/`,{
+                    const res = await axios.post(`${backendUrl}api/v1/paymentVerify/`, {
                         razorpay_order_id,
                         razorpay_payment_id,
                         razorpay_signature,
-                        courseId:id,
-                        clerkUserId:user?.id
+                        courseId: id,
+                        clerkUserId: user?.id
                     })
                     // @ts-ignore
-                    if(res.status===200){
+                    if (res.status === 200) {
                         setIsPurchased(true);
                         // window.location.reload();
                     }
-                    else{
+                    else {
                         alert("Payment Failed");
                     }
                 }
@@ -268,6 +268,7 @@ const Course = () => {
 
                 </div>
             )}
+            <SignInButton data-testid="clerk-signin-button" mode="modal" />
         </div>
     )
 }
