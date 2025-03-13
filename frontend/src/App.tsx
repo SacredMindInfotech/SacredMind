@@ -21,6 +21,7 @@ import TermsAndConditions from './components/ui/TermsAndConditions'
 import SalesAndRefunds from './components/ui/SalesAndRefunds'
 import Purchases from './components/ui/purchases'
 import CourseContent from './components/ui/courseContent'
+import MetaPixel from './MetaPixel'
 
 function App() {
   const Router = createBrowserRouter([
@@ -126,8 +127,8 @@ function App() {
   ])
   return (
     <div>
+      <MetaPixel />
       <RouterProvider router={Router}></RouterProvider>
-
     </div>
   )
 }
