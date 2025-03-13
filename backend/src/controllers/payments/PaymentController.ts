@@ -27,7 +27,7 @@ export const coursePaymentController = async (req: Request, res: Response) => {
     let discountedPrice=course!.price;
     if(discountTokenData?.courseIds.includes(course!.id)){
       discountedPrice = discountTokenData?.isActive
-        ? Math.round(course!.price * (1 - discountTokenData.discountPercentage / 100))
+        ? Math.round(course!.price * (1 - discountTokenData.discountPercentage / 100))-1
         : course!.price;
     }
     

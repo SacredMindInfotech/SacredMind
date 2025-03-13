@@ -33,6 +33,15 @@ const Course = () => {
     const { getToken } = useAuth();
     const { user,isLoaded } = useUser();
     const [isPurchased, setIsPurchased] = useState<boolean>(false);
+    const [discountToken, setDiscountToken] = useState<string | null>(null);
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const discountCode = urlParams.get("discount_code");
+        if(discountCode){
+            setDiscountToken(discountCode);
+        }
+    }, [id]);
 
     useEffect(() => {
         const fetchIsPurchased = async () => {
@@ -63,7 +72,7 @@ const Course = () => {
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [id]);
+    }, []);
 
 
     const loadScript=(src:string)=>{
@@ -91,7 +100,8 @@ const Course = () => {
             const token = await getToken();
             const res = await axios.post(`${backendUrl}api/v1/payment/${id}`,{}, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    discountToken: discountToken
                 }
             });
 
