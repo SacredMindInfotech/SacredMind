@@ -108,8 +108,9 @@ const CourseContent = () => {
                                     <div className="space-y-4 md:space-y-6">
                                         <div className="text-center">
                                             <h2 className="text-2xl font-bold mb-4">Congratulations! You have enrolled in the course.</h2>
-                                            <p className="text-gray-600 mb-4">Course content will be added here shortly.</p>
-                                            <p className="text-gray-500">Thank you for your patience while we prepare the course materials.</p>
+                                            <p className="text-gray-600 mb-4">Course will begin on March 17th, 2025</p>
+                                            <p className="text-gray-600 mb-4">Then you will be joining through the live class</p>
+
                                         </div>
                                     </div>
                                 </div>
