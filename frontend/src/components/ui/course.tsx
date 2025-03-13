@@ -268,7 +268,9 @@ const Course = () => {
 
                 </div>
             )}
-            <SignInButton data-testid="clerk-signin-button" mode="modal" />
+            <div className="hidden">
+                <SignInButton data-testid="clerk-signin-button" mode="modal" />
+            </div>
         </div>
     )
 }
