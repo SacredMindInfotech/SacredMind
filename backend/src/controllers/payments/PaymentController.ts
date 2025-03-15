@@ -5,7 +5,7 @@ import createRazorpayInstance from "../../config/razorpay-config";
 export const coursePaymentController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const  discountToken  = req.headers.discounttoken as string;
+    const discountToken = req.headers.discounttoken as string;
 
     const course = await prisma.course.findUnique({
       where: { id: Number(id) },
@@ -13,26 +13,31 @@ export const coursePaymentController = async (req: Request, res: Response) => {
 
     let discountTokenData;
     if (discountToken) {
-      try{
+      try {
         discountTokenData = await prisma.discountToken.findUnique({
           where: { token: discountToken as string },
         });
-      }
-      catch(error){
-        discountTokenData=null;
+      } catch (error) {
+        discountTokenData = null;
         console.log(error);
       }
     }
 
-    let discountedPrice=course!.price;
-    if(discountTokenData?.courseIds.includes(course!.id)){
+    let discountedPrice = course!.price;
+    if (discountTokenData?.courseIds.includes(course!.id)) {
       discountedPrice = discountTokenData?.isActive
-        ? Math.round(course!.price * (1 - discountTokenData.discountPercentage / 100))-1
+        ? Math.round(
+            course!.price * (1 - discountTokenData.discountPercentage / 100)
+          ) - 1
         : course!.price;
     }
-    
+
+    const totalAmount = Math.round(
+      (discountedPrice + (discountedPrice * 0.18)) * 100
+    );
+
     const options = {
-      amount: discountedPrice * 100,
+      amount: totalAmount, 
       currency: "INR",
       receipt: "receipt#1",
     };

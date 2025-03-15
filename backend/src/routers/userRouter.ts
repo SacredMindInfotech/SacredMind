@@ -1,6 +1,5 @@
 import express from "express";
 import { getPurchasesByUserIdController, getUserbyIdController, isPurchaseController } from "../controllers/user/userController";
-import { isAdmin } from "../middleware/authMiddleware";
 
 const userRouter = express.Router();
 
@@ -15,6 +14,8 @@ userRouter.get("/purchases/:id", getPurchasesByUserIdController);
 //router to check if user has purchased a course
 // api/v1/user/isPurchase/:id
 userRouter.get("/isPurchase/:id", isPurchaseController);
+
+
 
 
 export default userRouter;

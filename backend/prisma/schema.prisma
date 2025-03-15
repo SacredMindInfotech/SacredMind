@@ -14,38 +14,70 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  clerkuserId String       @unique
-  email       String       @unique
-  firstName   String
-  lastName    String?
-  imageUrl    String?
-  role        Role?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  courses     UserCourse[]
+  id           Int           @id @default(autoincrement())
+  clerkuserId  String        @unique
+  email        String        @unique
+  firstName    String
+  lastName     String?
+  imageUrl     String?
+  role         Role?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  courses      UserCourse[]
   transactions Transaction[]
 }
 
 model Course {
-  id               Int          @id @default(autoincrement())
-  title            String       @unique
+  id               Int           @id @default(autoincrement())
+  title            String        @unique
   description      String
   price            Float
   imageUrl         String?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  published        Boolean?     @default(false)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  published        Boolean?      @default(false)
   users            UserCourse[]
   categoryId       Int
-  category         Category     @relation(fields: [categoryId], references: [id])
+  category         Category      @relation(fields: [categoryId], references: [id])
   overview         String[]
   learningOutcomes String[]
   requirements     String[]
   forwhom          String[]
-  language         String       @default("English")
+  language         String        @default("English")
   transactions     Transaction[]
+  // modules          Module[]
 }
+
+// model Module {
+//   id       Int     @id @default(autoincrement())
+//   title    String
+//   courseId Int
+//   course   Course  @relation(fields: [courseId], references: [id])
+//   topics   Topic[]
+// }
+
+// model Topic {
+//   id          Int    @id @default(autoincrement())
+//   title       String
+//   description String
+//   moduleId    Int
+//   module      Module @relation(fields: [moduleId], references: [id])
+//   contents    Content[]
+// }
+
+// model Content {
+//   id Int @id @default(autoincrement())
+//   topicId Int
+//   topic Topic @relation(fields: [topicId], references: [id])
+//   type ContentType
+//   key String @unique
+// }
+
+// enum ContentType {
+//   VIDEO
+//   PDF
+//   TEXT
+// }
 
 model Category {
   id            Int        @id @default(autoincrement())
@@ -93,30 +125,29 @@ model JobCategory {
 }
 
 model Transaction {
-  id                Int       @id @default(autoincrement())
+  id                Int               @id @default(autoincrement())
   userId            Int
   courseId          Int
-  razorpayOrderId   String   @unique
-  razorpayPaymentId String?  // Null if payment fails
+  razorpayOrderId   String            @unique
+  razorpayPaymentId String? // Null if payment fails
   razorpaySignature String?
   amount            Float
-  currency          String   @default("INR")
+  currency          String            @default("INR")
   status            TransactionStatus @default(PENDING) // SUCCESS, FAILED, PENDING
-  createdAt         DateTime @default(now())
+  createdAt         DateTime          @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
 }
 
-
-model DiscountToken{
-  id Int @id @default(autoincrement())
-  token String @unique
-  discountPercentage Float     @default(0) 
-  courseIds         Int[]
-  expiresAt         DateTime
-  isActive          Boolean   @default(true)
-  createdAt         DateTime @default(now())
+model DiscountToken {
+  id                 Int      @id @default(autoincrement())
+  token              String   @unique
+  discountPercentage Float    @default(0)
+  courseIds          Int[]
+  expiresAt          DateTime
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
 
   @@index([expiresAt])
 }

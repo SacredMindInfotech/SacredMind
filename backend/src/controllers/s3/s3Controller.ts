@@ -13,7 +13,7 @@ const s3Client = new S3Client({
 //key : moon-future-5k-1920x1080-16999.jpg
 export const getObjectUrlByKey = async (key: string) => {
   const command = new GetObjectCommand({
-    Bucket: "",
+    Bucket: "sacredmind-private",
     Key: key,
   });
   const url = await getSignedUrl(s3Client, command, { expiresIn: 60 * 5 });

@@ -36,6 +36,8 @@ const Course = () => {
     const [isPurchased, setIsPurchased] = useState<boolean>(false);
     const [discountToken, setDiscountToken] = useState<string | null>(null);
 
+    
+
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const discountCode = urlParams.get("discount_code");
@@ -191,11 +193,13 @@ const Course = () => {
                                         </button>
                                     </div>
                                 ) : (
+                                    
                                     <button
                                         onClick={() => coursePayment()}
                                         className="cursor-pointer px-8 sm:px-12 py-2 sm:py-3 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
                                         Enroll Now
                                     </button>
+                                    
                                 )
                             ) : (
                                 <button
