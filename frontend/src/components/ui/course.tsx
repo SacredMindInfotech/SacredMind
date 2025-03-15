@@ -106,7 +106,8 @@ const Course = () => {
                     discountToken: discountToken
                 }
             });
-
+            // @ts-ignore
+            let amount = res.data.order.amount;
             const paymentObject = new (window as any).Razorpay({
                 key: import.meta.env.VITE_RAZORPAY_KEY_ID,
                 // @ts-ignore
@@ -131,7 +132,8 @@ const Course = () => {
                         razorpay_payment_id,
                         razorpay_signature,
                         courseId: id,
-                        clerkUserId: user?.id
+                        clerkUserId: user?.id,
+                        amount:amount/100
                     })
                     // @ts-ignore
                     if (res.status === 200) {

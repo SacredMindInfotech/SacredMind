@@ -5,7 +5,7 @@ import prisma from "../../PrismaClient";
 export const verifyPaymentController = async (req: Request, res: Response) => {
   try {
 
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature,courseId,clerkUserId } =
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature,courseId,clerkUserId,amount } =
       req.body;
     const secret = process.env.RAZORPAY_KEY_SECRET!;
 
@@ -34,7 +34,7 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
           razorpayOrderId:razorpay_order_id,
           razorpayPaymentId:razorpay_payment_id,
           razorpaySignature:razorpay_signature,
-          amount:course!.price,
+          amount:amount,
           currency:"INR",
           status:"SUCCESS",
           createdAt:new Date(),
