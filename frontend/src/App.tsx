@@ -53,9 +53,11 @@ function App() {
     {
       path: "/course/:id/content",
       element: <>
-        <Navbar></Navbar>
-        <CourseContent></CourseContent>
-        <Footer />
+        <ProtectedRoutes>
+          <Navbar></Navbar>
+          <CourseContent></CourseContent>
+          <Footer />
+        </ProtectedRoutes>
       </>
     },
     {

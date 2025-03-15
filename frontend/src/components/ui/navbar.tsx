@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, SignIn, useAuth, UserButton, useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { holiOfferBannerClickedEvent } from "../../lib/pixel-event";
@@ -18,6 +18,7 @@ const Navbar = () => {
     const [isExploreOpen, setIsExploreOpen] = useState(false);
     const { isLoaded, user } = useUser();
     const { getToken } = useAuth();
+    const currentPath = useLocation().pathname;
 
 
     useEffect(() => {
@@ -96,9 +97,12 @@ const Navbar = () => {
 
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
-                navigate("/course/20")
-                }} className="flex justify-center items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-2 cursor-pointer">
-                <p className="montserrat-700 text-sm md:text-base animate-pulse">🎉 Special Holi Offer is Live! 🎨</p>
+                navigate("/course/20?discount_code=holioffer")
+            }} className="flex justify-center items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-2 cursor-pointer">
+                <div className="flex flex-col justify-center items-center">
+                    <p className="montserrat-700 text-sm md:text-base animate-pulse">🎉 Special Holi Offer is Live! 🎨</p>
+                    <p className="montserrat-400 text-sm md:text-base text-white ml-4">HR Payroll Masterclass worth ₹20,000 at just ₹199. Offer valid till 15th March 2 PM</p>
+                </div>
             </div>
 
             <motion.div
@@ -264,7 +268,7 @@ const Navbar = () => {
 
                 {showSignIn && (
                     <div onClick={handleOverlayClick} className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600/60 backdrop-blur-lg">
-                        <SignIn fallbackRedirectUrl="/" signUpFallbackRedirectUrl="/" />
+                        <SignIn fallbackRedirectUrl={currentPath} signUpFallbackRedirectUrl={currentPath} />
                     </div>
                 )}
             </motion.div>
