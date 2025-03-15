@@ -22,7 +22,7 @@ import SalesAndRefunds from './components/ui/SalesAndRefunds'
 import Purchases from './components/ui/purchases'
 import CourseContent from './components/ui/courseContent'
 import MetaPixel from './MetaPixel'
-import PricingPolicy from './components/ui/PricingPolicy'
+import PricingPolicy from './components/ui/pricingPolicy'
 
 function App() {
   const Router = createBrowserRouter([
