@@ -22,6 +22,7 @@ import SalesAndRefunds from './components/ui/SalesAndRefunds'
 import Purchases from './components/ui/purchases'
 import CourseContent from './components/ui/courseContent'
 import MetaPixel from './MetaPixel'
+import PricingPolicy from './components/ui/PricingPolicy'
 
 function App() {
   const Router = createBrowserRouter([
@@ -115,6 +116,14 @@ function App() {
       element: <>
         <Navbar></Navbar>
         <SalesAndRefunds />
+        <Footer />
+      </>
+    },
+    {
+      path: "/pricing-policy",
+      element: <>
+        <Navbar></Navbar>
+        <PricingPolicy />
         <Footer />
       </>
     },

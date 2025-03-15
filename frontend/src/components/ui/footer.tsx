@@ -73,6 +73,7 @@ const Footer = () => {
                         <button onClick={() => router("/privacy-policy")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Privacy Policy</button>
                         <button onClick={() => router("/terms-and-conditions")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Terms & Conditions</button>
                         <button onClick={() => router("/sales-and-refunds")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Sales and Refunds</button>
+                        <button onClick={() => router("/pricing-policy")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Pricing Policy</button>
                     </div>
                     <p className="text-sm text-gray-600 text-center md:text-left">© 2025 Sacred Mind Infotech Private Limited. All rights reserved.</p>
                 </div>
