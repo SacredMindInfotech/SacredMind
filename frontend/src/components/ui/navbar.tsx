@@ -101,7 +101,7 @@ const Navbar = () => {
             }} className="flex justify-center items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-2 cursor-pointer">
                 <div className="flex flex-col justify-center items-center">
                     <p className="montserrat-700 text-sm md:text-base animate-pulse">🎉 Special Holi Offer is Live! 🎨</p>
-                    <p className="montserrat-400 text-sm md:text-base text-white ml-4">HR Payroll Masterclass worth ₹20,000 at just ₹199. Offer valid till 15th March 5 PM</p>
+                    {/* <p className="montserrat-400 text-sm md:text-base text-white ml-4">HR Payroll Masterclass worth ₹20,000 at just ₹199. Offer valid till 15th March 5 PM</p> */}
                 </div>
             </div>
 
