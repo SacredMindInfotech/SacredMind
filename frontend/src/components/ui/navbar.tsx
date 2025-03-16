@@ -97,7 +97,7 @@ const Navbar = () => {
 
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
-                navigate("/course/20?discount_code=holioffer")
+                navigate("/course/20?discount_code=eidoffer")
             }} className="flex justify-center items-center bg-gradient-to-r from-green-700 via-green-800 to-green-900 text-white py-2 cursor-pointer">
                 <div className="flex flex-col justify-center items-center">
                     <p className="montserrat-700 text-sm md:text-base animate-pulse">🎉 Special Eid Offer is Live! 🎨</p>

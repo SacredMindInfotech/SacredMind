@@ -41,7 +41,7 @@ const Landing = () => {
                     <p className="text-xs sm:text-sm md:text-base animate-pulse">🎉 Get enrolled in our HR Payroll Course | Special Festive Offer !!</p>
                     <button onClick={() => {
                         holiOfferBannerClickedEvent();
-                        navigate("/course/20?discount_code=holioffer")
+                        navigate("/course/20?discount_code=eidoffer")
                         }} className="bg-white w-full sm:max-w-[200px] cursor-pointer text-green-800 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold hover:bg-green-50 transition-colors">
                         Enroll Now
                     </button>
