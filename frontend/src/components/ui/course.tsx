@@ -36,7 +36,6 @@ const Course = () => {
     const { getToken } = useAuth();
     const { user, isLoaded } = useUser();
     const [isPurchased, setIsPurchased] = useState<boolean>(false);
-    const [discountToken, setDiscountToken] = useState<string | null>(null);
 
     
 
