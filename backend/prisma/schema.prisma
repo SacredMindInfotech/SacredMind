@@ -31,6 +31,8 @@ model Course {
   id               Int           @id @default(autoincrement())
   title            String        @unique
   description      String
+  isActive         Boolean       @default(true)
+  isStarted        Boolean       @default(false)
   price            Float
   imageUrl         String?
   createdAt        DateTime      @default(now())
@@ -45,39 +47,42 @@ model Course {
   forwhom          String[]
   language         String        @default("English")
   transactions     Transaction[]
-  // modules          Module[]
+  modules          Module[]
 }
 
-// model Module {
-//   id       Int     @id @default(autoincrement())
-//   title    String
-//   courseId Int
-//   course   Course  @relation(fields: [courseId], references: [id])
-//   topics   Topic[]
-// }
+model Module {
+  id       Int     @id @default(autoincrement())
+  title    String
+  courseId Int
+  course   Course  @relation(fields: [courseId], references: [id])
+  topics   Topic[]
+}
 
-// model Topic {
-//   id          Int    @id @default(autoincrement())
-//   title       String
-//   description String
-//   moduleId    Int
-//   module      Module @relation(fields: [moduleId], references: [id])
-//   contents    Content[]
-// }
+model Topic {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  moduleId    Int
+  module      Module    @relation(fields: [moduleId], references: [id])
+  contents    Content[]
+}
 
-// model Content {
-//   id Int @id @default(autoincrement())
-//   topicId Int
-//   topic Topic @relation(fields: [topicId], references: [id])
-//   type ContentType
-//   key String @unique
-// }
+model Content {
+  id      Int         @id @default(autoincrement())
+  name    String
+  topicId Int
+  topic   Topic       @relation(fields: [topicId], references: [id])
+  type    ContentType
+  key     String      @unique
+}
 
-// enum ContentType {
-//   VIDEO
-//   PDF
-//   TEXT
-// }
+enum ContentType {
+  VIDEO
+  PDF
+  EXCEL
+  TEXT
+  IMAGE
+}
 
 model Category {
   id            Int        @id @default(autoincrement())

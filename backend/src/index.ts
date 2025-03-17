@@ -11,6 +11,8 @@ import jobCategoryRouter from "./routers/jobCategoryRouter";
 import coursePaymentRouter from "./routers/coursePaymentRouter";
 import paymentVerifyRouter from "./routers/paymentVerifyRouter";
 import tokenRouter from "./routers/tokenRouter";
+import contentRouter from "./routers/contentRouter";
+import { isUserEnrolled } from "./middleware/isUserEnrolled";
 
 const app = express();
 
@@ -46,6 +48,8 @@ app.use("/api/v1/discountToken", tokenRouter);
 app.use("/api/v1/payment",  coursePaymentRouter);
 //to verify payment
 app.use("/api/v1/paymentVerify",  paymentVerifyRouter);
+
+app.use("/api/v1/content",isUser,contentRouter);
 
 
 app.listen(3000, () => {

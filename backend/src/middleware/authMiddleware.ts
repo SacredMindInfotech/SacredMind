@@ -71,6 +71,7 @@ export const isUser = async (
       return;
     }
 
+    (req as any).user = user;
     next();
   } catch (error) {
     

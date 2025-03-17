@@ -24,13 +24,22 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
       },
     });
   
+    if (!user || !course) {
+      console.log("User or course not found", { clerkUserId, courseId });
+      res.status(404).json({ 
+        message: "User or course not found",
+        userFound: !!user,
+        courseFound: !!course
+      });
+      return;
+    }
 
     if (generatedSignature === razorpay_signature) {
       //db operation
       const transaction=await prisma.transaction.create({
         data:{
-          userId:user!.id,
-          courseId:course!.id,
+          userId: user.id,
+          courseId: course.id,
           razorpayOrderId:razorpay_order_id,
           razorpayPaymentId:razorpay_payment_id,
           razorpaySignature:razorpay_signature,
@@ -43,8 +52,8 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
 
       const userCourse = await prisma.userCourse.create({
         data: {
-          userId: user!.id,
-          courseId: course!.id,
+          userId: user.id,
+          courseId: course.id,
         },
       });
       
@@ -54,12 +63,12 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
     else {
       await prisma.transaction.create({
         data:{
-          userId:user!.id,
-          courseId:course!.id,
+          userId:user.id,
+          courseId:course.id,
           razorpayOrderId:razorpay_order_id,
           razorpayPaymentId:razorpay_payment_id,
           razorpaySignature:razorpay_signature,
-          amount:course!.price,
+          amount:course.price,
           currency:"INR",
           status:"FAILED",
           createdAt:new Date(),
