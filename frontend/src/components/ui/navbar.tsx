@@ -21,6 +21,8 @@ const Navbar = () => {
     const currentPath = useLocation().pathname;
 
 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     useEffect(() => {
         const fetchAdminStatus = async () => {
             if (!isLoaded || !user?.id) return; // Ensure user is loaded
@@ -31,7 +33,7 @@ const Navbar = () => {
                         Authorization: `Bearer ${token}`
                     }
                 }));
-                console.log(response);
+                // console.log(response);
                 //@ts-ignore
                 setIsAdmin(response.data.role === "ADMIN");
             } catch (error) {
@@ -41,12 +43,6 @@ const Navbar = () => {
 
         fetchAdminStatus();
     }, [isLoaded, user]);
-
-
-
-
-
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -268,7 +264,7 @@ const Navbar = () => {
 
                 {showSignIn && (
                     <div onClick={handleOverlayClick} className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600/60 backdrop-blur-lg">
-                        <SignIn fallbackRedirectUrl={currentPath} signUpFallbackRedirectUrl={currentPath} />
+                        <SignIn fallbackRedirectUrl={currentPath}   signUpFallbackRedirectUrl={currentPath} />
                     </div>
                 )}
             </motion.div>

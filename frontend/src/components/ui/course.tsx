@@ -1,13 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { SignInButton, useAuth, useUser } from "@clerk/clerk-react";
+import {  useAuth, useUser } from "@clerk/clerk-react";
 import { enrolledClickedEvent, enrolledSuccessEvent } from "../../lib/pixel-event";
 
 interface Course {
     id: number;
     title: string;
     description: string;
+    isActive: boolean;
+    isStarted: boolean;
     price: number;
     imageUrl: string | null;
     createdAt: Date;
@@ -38,14 +40,17 @@ const Course = () => {
 
     
 
+    //fetching the discount code from the url
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const discountCode = urlParams.get("discount_code");
         if (discountCode) {
-            setDiscountToken(discountCode);
+            // setDiscountToken(discountCode);
+            localStorage.setItem("discount_code", discountCode);
         }
     }, [id]);
 
+    //checking if the user has purchased the course or not before
     useEffect(() => {
         const fetchIsPurchased = async () => {
             if (!isLoaded || !user) return;
@@ -64,6 +69,7 @@ const Course = () => {
         fetchIsPurchased();
     }, [id, isLoaded, user]);
 
+    //fetching the course details, by id from the url
     useEffect(() => {
         const fetchCourse = async () => {
             const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
@@ -78,6 +84,7 @@ const Course = () => {
     }, []);
 
 
+    //razorpay script
     const loadScript = (src: string) => {
         return new Promise((resolve) => {
             const script = document.createElement('script');
@@ -88,6 +95,11 @@ const Course = () => {
         });
     }
 
+    const handleSignIn = () => {
+        navigate("?sign-in=true");
+        coursePayment();
+    }
+    
     useEffect(() => {
         loadScript("https://checkout.razorpay.com/v1/checkout.js");
     }, []);
@@ -97,11 +109,12 @@ const Course = () => {
             enrolledClickedEvent();
 
             if (!isSignedIn) {
-                document.querySelector("[data-testid='clerk-signin-button']")?.dispatchEvent(new Event('click', { bubbles: true }));
+                handleSignIn();
                 return;
             }
 
             const token = await getToken();
+            const discountToken = localStorage.getItem("discount_code");
             const res = await axios.post(`${backendUrl}api/v1/payment/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -182,7 +195,7 @@ const Course = () => {
 
                         <p className="text-base sm:text-xl text-gray-600">{course.description}</p>
                         <div className="mt-6 sm:mt-8 flex flex-col items-center gap-4 sm:gap-6">
-                            {id === "20" ? (
+                            {course.isActive ? (
                                 isPurchased ? (
                                     <div>
                                         <button
@@ -278,9 +291,9 @@ const Course = () => {
 
                 </div>
             )}
-            <div className="hidden">
+            {/* <div className="hidden">
                 <SignInButton data-testid="clerk-signin-button" mode="modal" />
-            </div>
+            </div> */}
         </div>
     )
 }
