@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import {  useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { enrolledClickedEvent, enrolledSuccessEvent } from "../../lib/pixel-event";
 
 interface Course {
@@ -36,37 +36,21 @@ const Course = () => {
     const { getToken } = useAuth();
     const { user, isLoaded } = useUser();
     const [isPurchased, setIsPurchased] = useState<boolean>(false);
+    const enrollButtonRef = useRef<HTMLButtonElement | null>(null);
 
+
+    //checking if the user has a pending payment for the course
+    useEffect(() => {
+        const hasPendingPayment = localStorage.getItem(`pendingPayment_${id}`) === 'true';
+        if (isSignedIn && hasPendingPayment && isLoaded && user) {
+            localStorage.removeItem(`pendingPayment_${id}`);
+            coursePayment();
+        }
+    }, [isSignedIn, isLoaded, user, id]);
     
-
-    //fetching the discount code from the url
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const discountCode = urlParams.get("discount_code");
-        if (discountCode) {
-            // setDiscountToken(discountCode);
-            localStorage.setItem("discount_code", discountCode);
-        }
-    }, [id]);
-
-    //checking if the user has purchased the course or not before
-    useEffect(() => {
-        const fetchIsPurchased = async () => {
-            if (!isLoaded || !user) return;
-
-            const token = await getToken();
-
-            const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    clerkuserId: user.id
-                }
-            });
-            // @ts-ignore
-            setIsPurchased(res.data.purchased);
-        }
-        fetchIsPurchased();
-    }, [id, isLoaded, user]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
 
     //fetching the course details, by id from the url
     useEffect(() => {
@@ -78,10 +62,34 @@ const Course = () => {
         fetchCourse();
     }, [id]);
 
+    //fetching the discount code from the url and storing it in local storage
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
+        const urlParams = new URLSearchParams(window.location.search);
+        const discountCode = urlParams.get("discount_code");
+        if (discountCode) {
+            localStorage.setItem("discount_code", discountCode);
+        }
+    }, [id]);
 
+    //checking if the user has purchased the course or not before
+    useEffect(() => {
+        const fetchIsPurchased = async () => {
+            if (!isLoaded || !user) return;
+
+            const token = await getToken();
+
+            //returns boolean value
+            const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    clerkuserId: user.id
+                }
+            });
+            // @ts-ignore
+            setIsPurchased(res.data.purchased);
+        }
+        fetchIsPurchased();
+    }, [id, isLoaded, user]);
 
     //razorpay script
     const loadScript = (src: string) => {
@@ -95,10 +103,10 @@ const Course = () => {
     }
 
     const handleSignIn = () => {
+        localStorage.setItem(`pendingPayment_${id}`, 'true');
         navigate("?sign-in=true");
-        coursePayment();
     }
-    
+
     useEffect(() => {
         loadScript("https://checkout.razorpay.com/v1/checkout.js");
     }, []);
@@ -147,7 +155,7 @@ const Course = () => {
                         razorpay_signature,
                         courseId: id,
                         clerkUserId: user?.id,
-                        amount:amount/100
+                        amount: amount / 100
                     })
                     // @ts-ignore
                     if (res.status === 200) {
@@ -165,6 +173,7 @@ const Course = () => {
 
         } catch (error) {
             console.log(error);
+            localStorage.removeItem(`pendingPayment_${id}`);
         }
     }
 
@@ -205,13 +214,16 @@ const Course = () => {
                                         </button>
                                     </div>
                                 ) : (
-                                    
+
                                     <button
-                                        onClick={() => coursePayment()}
+                                        ref={enrollButtonRef}
+                                        onClick={() => {
+                                            {isSignedIn ? coursePayment() : handleSignIn()}
+                                        }}
                                         className="cursor-pointer px-8 sm:px-12 py-2 sm:py-3 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
                                         Enroll Now
                                     </button>
-                                    
+
                                 )
                             ) : (
                                 <button
@@ -290,9 +302,7 @@ const Course = () => {
 
                 </div>
             )}
-            {/* <div className="hidden">
-                <SignInButton data-testid="clerk-signin-button" mode="modal" />
-            </div> */}
+               
         </div>
     )
 }
