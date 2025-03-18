@@ -49,6 +49,8 @@ app.use("/api/v1/payment",  coursePaymentRouter);
 //to verify payment
 app.use("/api/v1/paymentVerify",  paymentVerifyRouter);
 
+
+//access paid content 
 app.use("/api/v1/content",isUser,contentRouter);
 
 

@@ -47,15 +47,15 @@ model Course {
   forwhom          String[]
   language         String        @default("English")
   transactions     Transaction[]
-  modules          Module[]
+  modules          Module[] 
 }
 
 model Module {
   id       Int     @id @default(autoincrement())
   title    String
   courseId Int
-  course   Course  @relation(fields: [courseId], references: [id])
-  topics   Topic[]
+  course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  topics   Topic[]  
 }
 
 model Topic {
@@ -63,15 +63,15 @@ model Topic {
   title       String
   description String
   moduleId    Int
-  module      Module    @relation(fields: [moduleId], references: [id])
-  contents    Content[]
+  module      Module    @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  contents    Content[]  
 }
 
 model Content {
   id      Int         @id @default(autoincrement())
   name    String
   topicId Int
-  topic   Topic       @relation(fields: [topicId], references: [id])
+  topic   Topic       @relation(fields: [topicId], references: [id], onDelete: Cascade)
   type    ContentType
   key     String      @unique
 }

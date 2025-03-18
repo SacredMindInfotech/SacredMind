@@ -1,35 +1,54 @@
 import { Request, Response } from "express";
 import prisma from "../../PrismaClient";
 
-export const getContentByIdController = async (req: Request, res: Response) => {
+export const createContentController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const course = await prisma.course.findUnique({
-      where: {
-        id: parseInt(id),
-      },
-      include: {
-        modules: {
-          orderBy: { id: "asc" },
-          include: {
-            topics: {
-              orderBy: { id: "asc" },
-              include: {
-                contents: {
-                  orderBy: { id: "asc" },
-                },
-              },
-            },
-          },
-        },
-      },
+    const { topicId } = req.params;
+    const { name, type, key } = req.body;
+    const content = await prisma.content.create({
+      data: { name, type, key, topicId: parseInt(topicId) },
     });
-
-    res.status(200).json(course);
+    res.status(200).json(content);
     return;
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error creating content:", error);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
+export const updateContentByIdController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { contentId } = req.params;
+    const { name, type, key } = req.body;
+    const content = await prisma.content.update({
+      where: { id: parseInt(contentId) },
+      data: { name, type, key },
+    });
+    res.status(200).json(content);
+    return;
+  } catch (error) {
+    console.error("Error updating content:", error);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
+export const deleteContentByIdController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { contentId } = req.params;
+    await prisma.content.delete({ where: { id: parseInt(contentId) } });
+    res.status(200).json({ message: "Content deleted successfully" });
+    return;
+  } catch (error) {
+    console.error("Error deleting content:", error);
+    res.status(500).json({ error: "Internal server error" });
     return;
   }
 };

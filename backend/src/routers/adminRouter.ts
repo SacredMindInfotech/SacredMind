@@ -23,9 +23,33 @@ import {
   getAllOrdersController,
   getOrderByIdController,
 } from "../controllers/admin/ordersOperations/order";
-import { createJobController, updateJobByIdController, deleteJobByIdController } from "../controllers/admin/jobOperations/job";
-import { createJobCategoryController, deleteJobCategoryByIdController, updateJobCategoryByIdController } from "../controllers/admin/jobCategoryOperations/jobCategory";
-import  { createDiscountTokenController, deleteDiscountTokenByIdController, getAllDiscountTokensController, updateDiscountTokenByIdController } from "../controllers/discountTokens/discountTokenController";
+import {
+  createJobController,
+  updateJobByIdController,
+  deleteJobByIdController,
+} from "../controllers/admin/jobOperations/job";
+import {
+  createJobCategoryController,
+  deleteJobCategoryByIdController,
+  updateJobCategoryByIdController,
+} from "../controllers/admin/jobCategoryOperations/jobCategory";
+import {
+  createDiscountTokenController,
+  deleteDiscountTokenByIdController,
+  getAllDiscountTokensController,
+  updateDiscountTokenByIdController,
+} from "../controllers/discountTokens/discountTokenController";
+import {
+  createModuleController,
+  deleteModuleByIdController,
+  updateModuleByIdController,
+} from "../controllers/module/moduleController";
+import {
+  createTopicController,
+  deleteTopicByIdController,
+  updateTopicByIdController,
+} from "../controllers/topic/topicController";
+import { createContentController, deleteContentByIdController, updateContentByIdController } from "../controllers/content/contentController";
 
 const adminRouter = Router();
 
@@ -62,7 +86,6 @@ adminRouter.get("/dashboard/users", getUserStats);
 // GET	/api/v1/admin/dashboard/courses	Get course stats
 adminRouter.get("/dashboard/courses", getCourseStats);
 
-
 // POST	/api/v1/admin/jobs	Create a new job
 adminRouter.post("/jobs", createJobController);
 // PUT	/api/v1/admin/jobs/:id	Update job details
@@ -85,5 +108,26 @@ adminRouter.get("/discountTokens", getAllDiscountTokensController);
 adminRouter.put("/discountTokens/:id", updateDiscountTokenByIdController);
 // DELETE	/api/v1/admin/discountTokens/:id	Delete a discount token
 adminRouter.delete("/discountTokens/:id", deleteDiscountTokenByIdController);
+
+//POST /api/v1/admin/module/:id   Creating new module of a course by courseId
+adminRouter.post("/module/:courseId", createModuleController);
+//PUT /api/v1/admin/module/:id   Updating a module of a course -  only title can be updated by moduleId
+adminRouter.put("/module/:moduleId", updateModuleByIdController);
+//DELETE /api/v1/admin/module/:id   Deleting a module of a course by moduleId
+adminRouter.delete("/module/:moduleId", deleteModuleByIdController);
+
+//POST /api/v1/admin/topic/:id   Creating new topic of a module by moduleId
+adminRouter.post("/topic/:moduleId", createTopicController);
+//PUT /api/v1/admin/topic/:id   Updating a topic of a module by topicId
+adminRouter.put("/topic/:topicId", updateTopicByIdController);
+//DELETE /api/v1/admin/topic/:id   Deleting a topic of a module by topicId
+adminRouter.delete("/topic/:topicId", deleteTopicByIdController);
+
+//POST /api/v1/admin/content/:id   Creating new content of a topic by topicId
+adminRouter.post("/content/:topicId", createContentController);
+//PUT /api/v1/admin/content/:id   Updating a content of a topic by contentId
+adminRouter.put("/content/:contentId", updateContentByIdController);
+//DELETE /api/v1/admin/content/:id   Deleting a content of a topic by contentId
+adminRouter.delete("/content/:contentId", deleteContentByIdController);
 
 export default adminRouter;

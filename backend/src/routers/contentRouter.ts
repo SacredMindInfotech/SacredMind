@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { getContentByIdController } from "../controllers/content/contentController";
+import { getContentByIdController } from "../controllers/courseContent/courseContentController";
 import { isUserEnrolled } from "../middleware/isUserEnrolled";
 
 const contentRouter = Router();
