@@ -1,5 +1,5 @@
 import { SignedIn, SignedOut, SignIn, useAuth, UserButton, useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -16,10 +16,11 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isExploreOpen, setIsExploreOpen] = useState(false);
+    const [isMobileExploreOpen, setIsMobileExploreOpen] = useState(false);
     const { isLoaded, user } = useUser();
     const { getToken } = useAuth();
     const currentPath = useLocation().pathname;
-
+    const exploreRef = useRef<HTMLDivElement>(null);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -80,6 +81,19 @@ const Navbar = () => {
         }
     }, [search]);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (exploreRef.current && !exploreRef.current.contains(event.target as Node)) {
+                setIsExploreOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [exploreRef]);
+
     function handleOverlayClick(e: any) {
         if (e.target === e.currentTarget) {
             setShowSignIn(false);
@@ -107,6 +121,7 @@ const Navbar = () => {
                     y: visible ? 0 : -100,
                     opacity: visible ? 1 : 0
                 }}
+                exit={{ y: -100, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="flex justify-between items-center min-h-[8vh] px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-2 border-b border-gray-100 bg-white text-gray-900 sticky top-0 z-40 shadow-md"
             >
@@ -132,11 +147,11 @@ const Navbar = () => {
                         </div>
 
                         {/* Desktop Explore Menu */}
-                        <div className="hidden md:block relative">
+                        <div className="hidden md:block relative" ref={exploreRef}>
                             {categories.length > 0 && (
                                 <button
                                     onClick={() => setIsExploreOpen(!isExploreOpen)}
-                                    className="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer"
+                                    className="text-sm lg:text-base text-gray-900 font-semibold transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer"
                                 >
                                     Explore Courses
                                     <svg
@@ -156,8 +171,12 @@ const Navbar = () => {
                                 </button>
                             )}
 
-
-                            <div className={`absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 transition-all ${isExploreOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={isExploreOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+                                transition={{ duration: 0.3 }}
+                                className={`absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 transition-all ${isExploreOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}
+                            >
                                 <div className="py-2" role="menu">
                                     {categories?.map((category) => (
                                         <button
@@ -171,7 +190,7 @@ const Navbar = () => {
                                         </button>
                                     ))}
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
 
                     </div>
@@ -179,27 +198,44 @@ const Navbar = () => {
 
                 {/* Mobile Menu */}
                 {isMenuOpen && (
-                    <div className="absolute top-full left-0 right-0 bg-white border-b border-gray-100 md:hidden">
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute top-full left-0 right-0 bg-white border-b border-gray-100 md:hidden"
+                    >
                         <div className="flex flex-col py-4">
                             <div className="px-4 py-2">
                                 <div className="relative group">
-                                    <button className="text-gray-600 w-full text-left">
+                                    <button 
+                                        className="text-gray-900 font-semibold w-full text-left"
+                                        onClick={() => setIsMobileExploreOpen(!isMobileExploreOpen)}
+                                    >
                                         Explore Courses
                                     </button>
-                                    <div className="pl-4 mt-2 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                                        {categories?.map((category) => (
-                                            <button
-                                                key={category.id}
-                                                onClick={() => {
-                                                    setIsMenuOpen(false);
-                                                    window.location.href = `/category/${category.name}`;
-                                                }}
-                                                className="block w-full py-2 text-gray-600 hover:bg-gray-50"
-                                            >
-                                                {category.name}
-                                            </button>
-                                        ))}
-                                    </div>
+                                    {isMobileExploreOpen && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: "auto", opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="pl-4 mt-2 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+                                        >
+                                            {categories?.map((category) => (
+                                                <button
+                                                    key={category.id}
+                                                    onClick={() => {
+                                                        setIsMenuOpen(false);
+                                                        window.location.href = `/category/${category.name}`;
+                                                    }}
+                                                    className="block w-full py-2 text-left text-gray-600 hover:bg-gray-50"
+                                                >
+                                                    {category.name}
+                                                </button>
+                                            ))}
+                                        </motion.div>
+                                    )}
                                 </div>
                             </div>
                             <div>
@@ -208,7 +244,7 @@ const Navbar = () => {
                                         setIsMenuOpen(false);
                                         navigate("/purchases");
                                     }}
-                                    className="px-4 py-2 text-gray-600 hover:bg-gray-50 w-full text-left"
+                                    className="px-4 py-2 text-gray-900 font-semibold hover:bg-gray-50 w-full text-left"
                                 >
                                     My Purchases
                                 </button>
@@ -223,7 +259,7 @@ const Navbar = () => {
                                 </button>
                             )}
                         </div>
-                    </div>
+                    </motion.div>
                 )}
 
                 {/* Desktop Navigation */}

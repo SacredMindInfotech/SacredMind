@@ -7,7 +7,7 @@ const CareerContact = (props: any) => {
 
     return (
 
-        <div className="relative w-full h-full">
+        <div className="relative lg:mb-32 sm:mb-16 mb-8 w-full h-full">
 
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
                 <section ref={props.ref} className="bg-white">
@@ -23,7 +23,7 @@ const CareerContact = (props: any) => {
                             </p>
                             <button
                                 onClick={() => router("/careers")}
-                                className="w-full md:w-48 px-6 py-4 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 montserrat-500"
+                                className="w-full max-w-48 md:w-48 px-6 py-4 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                             >
                                 JOIN US
                             </button>
@@ -39,7 +39,7 @@ const CareerContact = (props: any) => {
                             </p>
                             <button
                                 onClick={() => router("/contact")}
-                                className="w-full md:w-48 px-6 py-4 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 montserrat-500"
+                                className="w-full max-w-48 md:w-48 px-6 py-4 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                             >
                                 SPEAK TO US
                             </button>

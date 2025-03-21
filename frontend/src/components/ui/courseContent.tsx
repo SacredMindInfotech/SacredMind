@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
+import { LoadingScreen } from "./loadingScreen";
 
 
 interface Module {
@@ -51,49 +52,20 @@ const CourseContent = () => {
     const { id } = useParams();
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(true);
-    const { user, isLoaded } = useUser();
     const { getToken } = useAuth();
-    const [isPurchased, setIsPurchased] = useState<boolean>(false);
     const navigate = useNavigate();
     const [openedModule, setOpenedModule] = useState<number[]>([0]);
     const [openedTopic, setOpenedTopic] = useState<string[]>([]);
 
 
+
     useEffect(() => {
-        const fetchIsPurchased = async () => {
-            if (!isLoaded || !user) return;
-
-            const token = await getToken();
-            const backendUrl = import.meta.env.VITE_BACKEND_URL;
-            try {
-
-                const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        clerkuserId: user.id
-                    }
-                });
-
-                // @ts-ignore
-                setIsPurchased(res.data.purchased);
-
-                if (!loading && !isPurchased) {
-                    navigate(`/course/${id}`);
-                }
-            } catch (error: any) {
-                if (error.status !== 200) {
-                    setIsPurchased(false);
-                    navigate(`/course/${id}`);
-                    return;
-                }
-                console.error("Error checking purchase:", error);
-            }
-        }
-        fetchIsPurchased();
-    }, [id, isLoaded, user]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
 
 
 
+    //fetching the course content
     useEffect(() => {
         const fetchCourse = async () => {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -104,7 +76,6 @@ const CourseContent = () => {
                 }
             });
             // @ts-ignore
-            console.log(res.data.modules);
             setCourse(res.data as Course);
             setLoading(false);
         }
@@ -112,7 +83,7 @@ const CourseContent = () => {
     }, [id]);
 
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingScreen />;
 
     return (
         <div className="relative w-full h-full">
@@ -128,6 +99,12 @@ const CourseContent = () => {
                                 <p className="text-md md:text-lg lg:text-xl mb-6 max-w-xl">
                                     Explore the course modules and lessons.
                                 </p>
+                                <button className="w-full max-w-40 md:w-36 px-4 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer flex items-center justify-center sm:w-auto" onClick={() => navigate(`/course/${id}`)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                    Overview
+                                </button>
                             </div>
 
                             {/* Content Section */}
@@ -146,10 +123,11 @@ const CourseContent = () => {
 
                             <div>
                                 {course?.modules?.map((module, moduleIndex) => {
+
                                     return (
-                                        <div key={moduleIndex} className="bg-white/10 backdrop-blur-md p-4 rounded-lg mb-4">
+                                        <div key={moduleIndex} className="bg-gray-100 p-4 rounded-lg mb-4">
                                             <div
-                                                className="flex justify-between items-center cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 rounded-lg p-2"
+                                                className="flex justify-between items-center cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-200 rounded-lg p-2"
                                                 onClick={() => {
                                                     if (openedModule?.includes(moduleIndex)) {
                                                         setOpenedModule(openedModule.filter(index => index !== moduleIndex))
@@ -158,9 +136,10 @@ const CourseContent = () => {
                                                     }
                                                 }}
                                             >
-                                                <h3 className="text-lg font-semibold mb-3 montserrat-700">
-                                                    Module {moduleIndex + 1}: {module.title}
+                                                <h3 className="text-lg font-bold">
+                                                    Module {moduleIndex + 1} - {module.title}
                                                 </h3>
+
                                                 <svg
                                                     className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedModule?.includes(moduleIndex) ? 'rotate-180' : ''}`}
                                                     fill="none"
@@ -184,7 +163,7 @@ const CourseContent = () => {
                                                                     }
                                                                 }
                                                             } >
-                                                                <h4 className="text-md font-medium mb-2">
+                                                                <h4 className="text-sm font-medium mb-2">
                                                                     {topicIndex + 1}. {topic.title}
                                                                 </h4>
                                                                 <svg className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedTopic?.includes(`${moduleIndex}-${topicIndex}`) ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -192,9 +171,25 @@ const CourseContent = () => {
                                                                 </svg>
                                                             </div>
                                                             {openedTopic?.includes(`${moduleIndex}-${topicIndex}`) && (
-                                                                <p className="text-gray-600 text-sm">
-                                                                    {topic.description}
-                                                                </p>
+                                                                <div className="flex flex-col gap-1">
+                                                                    <p className="text-gray-600 text-sm mb-1">
+                                                                        {topic.description}
+                                                                    </p>
+                                                                    {topic.contents?.map((content, contentIndex) => (
+                                                                        <div key={contentIndex} className="p-2 max-w-xl bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
+                                                                            <div className="flex text-sm flex-col gap-1">
+                                                                                <span className="font-bold">{content.name}</span>
+                                                                                <span className="text-gray-600 text-xs">{content.type}</span>
+                                                                            </div>
+                                                                            <button
+                                                                                className="w-full max-w-20 md:w-36 px-4 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer flex items-center justify-center sm:w-auto"
+                                                                                onClick={() => navigate(`/course/${id}/content/${encodeURIComponent(content.key)}`)}
+                                                                            >
+                                                                                View
+                                                                            </button>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
                                                             )}
                                                         </div>
                                                     ))}
@@ -204,7 +199,6 @@ const CourseContent = () => {
                                     );
                                 })}
                             </div>
-
                         </div>
                     </div>
                 </section>

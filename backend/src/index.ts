@@ -50,8 +50,9 @@ app.use("/api/v1/payment",  coursePaymentRouter);
 app.use("/api/v1/paymentVerify",  paymentVerifyRouter);
 
 
-//access paid content 
+//accessing  paid course content
 app.use("/api/v1/content",isUser,contentRouter);
+
 
 
 app.listen(3000, () => {

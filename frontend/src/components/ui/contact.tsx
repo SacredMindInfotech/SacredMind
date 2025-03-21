@@ -46,7 +46,7 @@ const Contact = (props: any) => {
                 <section ref={props.ref} className="relative text-black">
                     {/* Content */}
                     <div className="relative z-10 container mx-auto">
-                        <div className="flex flex-col gap-12">
+                        <div className="flex flex-col">
                             {/* Left Section - Hero Content */}
                             <div className="flex flex-col p-8 md:p-16 lg:p-28 bg-gray-100 justify-center">
                                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 montserrat-700">
@@ -115,7 +115,7 @@ const Contact = (props: any) => {
                                             <button
                                                 type="submit"
                                                 disabled={isLoading}
-                                                className="w-full md:w-48 px-6 py-4 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 montserrat-500"
+                                                className="w-full md:w-48 px-6 py-4 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                                             >
                                                 {isLoading ? 'SENDING...' : 'SPEAK WITH US'}
                                             </button>

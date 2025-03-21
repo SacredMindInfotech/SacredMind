@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
+import { LoadingScreen } from "./loadingScreen";
 
 
 interface Purchases {
@@ -79,7 +80,7 @@ const Purchases = () => {
     }, [purchases]);
 
     if (loading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return  <LoadingScreen />
     }
 
     return (
@@ -97,19 +98,28 @@ const Purchases = () => {
 
                             {/* Courses */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {courses.length === 0 ? <div className="text-center text-gray-500">No courses purchased yet.</div> : courses.map((course) => (
-                                    <div key={course.id} className="bg-white shadow-md rounded-lg p-6">
-                                        <h1 className="text-xl font-bold mb-2">{course.title}</h1>
-                                        <div className="mt-4 flex justify-center">
-                                            <button
-                                                onClick={() => window.location.href = `/course/${course.id}`}
-                                                className="w-full md:w-48 px-6 py-4 border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-colors duration-200 montserrat-500"
-                                            >
-                                                View Course
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                {courses.length === 0 ? (
+                                    <div className="text-center text-gray-500">No courses purchased yet.</div>
+                                ) : (
+                                    courses.map((course) => {
+                                        const purchase = purchases.find(p => p.courseId === course.id);
+                                        const enrolledAt = purchase ? new Date(purchase.enrolledAt).toLocaleDateString('en-GB') : "Unknown date";
+                                        return (
+                                            <div key={course.id} className="bg-white shadow-md rounded-lg p-6 flex flex-col justify-between h-full">
+                                                <h1 className="text-xl font-bold mb-2 text-center">{course.title}</h1>
+                                                <p className="text-center text-gray-600 mb-4">Enrolled at: {enrolledAt}</p>
+                                                <div className="mt-4 flex justify-center">
+                                                    <button
+                                                        onClick={() => window.location.href = `/course/${course.id}`}
+                                                        className="w-full md:w-36 px-4 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer flex items-center justify-center"
+                                                    >
+                                                        View Course
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                )}
                             </div>
                         </div>
                     </div>

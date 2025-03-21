@@ -23,6 +23,8 @@ import Purchases from './components/ui/purchases'
 import CourseContent from './components/ui/courseContent'
 import MetaPixel from './MetaPixel'
 import PricingPolicy from './components/ui/pricingPolicy'
+import ViewContent from './components/ui/viewContent'
+import OnlyPaidUsers from './components/onlyPaidUsers'
 
 function App() {
   const Router = createBrowserRouter([
@@ -55,9 +57,24 @@ function App() {
       path: "/course/:id/content",
       element: <>
         <ProtectedRoutes>
-          <Navbar></Navbar>
-          <CourseContent></CourseContent>
-          <Footer />
+          <OnlyPaidUsers>
+            <Navbar></Navbar>
+            <CourseContent></CourseContent>
+            <Footer />
+          </OnlyPaidUsers>
+        </ProtectedRoutes>
+      </>
+    },
+    {
+      //id is required by onlyPaidUsers to check if the user has purchased the course
+      path: "/course/:id/content/:contentKey",
+      element: <>
+        <ProtectedRoutes>
+          <OnlyPaidUsers>
+            <Navbar></Navbar>
+            <ViewContent />
+            <Footer />
+          </OnlyPaidUsers>
         </ProtectedRoutes>
       </>
     },
@@ -130,9 +147,11 @@ function App() {
     {
       path: "/purchases",
       element: <>
-        <Navbar></Navbar>
-        <Purchases />
-        <Footer />
+        <ProtectedRoutes>
+          <Navbar></Navbar>
+          <Purchases />
+          <Footer />
+        </ProtectedRoutes>
       </>
     }
   ])
