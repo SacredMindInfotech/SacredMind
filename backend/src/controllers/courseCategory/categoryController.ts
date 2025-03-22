@@ -64,6 +64,7 @@ export const getCoursesByCategoryIdController = async (
     const courses = await prisma.course.findMany({
       where: {
         categoryId: parseInt(id),
+        published: true,
       },
       include: {
         category: true,
@@ -75,6 +76,25 @@ export const getCoursesByCategoryIdController = async (
       return;
     }
     res.status(200).json(courses);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getOnlySubcategoriesController = async (req: Request, res: Response) => {
+  try {
+    const categories = await prisma.category.findMany({
+      where: { parentId: { not: null } },
+    });
+    if (!categories) {
+      res.status(400).json({ error: "Failed to get categories" });
+      return;
+    }
+    if (categories.length === 0) {
+      res.status(204).json({ "Message": "No subcategories found" });
+      return;
+    }
+    res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

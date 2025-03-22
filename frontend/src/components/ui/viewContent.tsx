@@ -61,27 +61,39 @@ const ViewContent = () => {
    
 
     return (
-        <div className="min-h-screen flex justify-center">
-            {fileUrl && (
-                <div className="flex flex-col md:flex-row min-w-full md:min-w-2/3 justify-center mt-7">
-                    {contentKey?.endsWith(".pdf") ? (
-                        <a href={fileUrl} target="_blank" download={`${contentKey}`} className="cursor-pointer underline text-center">
-                            Click here to download the PDF file
-                        </a>
-                    ) : contentKey?.match(/\.(mp4|webm|ogg)$/) ? (
-                        <div className="w-full lg:mt-20 md:w-3/5 h-60 md:h-96 flex justify-center items-center">
-                            <SecureVideo src={fileUrl} />
-                        </div>
-                    ) : contentKey?.match(/\.(jpg|jpeg|png|gif)$/) ? (
-                        <img src={fileUrl} alt="File Preview" className="w-full md:w-auto h-60 md:h-96" style={{ objectFit: 'contain' }} />
-                    ) : contentKey?.match(/\.(xlsx|xls)$/) ? (
-                        <a href={fileUrl} target="_blank" download={`${contentKey}`} className="underline cursor-pointer text-center">
-                            Click here to download the Excel file
-                        </a>
-                    ) : null}
-                </div>
-            )}
-            
+        <div className="min-h-screen mt-10 flex flex-col items-center">
+            <div className="w-full ml-4 flex justify-start">
+                <button 
+                    onClick={() => navigate("/course")} 
+                    className="w-full hidden md:flex max-w-44 px-4 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer  items-center justify-center sm:w-auto"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                    Back to Course
+                </button>
+            </div>
+            <div className="flex justify-center">
+                {fileUrl && (
+                    <div className="flex flex-col md:flex-row min-w-full md:min-w-2/3 justify-center mt-7">
+                        {contentKey?.endsWith(".pdf") ? (
+                            <a href={fileUrl} target="_blank" download={`${contentKey}`} className="cursor-pointer underline text-center">
+                                Click here to download the PDF file
+                            </a>
+                        ) : contentKey?.match(/\.(mp4|webm|ogg)$/) ? (
+                            <div className="w-full sm:mt-20 md:w-3/5 h-60 md:h-96 flex justify-center items-center">
+                                <SecureVideo src={fileUrl} />
+                            </div>
+                        ) : contentKey?.match(/\.(jpg|jpeg|png|gif)$/) ? (
+                            <img src={fileUrl} alt="File Preview" className="w-full md:w-auto h-60 md:h-96" style={{ objectFit: 'contain' }} />
+                        ) : contentKey?.match(/\.(xlsx|xls)$/) ? (
+                            <a href={fileUrl} target="_blank" download={`${contentKey}`} className="underline cursor-pointer text-center">
+                                Click here to download the Excel file
+                            </a>
+                        ) : null}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

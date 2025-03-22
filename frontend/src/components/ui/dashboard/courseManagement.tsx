@@ -6,14 +6,45 @@ import styled from "styled-components";
 
 interface Course {
     id: number;
+    title: string;
+    description: string;
+    isActive: boolean;
+    isStarted: boolean;
+    price: number;
     imageUrl: string | null;
     createdAt: Date;
     updatedAt: Date;
+    published: boolean;
+    categoryId: number;
+    overview: string[];
+    learningOutcomes: string[];
+    requirements: string[];
+    forwhom: string[];
+    language: string;
+    modules: Module[];
+    category: {
+        name: string;
+    };
+}
+interface Module {
+    id: number;
+    title: string;
+    courseId: number;
+    topics: Topic[];
+}
+interface Topic {
+    id: number;
     title: string;
     description: string;
-    price: number;
-    categoryId: number;
-    published: boolean;
+    moduleId: number;
+    contents: Content[];
+}
+interface Content {
+    id: number;
+    name: string;
+    topicId: number;
+    type: "VIDEO" | "PDF" | "EXCEL" | "TEXT" | "IMAGE";
+    key: string;
 }
 
 interface SelectedRows {
@@ -73,146 +104,73 @@ const columns = [
 ];
 
 const ExpandedComponent = ({ data }: any) => (
-    <div className="p-6 space-y-4 bg-gray-50">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Course Details</h1>
+    <div className="p-8 space-y-6 bg-white shadow-lg rounded-lg">
+        <h1 className="text-3xl font-extrabold text-gray-800 mb-8">Course Details</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Title:</span>
-                    <span className="text-gray-600">{data.title}</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Title:</span>
+                    <span className="text-gray-700">{data.title}</span>
                 </p>
 
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Description:</span>
-                    <span className="text-gray-600">{data.description}</span>
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Description:</span>
+                    <span className="text-gray-700">{data.description}</span>
                 </p>
 
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Price:</span>
-                    <span className="text-gray-600">${data.price}</span>
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Price:</span>
+                    <span className="text-gray-700">${data.price}</span>
                 </p>
 
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Status:</span>
-                    <span className={`px-2 py-1 rounded-full text-xs ${data.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Status:</span>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${data.published ? 'bg-green-200 text-green-900' : 'bg-yellow-200 text-yellow-900'
                         }`}>
                         {data.published ? 'Published' : 'Draft'}
                     </span>
                 </p>
             </div>
 
-            <div className="space-y-4">
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Category ID:</span>
-                    <span className="text-gray-600">{data.categoryId}</span>
+            <div className="space-y-6">
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Category:</span>
+                    <span className="text-gray-700">{data.category.name}</span>
                 </p>
 
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Created At:</span>
-                    <span className="text-gray-600">{data.createdAt}</span>
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Created At:</span>
+                    <span className="text-gray-700">{data.createdAt}</span>
                 </p>
 
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Updated At:</span>
-                    <span className="text-gray-600">{data.updatedAt}</span>
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Updated At:</span>
+                    <span className="text-gray-700">{data.updatedAt}</span>
                 </p>
 
-                <p className="flex gap-2">
-                    <span className="font-semibold text-gray-700">Image:</span>
-                    <span className="text-gray-600">{data.imageUrl || 'No image available'}</span>
+                <p className="flex items-center gap-3">
+                    <span className="font-semibold text-gray-800">Image:</span>
+                    <span className="text-gray-700">{data.imageUrl || 'No image available'}</span>
                 </p>
             </div>
+        </div>
+        <div className="mt-8 text-center">
+            <a
+                href={`/admin/course/${data.id}`}
+                className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-all duration-200"
+            >
+                View Details
+            </a>
         </div>
     </div>
 );
 
 
-const CourseDetailsChangingDialog = ({selectedRows,setIsDetailsDialogOpen,handleCourseSaveChanges}:{selectedRows:SelectedRows,setIsDetailsDialogOpen:(value:boolean)=>void,handleCourseSaveChanges:()=>void}) => {
-    const course = selectedRows?.selectedRows[0];
-
-    return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-xl min-h-[700px] shadow-xl w-full max-w-7xl">
-                <h2 className="text-xl font-bold mb-4">Edit Course Details</h2>
-                <div className="flex gap-8">
-                    {/* Left side: Current course details */}
-                    <div className="flex flex-col gap-4 w-1/2">
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">Current Title:</label>
-                            <span className="text-gray-600">{course?.title}</span>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">Current Description:</label>
-                            <span className="text-gray-600">{course?.description}</span>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">Current Price:</label>
-                            <span className="text-gray-600">${course?.price}</span>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">Current Status:</label>
-                            <span className={`px-2 py-1 w-20 inline-block text-center rounded-full text-xs ${course?.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                {course?.published ? 'Published' : 'Draft'}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Right side: Input fields with empty values */}
-                    <div className="flex flex-col gap-4 w-1/2">
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">New Title:</label>
-                            <input
-                                type="text"
-                                className="p-2 border rounded-md text-gray-600"
-                                placeholder="Enter new title"
-                            />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">New Description:</label>
-                            <textarea
-                                className="p-2 border rounded-md text-gray-600"
-                                placeholder="Enter new description"
-                                rows={3}
-                            />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">New Price:</label>
-                            <input
-                                type="number"
-                                className="p-2 border rounded-md text-gray-600"
-                                placeholder="Enter new price"
-                            />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="font-semibold text-gray-700">New Status:</label>
-                            <select 
-                                className="p-2 border rounded-md text-gray-600"
-                            >
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex justify-end gap-2 mt-4">
-                    <button onClick={() => setIsDetailsDialogOpen(false)} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                        Cancel
-                    </button>
-                    <button onClick={handleCourseSaveChanges} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                        Save Changes
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
 const CourseDeletingDialog = ({ isLoading, setIsDeleteDialogOpen, handleDeleteCourse, selectedRows }: { isLoading: boolean, setIsDeleteDialogOpen: (value: boolean) => void, handleDeleteCourse: () => Promise<void>, selectedRows: SelectedRows }) => {
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50" >
-           <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
+            <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Are you sure you want to delete these courses?</h2>
                 <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                     <div className="space-y-3">
@@ -226,8 +184,8 @@ const CourseDeletingDialog = ({ isLoading, setIsDeleteDialogOpen, handleDeleteCo
                     </div>
                 </div>
                 <div className="flex justify-end mt-4">
-                    <button 
-                        onClick={handleDeleteCourse} 
+                    <button
+                        onClick={handleDeleteCourse}
                         disabled={isLoading}
                         className={`bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
@@ -242,7 +200,7 @@ const CourseDeletingDialog = ({ isLoading, setIsDeleteDialogOpen, handleDeleteCo
                     </button>
                 </div>
                 <div className="flex justify-end mt-4">
-                    <button 
+                    <button
                         onClick={() => setIsDeleteDialogOpen(false)}
                         disabled={isLoading}
                         className={`bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -276,7 +234,6 @@ const CourseManagement = () => {
         selectedCount: 0,
         selectedRows: []
     });
-    const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [progressPending, setProgressPending] = useState(true);
     //toggle clear selected rows set to true when the user clicks the change details button and request sent
@@ -321,11 +278,11 @@ const CourseManagement = () => {
     //handle row selected - setting the selected rows
     const handleRowSelected = (selectedRows: SelectedRows) => {
         setSelectedRows(selectedRows);
-        setIsDetailsDialogOpen(false);
         setIsDeleteDialogOpen(false);
     };
 
     //context actions for the table
+    //when rows are selected, what optoins should be shown
     const contextActions = useMemo(() => (
 
         <div className="flex gap-2">
@@ -339,20 +296,11 @@ const CourseManagement = () => {
                 Delete Selected
             </button>
 
-            {selectedRows!.selectedRows.length === 1 && (
-                <button
-                    onClick={() => setIsDetailsDialogOpen(true)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                    </svg>
-                    Change details
-                </button>
-            )}
+
         </div>
     ), [selectedRows]);
 
+    //handle delete course - can delete multiple courses at once
     const handleDeleteCourse = async () => {
         try {
             setIsLoading(true);
@@ -367,7 +315,7 @@ const CourseManagement = () => {
 
             if (updatePromises) {
                 await Promise.all(updatePromises);
-                const response=await fetchCourses();
+                const response = await fetchCourses();
                 setCourses(response.data as Course[]);
                 setToggleClearSelectedRows(true);
                 setIsDeleteDialogOpen(false);
@@ -380,26 +328,6 @@ const CourseManagement = () => {
         }
     }
 
-    const handleCourseSaveChanges = async () => {
-        try {
-            setIsLoading(true);
-            const token = await getToken();
-            const response=await axios.put(`${backendUrl}api/v1/admin/courses/${selectedRows?.selectedRows[0].id}`,{
-                title:selectedRows?.selectedRows[0].title,
-                description:selectedRows?.selectedRows[0].description,
-                price:selectedRows?.selectedRows[0].price,
-                published:selectedRows?.selectedRows[0].published,
-                imageUrl:selectedRows?.selectedRows[0].imageUrl,
-            },{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            console.log(response);
-        } catch (error) {
-            console.error('Failed to save changes:', error);
-        }   
-    }
 
     //gives option for pagination to see all rows at once
     const paginationComponentOptions = {
@@ -441,11 +369,9 @@ const CourseManagement = () => {
 	border-bottom-right-radius: 0;
 	border: 1px solid #e5e5e5;
 	padding: 0 32px 0 16px;
-
 	&:hover {
 		cursor: pointer;
-	}
-`;
+	}`;
 
     //filter bar component provider
     const subHeaderComponentMemo = useMemo(() => {
@@ -482,10 +408,11 @@ const CourseManagement = () => {
     }, [filterText, data]);
 
     return (
-        <div className="p-4">
+        <div className="  p-4">
 
             <div className="overflow-x-auto bg-white rounded-lg shadow">
                 <DataTable
+                    
                     responsive
                     title="Courses"
                     columns={columns}
@@ -511,11 +438,6 @@ const CourseManagement = () => {
                     subHeaderComponent={subHeaderComponentMemo}
                 />
             </div>
-
-            {/* Changing Details Dialog */}
-            {isDetailsDialogOpen && (
-                <CourseDetailsChangingDialog handleCourseSaveChanges={handleCourseSaveChanges} setIsDetailsDialogOpen={setIsDetailsDialogOpen} selectedRows={selectedRows} />
-            )}
 
             {/* Delete Dialog */}
             {isDeleteDialogOpen && (

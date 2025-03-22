@@ -30,7 +30,7 @@ const Category = () => {
     const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
-    //fetch category with its subcategories
+    //fetch category 's subcategories by category id
     useEffect(() => {
         const fetchCategory = async () => {
             const res = await axios.get(`${backendUrl}api/v1/category/${id}`);

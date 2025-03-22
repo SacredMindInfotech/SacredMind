@@ -4,6 +4,8 @@ import axios from "axios";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { enrolledClickedEvent, enrolledSuccessEvent } from "../../lib/pixel-event";
 
+
+// add modules in courses also, user can see the modules and topics in the course before purchasing
 interface Course {
     id: number;
     title: string;
@@ -24,6 +26,7 @@ interface Course {
     requirements: string[] | null;
     forwhom: string[] | null;
     language: string;
+    courseNotice: string | null;
 }
 
 const Course = () => {

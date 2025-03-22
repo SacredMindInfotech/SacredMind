@@ -31,7 +31,7 @@ interface Course {
     description: string;
     price: number;
     isActive: boolean;
-    isStarted: boolean;
+    showCourseNotice: boolean;
     imageUrl: string | null;
     createdAt: Date;
     updatedAt: Date;
@@ -46,6 +46,7 @@ interface Course {
     forwhom: string[] | null;
     language: string;
     modules: Module[];
+    courseNotice: string | null;
 }
 
 const CourseContent = () => {
@@ -108,13 +109,12 @@ const CourseContent = () => {
                             </div>
 
                             {/* Content Section */}
-                            {course?.isStarted === false && (
+                            {course?.showCourseNotice === true && (
                                 <div className="flex flex-col justify-center py-6 md:py-12">
                                     <div className="bg-white/10 backdrop-blur-md p-4 md:p-6 rounded-lg max-w-2xl mx-auto w-full">
                                         <div className="space-y-4 md:space-y-5">
                                             <div className="text-center">
-                                                <h2 className="text-xl font-bold mb-3">Congratulations! You have enrolled in the course.</h2>
-                                                <p className="text-gray-600 mb-3">Live Classes will begin on April 1st, 2025</p>
+                                                {course?.courseNotice}
                                             </div>
                                         </div>
                                     </div>

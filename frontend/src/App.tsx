@@ -8,14 +8,14 @@ import Navbar from './components/ui/navbar'
 import Category from './components/ui/category'
 import Course from './components/ui/course'
 import AdminLayout from './pages/adminLayout'
-import UserManagement from './components/ui/userManagement'
-import CourseManagement from './components/ui/courseManagement'
-import OrderManagement from './components/ui/orderManagement'
-import AdminDashboard from './components/ui/adminDashboard'
+import UserManagement from './components/ui/dashboard/userManagement'
+import CourseManagement from './components/ui/dashboard/courseManagement'
+import OrderManagement from './components/ui/dashboard/orderManagement'
+import AdminDashboard from './components/ui/dashboard/adminDashboard'
 import Careers from './components/ui/careers'
 import ProtectedRoutes from './components/protected-routes'
 import JobDetails from './components/ui/jobDetails'
-import JobManagement from './components/ui/jobManagement'
+import JobManagement from './components/ui/dashboard/jobManagement'
 import PrivacyPolicy from './components/ui/PrivacyPolicy'
 import TermsAndConditions from './components/ui/TermsAndConditions'
 import SalesAndRefunds from './components/ui/SalesAndRefunds'
@@ -25,6 +25,8 @@ import MetaPixel from './MetaPixel'
 import PricingPolicy from './components/ui/pricingPolicy'
 import ViewContent from './components/ui/viewContent'
 import OnlyPaidUsers from './components/onlyPaidUsers'
+import EditCourse from './components/ui/dashboard/EditCourse'
+import CategoryManagement from './components/ui/dashboard/categoryManagement'
 
 function App() {
   const Router = createBrowserRouter([
@@ -85,6 +87,8 @@ function App() {
         { path: "", element: <AdminDashboard /> },
         { path: "users", element: <UserManagement /> },
         { path: "courses", element: <CourseManagement /> },
+        { path: "categories", element: <CategoryManagement /> },
+        { path: "course/:id", element: <EditCourse /> },
         { path: "orders", element: <OrderManagement /> },
         { path: "jobs", element: <JobManagement /> },
       ]
@@ -153,10 +157,14 @@ function App() {
           <Footer />
         </ProtectedRoutes>
       </>
+    },
+    {
+      path: "/admin/course/:id",
+      element: <EditCourse />
     }
   ])
   return (
-    <div>
+    <div className='overflow-auto'>
       <MetaPixel />
       <RouterProvider router={Router}></RouterProvider>
     </div>

@@ -15,14 +15,12 @@ export const getContentByIdController = async (req: Request, res: Response) => {
       },
       include: {
         modules: {
-          orderBy: { id: "asc" },
+          orderBy: { serialNumber: "asc" },
           include: {
             topics: {
-              orderBy: { id: "asc" },
+              orderBy: { serialNumber: "asc" },
               include: {
-                contents: {
-                  orderBy: { id: "asc" },
-                },
+                contents: true,
               },
             },
           },

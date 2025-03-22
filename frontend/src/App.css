@@ -6,35 +6,12 @@
 
 
 
-/* primary font  */
-.rowdies-bold {
-  font-family: "Rowdies", serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.rowdies-light {
-  font-family: "Rowdies", serif;
-  font-weight: 300;
-  font-style: normal;
-}  
-
-.rowdies-regular {
-  font-family: "Rowdies", serif;
-  font-weight: 400;
-  font-style: normal;
-}  
-
-
-/* font used for tag line, secondary text */
 .montserrat-400 {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-weight:400;
   font-style: normal;
 }
-
-
 
 .montserrat-500 {
   font-family: "Montserrat", sans-serif;
@@ -51,8 +28,38 @@
   font-style: normal;
 }
 
-
+/* styling clerk avatar box  */
 /* .cl-avatarBox {
   width: 5rem;
   height: 5rem;
 } */
+
+
+
+/* Target the entire scroll bar */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scroll bar */
+}
+
+/* Track of the scroll bar */
+::-webkit-scrollbar-track {
+  background: #f4f4f4; /* Light background for the track */
+  border-radius: 10px;
+}
+
+/* Thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: #ccc; /* Color of the thumb */
+  border-radius: 10px;
+}
+
+/* Hover effect on the thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: #888; /* Darker shade when hovered */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin; /* Thin scroll bar */
+  scrollbar-color: #ccc #f4f4f4; /* Thumb and track colors */
+}

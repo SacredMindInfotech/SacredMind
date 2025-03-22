@@ -3,7 +3,11 @@ import prisma from "../../PrismaClient";
 
 export const getAllCoursesController = async (req: Request, res: Response) => {
   try {
-    const courses = await prisma.course.findMany();
+    const courses = await prisma.course.findMany({
+      include: {
+        category: true
+      }
+    });
     if (!courses) {
       res.status(404).json({ error: "No courses found" });
       return;
@@ -21,6 +25,17 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
       where: { id: Number(id) },
       include: {
         category: true,
+        modules: {
+          orderBy: { serialNumber: "asc" },
+          include: {
+            topics: {
+              orderBy: { serialNumber: "asc" },
+              include: {
+                contents: true,
+              },
+            },
+          },
+        },
       },
     });
     if (!course) {

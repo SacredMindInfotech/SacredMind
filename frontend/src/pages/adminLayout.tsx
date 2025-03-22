@@ -1,49 +1,39 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { FiHome, FiUsers, FiBook, FiShoppingCart, FiBriefcase, FiBookOpen } from 'react-icons/fi';
 
 const AdminLayout = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: "/admin", label: "Dashboard" },
-    { path: "/admin/users", label: "Users" },
-    { path: "/admin/courses", label: "Courses" },
-    { path: "/admin/orders", label: "Orders" },
-    { path: "/admin/jobs", label: "Jobs" },
+    { path: "/admin", label: "Home" , icon: <FiHome />},
+    { path: "/admin/users", label: "Users" , icon: <FiUsers />},
+    { path: "/admin/courses", label: "Courses" , icon: <FiBook />},
+    { path: "/admin/categories", label: "Categories" , icon: <FiBookOpen />},
+    { path: "/admin/orders", label: "Orders" , icon: <FiShoppingCart />},
+    { path: "/admin/jobs", label: "Jobs" , icon: <FiBriefcase />},
   ];
 
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <div className="w-72 bg-gray-900 p-6">
+      <div className="w-40 bg-gray-900 p-4">
         
-        <div className="flex flex-col items-center gap-8">
+        <div className="flex flex-col items-center gap-6">
           {/* Logo and Company Name */}
-          <div className="flex items-center gap-2">
-            <img src="/logo.svg" alt="logo" className="w-12 h-12" />
-            <span className="text-white font-medium text-lg">Sacred Mind Infotech Pvt Ltd</span>
-          </div>
-
-          {/* Circular User Profile Section */}
-          {/* <div className="flex z-10 flex-col items-center mt-10  justify-center">
-            <UserButton appearance={{
-              layout: {
-                termsPageUrl: 'https://clerk.com/terms'
-              }
-            }} />
-            <span className="text-black montserrat-500 text-sm">{user?.firstName}</span>
-            <span className="text-black montserrat-500 text-sm">{user?.lastName}</span>
-          </div> */}
+          <div className="flex items-center gap-1">
+            <img src="/logo.svg" alt="logo" className="w-10 h-10" />
+        </div>
 
           {/* Navigation */}
-          <nav className="w-full bg-gray-300 p-2 min-h-[60vh] rounded-lg">
+          <nav className="w-full bg-gray-300 p-1 min-h-[50vh] rounded-lg">
             
-            <ul className="space-y-4 mt-28">
+            <ul className="space-y-3 mt-20">
               {navItems.map((item) => (
                 <li key={item.path}>
-                  <Link
-                    to={item.path}
+                    <Link
+                      to={item.path}
                     className={`
-                      block px-4 py-3 rounded-lg transition duration-200
+                      block px-3 py-2 rounded-lg transition duration-200
                       text-sm font-medium montserrat-secondary w-full
                       ${location.pathname === item.path
                         ? 'bg-white text-gray-900'
@@ -51,8 +41,10 @@ const AdminLayout = () => {
                       }
                     `}
                   >
-                    {item.label}
-                  </Link>
+                    <div className="flex items-center gap-2">
+                     {item.icon} {item.label}
+                  </div>
+                    </Link>
                 </li>
               ))}
             </ul>

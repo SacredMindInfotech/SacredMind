@@ -71,7 +71,7 @@ export const updateCourseByIdController = async (
       return;
     }
 
-    const { title, description, price, imageUrl, categoryId, published } =
+    const { title, description, price, imageUrl, categoryId, published,overview,learningOutcomes,requirements,forwhom,language,isActive,showCourseNotice,courseNotice } =
       validatedData.data;
 
     // update data object with only provided fields
@@ -84,6 +84,15 @@ export const updateCourseByIdController = async (
       updateData.category = { connect: { id: Number(categoryId) } };
     }
     if (typeof published !== "undefined") updateData.published = published;
+    if (typeof isActive !== "undefined") updateData.isActive = isActive;
+    if (typeof showCourseNotice !== "undefined") updateData.showCourseNotice = showCourseNotice;
+    if (overview) updateData.overview = overview;
+    if (learningOutcomes) updateData.learningOutcomes = learningOutcomes;
+    if (requirements) updateData.requirements = requirements;
+    if (forwhom) updateData.forwhom = forwhom;
+    if (language) updateData.language = language;
+    if (courseNotice) updateData.courseNotice = courseNotice;
+
 
     const updatedCourse = await prisma.course.update({
       where: { id: Number(id) },
