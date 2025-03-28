@@ -170,7 +170,7 @@ const PopularCourses = () => {
                             <>
                                 <button
                                     onClick={scrollLeft}
-                                    className="absolute -left-6 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg z-10"
+                                    className="absolute -left-3 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg z-10"
                                     aria-label="Scroll left"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
