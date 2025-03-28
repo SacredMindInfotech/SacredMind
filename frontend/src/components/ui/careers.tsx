@@ -76,22 +76,12 @@ const Careers = (props: any) => {
                                     <span className="text-base md:text-lg lg:text-xl">Current Openings</span>
                                 </div>
                             </div>
-                            {/* Right Section - Job Listings */}
+                           
 
-                            {/* {loading ? (
-                        <div className="flex justify-center items-center h-full">
-                            <p className="text-gray-500">Loading...</p>
-                        </div>
-                    ) : ( */}
                             <div className="flex px-4 md:px-16 lg:p-28 flex-col justify-center py-8 md:py-16">
                                 <div className="bg-white/10 backdrop-blur-md p-4 md:p-8 rounded-lg max-w-2xl mx-auto w-full">
                                     <div className="space-y-6">
-                                        {jobs.length < 1 && (
-                                            <div className="flex justify-center items-center h-full">
-                                                <p className="text-gray-500">No jobs found</p>
-                                            </div>
-                                        )}
-
+                                        
                                         {jobs.length > 0 ? (
                                             jobs.map((job: Job) => (
                                                 <div key={job.id} className="border border-gray-900 p-6">

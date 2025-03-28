@@ -7,11 +7,21 @@ export const createCategoryController = async (req: Request, res: Response) => {
   try {
     const validatedData = createCategorySchema.safeParse(req.body);
     if (!validatedData.success) {
+      console.log(validatedData.error.errors);
       res.status(400).json({ error: validatedData.error.errors });
       return;
     }
     const { name, parentId } = validatedData.data;
 
+    const isCategoryExists = await prisma.category.findFirst({
+      where: {
+        name: name,
+      },
+    });
+    if (isCategoryExists) {
+      res.status(400).json({ error: "Category already exists" });
+      return;
+    }
   
     const category = await prisma.category.create({
       data: {
@@ -23,10 +33,6 @@ export const createCategoryController = async (req: Request, res: Response) => {
     res.status(201).json(category);
     return;
   } catch (error: any) {
-    if (error.code === "P2002") {
-      res.status(400).json({ error: "Category already exists" });
-      return;
-    }
     res.status(500).json({ error: "Internal server error" });
     return;
   }

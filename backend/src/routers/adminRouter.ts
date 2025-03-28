@@ -50,6 +50,7 @@ import {
   updateTopicByIdController,
 } from "../controllers/topic/topicController";
 import { createContentController, deleteContentByIdController, updateContentByIdController } from "../controllers/content/contentController";
+import { uploadS3 } from "../middleware/multer";
 
 const adminRouter = Router();
 
@@ -109,22 +110,24 @@ adminRouter.put("/discountTokens/:id", updateDiscountTokenByIdController);
 // DELETE	/api/v1/admin/discountTokens/:id	Delete a discount token
 adminRouter.delete("/discountTokens/:id", deleteDiscountTokenByIdController);
 
-//POST /api/v1/admin/module/:id   Creating new module of a course by courseId
-adminRouter.post("/module/:courseId", createModuleController);
-//PUT /api/v1/admin/module/:id   Updating a module of a course -  only title can be updated by moduleId
-adminRouter.put("/module/:moduleId", updateModuleByIdController);
-//DELETE /api/v1/admin/module/:id   Deleting a module of a course by moduleId
-adminRouter.delete("/module/:moduleId", deleteModuleByIdController);
+//POST /api/v1/admin/:courseId/module   Creating new module of a course by courseId
+adminRouter.post("/:courseId/modules", createModuleController);
+//PUT /api/v1/admin/:courseId/modules/:moduleId 
+adminRouter.put("/:courseId/modules/:moduleId", updateModuleByIdController);
+//DELETE /api/v1/admin/:courseId/modules/:moduleId   Deleting a module of a course by moduleId
+adminRouter.delete("/:courseId/modules/:moduleId", deleteModuleByIdController);
 
-//POST /api/v1/admin/topic/:id   Creating new topic of a module by moduleId
-adminRouter.post("/topic/:moduleId", createTopicController);
-//PUT /api/v1/admin/topic/:id   Updating a topic of a module by topicId
-adminRouter.put("/topic/:topicId", updateTopicByIdController);
-//DELETE /api/v1/admin/topic/:id   Deleting a topic of a module by topicId
-adminRouter.delete("/topic/:topicId", deleteTopicByIdController);
+//POST /api/v1/admin/modules/:moduleId/topics   Creating new topic of a module by moduleId
+adminRouter.post("/modules/:moduleId/topics", createTopicController);
+//PUT /api/v1/admin/modules/:moduleId/topics/:topicId   Updating a topic of a module by topicId
+adminRouter.put("/modules/:moduleId/topics/:topicId", updateTopicByIdController);
+//DELETE /api/v1/admin/modules/:moduleId/topics/:topicId   Deleting a topic of a module by topicId
+adminRouter.delete("/modules/:moduleId/topics/:topicId", deleteTopicByIdController);
 
-//POST /api/v1/admin/content/:id   Creating new content of a topic by topicId
-adminRouter.post("/content/:topicId", createContentController);
+
+
+//POST /api/v1/admin/:topicId/content   Creating new content of a topic by topicId
+adminRouter.post("/:topicId/content",uploadS3.single("file"), createContentController);
 //PUT /api/v1/admin/content/:id   Updating a content of a topic by contentId
 adminRouter.put("/content/:contentId", updateContentByIdController);
 //DELETE /api/v1/admin/content/:id   Deleting a content of a topic by contentId

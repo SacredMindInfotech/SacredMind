@@ -27,6 +27,7 @@ import ViewContent from './components/ui/viewContent'
 import OnlyPaidUsers from './components/onlyPaidUsers'
 import EditCourse from './components/ui/dashboard/EditCourse'
 import CategoryManagement from './components/ui/dashboard/categoryManagement'
+import EditJob from './components/ui/dashboard/editJob'
 
 function App() {
   const Router = createBrowserRouter([
@@ -91,6 +92,7 @@ function App() {
         { path: "course/:id", element: <EditCourse /> },
         { path: "orders", element: <OrderManagement /> },
         { path: "jobs", element: <JobManagement /> },
+        { path: "jobs/:id", element: <EditJob /> },
       ]
     },
     {

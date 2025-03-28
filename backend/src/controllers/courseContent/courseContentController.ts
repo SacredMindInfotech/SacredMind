@@ -63,7 +63,7 @@ export const getContentByKeyController=async(req:Request,res:Response)=>{
     });
 
     res.setHeader("Content-Type", response.headers["content-type"]);
-    res.setHeader("Cache-Control", "no-store"); // Ensures users can't cache the content
+    res.setHeader("Cache-Control", "no-store"); 
     res.setHeader("Content-Disposition", `inline; filename="${filePath}"`);
 
     // @ts-ignore

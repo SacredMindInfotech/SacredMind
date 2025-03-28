@@ -63,7 +63,7 @@ const SecureVideo: React.FC<SecureVideoProps> = ({
   width = '100%',
   height = 'auto',
   controls = true,
-  autoPlay = false,
+  autoPlay = true,
   muted = false,
 }) => {
   return (

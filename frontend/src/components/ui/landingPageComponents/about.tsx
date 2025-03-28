@@ -10,7 +10,8 @@ const About = () => {
                 <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center py-16 bg-gray-100">
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">About Us</h1>
                     <p className="text-xl mt-10 text-gray-600 max-w-3xl">
-                        SacredMind Pvt Ltd is a multi-product-based coaching institute providing quality education through online and offline courses. In collaboration with CBCE Skill India (CBCE-PB0991) , we develop tailored courses focused on empowering learners with industry-ready skills and certification programs.
+                        SacredMind Pvt Ltd is a multi-product-based coaching institute providing quality education through online and offline courses. <p className="font-bold" >In collaboration with CBCE Skill India (CBCE-PB0991)
+                            </p> we develop tailored courses focused on empowering learners with industry-ready skills and certification programs.
                     </p>
                 </div>
 

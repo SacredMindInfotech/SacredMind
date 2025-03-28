@@ -1,8 +1,8 @@
-import { useAuth } from "@clerk/clerk-react";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import DataTable from 'react-data-table-component';
-import styled from "styled-components";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface Course {
     id: number;
@@ -47,17 +47,11 @@ interface Content {
     key: string;
 }
 
-interface SelectedRows {
-    allSelected: boolean;
-    selectedCount: number;
-    selectedRows: {
-        id: number;
-        title: string;
-        description: string;
-        price: number;
-        published: boolean;
-        imageUrl: string;
-    }[];
+// Add this interface for subcategories
+interface Subcategory {
+    id: number;
+    name: string;
+    parentId: number;
 }
 
 const columns = [
@@ -103,117 +97,6 @@ const columns = [
     },
 ];
 
-const ExpandedComponent = ({ data }: any) => (
-    <div className="p-8 space-y-6 bg-white shadow-lg rounded-lg">
-        <h1 className="text-3xl font-extrabold text-gray-800 mb-8">Course Details</h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Title:</span>
-                    <span className="text-gray-700">{data.title}</span>
-                </p>
-
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Description:</span>
-                    <span className="text-gray-700">{data.description}</span>
-                </p>
-
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Price:</span>
-                    <span className="text-gray-700">${data.price}</span>
-                </p>
-
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Status:</span>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${data.published ? 'bg-green-200 text-green-900' : 'bg-yellow-200 text-yellow-900'
-                        }`}>
-                        {data.published ? 'Published' : 'Draft'}
-                    </span>
-                </p>
-            </div>
-
-            <div className="space-y-6">
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Category:</span>
-                    <span className="text-gray-700">{data.category.name}</span>
-                </p>
-
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Created At:</span>
-                    <span className="text-gray-700">{data.createdAt}</span>
-                </p>
-
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Updated At:</span>
-                    <span className="text-gray-700">{data.updatedAt}</span>
-                </p>
-
-                <p className="flex items-center gap-3">
-                    <span className="font-semibold text-gray-800">Image:</span>
-                    <span className="text-gray-700">{data.imageUrl || 'No image available'}</span>
-                </p>
-            </div>
-        </div>
-        <div className="mt-8 text-center">
-            <a
-                href={`/admin/course/${data.id}`}
-                className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-all duration-200"
-            >
-                View Details
-            </a>
-        </div>
-    </div>
-);
-
-
-const CourseDeletingDialog = ({ isLoading, setIsDeleteDialogOpen, handleDeleteCourse, selectedRows }: { isLoading: boolean, setIsDeleteDialogOpen: (value: boolean) => void, handleDeleteCourse: () => Promise<void>, selectedRows: SelectedRows }) => {
-    return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50" >
-            <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Are you sure you want to delete these courses?</h2>
-                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                    <div className="space-y-3">
-                        {selectedRows?.selectedRows.map((course) => (
-                            <div key={course.id} className="flex items-center gap-3 text-sm text-gray-700 p-2 rounded hover:bg-gray-100">
-                                <span className="font-semibold">{course.title}</span>
-                                <span className="text-gray-400">|</span>
-                                <span className="text-gray-500 text-xs">ID: {course.id}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                <div className="flex justify-end mt-4">
-                    <button
-                        onClick={handleDeleteCourse}
-                        disabled={isLoading}
-                        className={`bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        {isLoading ? (
-                            <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
-                        ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        )}
-                        Delete
-                    </button>
-                </div>
-                <div className="flex justify-end mt-4">
-                    <button
-                        onClick={() => setIsDeleteDialogOpen(false)}
-                        disabled={isLoading}
-                        className={`bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-
 const CourseManagement = () => {
     const [courses, setCourses] = useState<Course[]>([]);
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -227,21 +110,40 @@ const CourseManagement = () => {
         price: number;
         categoryId: number;
         published: boolean;
+        category: {
+            name: string;
+        };
+        language: string;
     }[]>([]);
-    const { getToken } = useAuth();
-    const [selectedRows, setSelectedRows] = useState<SelectedRows>({
-        allSelected: false,
-        selectedCount: 0,
-        selectedRows: []
-    });
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+
     const [progressPending, setProgressPending] = useState(true);
-    //toggle clear selected rows set to true when the user clicks the change details button and request sent
-    const [toggleClearSelectedRows, setToggleClearSelectedRows] = useState(false);
     const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-    const [filterText, setFilterText] = useState('');
     const [filteredData, setFilteredData] = useState<typeof data>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [expandedRow, setExpandedRow] = useState<any>(null);
+    const [showFilters, setShowFilters] = useState(false);
+
+
+    // Filter state
+    const [filters, setFilters] = useState({
+        title: '',
+        description: '',
+        categoryName: '',
+        categoryId: '',
+        price: '',
+        language: '',
+        published: '' as '' | 'true' | 'false',
+    });
+
+    // Fetch subcategories from the backend
+    const fetchSubcategories = async () => {
+        try {
+            const response = await axios.get(`${backendUrl}api/v1/category/onlySubcategories`);
+            setSubcategories(response.data as Subcategory[]);
+        } catch (error) {
+            console.error("Error fetching subcategories:", error);
+        }
+    };
 
     //fetch courses from the backend
     const fetchCourses = async () => {
@@ -249,10 +151,11 @@ const CourseManagement = () => {
         setCourses(response.data as Course[]);
         return response;
     };
+
     useEffect(() => {
         fetchCourses();
+        fetchSubcategories();
     }, []);
-
 
     //set data for table
     useEffect(() => {
@@ -274,174 +177,429 @@ const CourseManagement = () => {
         }
     }, [courses]);
 
-
-    //handle row selected - setting the selected rows
-    const handleRowSelected = (selectedRows: SelectedRows) => {
-        setSelectedRows(selectedRows);
-        setIsDeleteDialogOpen(false);
-    };
-
-    //context actions for the table
-    //when rows are selected, what optoins should be shown
-    const contextActions = useMemo(() => (
-
-        <div className="flex gap-2">
-            <button
-                onClick={() => setIsDeleteDialogOpen(true)}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                Delete Selected
-            </button>
-
-
-        </div>
-    ), [selectedRows]);
-
-    //handle delete course - can delete multiple courses at once
-    const handleDeleteCourse = async () => {
-        try {
-            setIsLoading(true);
-            const token = await getToken();
-            const updatePromises = selectedRows?.selectedRows.map(course =>
-                axios.delete(`${backendUrl}api/v1/admin/courses/${course.id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-            );
-
-            if (updatePromises) {
-                await Promise.all(updatePromises);
-                const response = await fetchCourses();
-                setCourses(response.data as Course[]);
-                setToggleClearSelectedRows(true);
-                setIsDeleteDialogOpen(false);
-                setIsLoading(false);
-            }
-
-        } catch (error) {
-            console.error('Failed to delete courses:', error);
-            // Add error handling here
+    // Handle row expansion
+    const handleRowExpanded = (expanded: boolean, row: any) => {
+        if (expanded) {
+            setExpandedRow(row);
+        } else {
+            setExpandedRow(null);
         }
-    }
-
+    };
 
     //gives option for pagination to see all rows at once
     const paginationComponentOptions = {
         selectAllRowsItem: true,
+        rowsPerPageText: 'Courses per page:',
+        rangeSeparatorText: 'of',
+        selectAllRowsItemText: 'All',
     };
 
+    // Apply filters
+    useEffect(() => {
+        if (!data.length) return;
 
-    //used by filter bar component
-    const FilterComponent = ({ filterText, onFilter, onClear }: { filterText: string, onFilter: (e: any) => void, onClear: () => void }) => (
-        <div className="flex gap-2">
-            <TextField
-                id="search"
-                type="text"
-                placeholder="Search by a keyword"
-                aria-label="Search Input"
-                value={filterText}
-                onChange={onFilter}
-                autoFocus
-            />
+        const filtered = data.filter(course => {
+            // Title filter
+            if (filters.title && !course.title.toLowerCase().includes(filters.title.toLowerCase())) {
+                return false;
+            }
 
-            <button
-                type="button"
-                className="px-4 border border-l-0 border-gray-200 hover:bg-gray-100"
-                onClick={onClear}
-            >
-                clear
-            </button>
-        </div>
-    );
+            // Description filter
+            if (filters.description && !course.description.toLowerCase().includes(filters.description.toLowerCase())) {
+                return false;
+            }
 
-    //text field for filter
-    const TextField = styled.input`
-	height: 32px;
-	width: 200px;
-	border-radius: 3px;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-	border: 1px solid #e5e5e5;
-	padding: 0 32px 0 16px;
-	&:hover {
-		cursor: pointer;
-	}`;
+            // Category name filter
+            if (filters.categoryName && !course.category?.name.toLowerCase().includes(filters.categoryName.toLowerCase())) {
+                return false;
+            }
 
-    //filter bar component provider
+            // Category ID filter
+            if (filters.categoryId && course.categoryId !== parseInt(filters.categoryId)) {
+                return false;
+            }
+
+            // Price filter
+            if (filters.price && !course.price.toString().includes(filters.price)) {
+                return false;
+            }
+
+            // Language filter
+            if (filters.language && !course.language?.toLowerCase().includes(filters.language.toLowerCase())) {
+                return false;
+            }
+
+            // Published status filter
+            if (filters.published) {
+                const isPublished = filters.published === 'true';
+                if (course.published !== isPublished) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        setFilteredData(filtered);
+    }, [data, filters]);
+
+    // Reset all filters
+    const resetFilters = () => {
+        setFilters({
+            title: '',
+            description: '',
+            categoryName: '',
+            categoryId: '',
+            price: '',
+            language: '',
+            published: '',
+        });
+        setResetPaginationToggle(!resetPaginationToggle);
+    };
+
+    // Handle filter changes
+    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFilters(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    // Filter button component for the subheader
     const subHeaderComponentMemo = useMemo(() => {
-        const handleClear = () => {
-            if (filterText) {
-                setResetPaginationToggle(!resetPaginationToggle);
-                setFilterText('');
+        return (
+            <div className="mb-4 flex justify-end items-center w-full">
+                <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
+                    </svg>
+                    Filters
+                </button>
+            </div>
+        );
+    }, [showFilters]);
+
+    // Set initial filtered data
+    useEffect(() => {
+        setFilteredData(data);
+    }, [data]);
+
+    // Expandable row component for inline expansion
+    const ExpandableRowComponent = ({ data }: any) => {
+        const navigate = useNavigate();
+        return (
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="p-8 space-y-6 bg-white shadow-xl rounded-xl mx-4 my-6 border border-gray-100"
+            >
+                <div className="mb-6">
+                    <span className="inline-block px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800 mb-2">
+                        {data.category?.name}
+                    </span>
+                    <h1 className="text-2xl font-bold text-gray-800">{data.title}</h1>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${data.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                            {data.published ? 'Published' : 'Draft'}
+                        </span>
+                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            {data.language}
+                        </span>
+                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-800">
+                            ${data.price}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <motion.div
+                        whileHover={{ y: -5, boxShadow: "0 12px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                        transition={{ duration: 0.2 }}
+                        className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm"
+                    >
+                        <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">Description</h2>
+                        <p className="text-sm text-gray-700">{data.description}</p>
+                    </motion.div>
+
+                    <motion.div
+                        whileHover={{ y: -5, boxShadow: "0 12px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                        transition={{ duration: 0.2 }}
+                        className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm"
+                    >
+                        <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">Dates</h2>
+                        <div className="space-y-2">
+                            <div className="flex flex-col">
+                                <span className="text-xs text-gray-500">Created</span>
+                                <span className="text-sm font-medium text-gray-800">{data.createdAt}</span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-xs text-gray-500">Updated</span>
+                                <span className="text-sm font-medium text-gray-800">{data.updatedAt}</span>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {data.overview && data.overview.length > 0 && (
+                        <motion.div
+                            whileHover={{ y: -5, boxShadow: "0 12px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm"
+                        >
+                            <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">Overview</h2>
+                            <ul className="list-disc pl-5 space-y-1">
+                                {data.overview.map((item: string, index: number) => (
+                                    <li key={index} className="text-sm text-gray-700">{item}</li>
+                                ))}
+                            </ul>
+                        </motion.div>
+                    )}
+
+                    {data.learningOutcomes && data.learningOutcomes.length > 0 && (
+                        <motion.div
+                            whileHover={{ y: -5, boxShadow: "0 12px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm"
+                        >
+                            <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">Learning Outcomes</h2>
+                            <ul className="list-disc pl-5 space-y-1">
+                                {data.learningOutcomes.map((item: string, index: number) => (
+                                    <li key={index} className="text-sm text-gray-700">{item}</li>
+                                ))}
+                            </ul>
+                        </motion.div>
+                    )}
+
+                    {data.requirements && data.requirements.length > 0 && (
+                        <motion.div
+                            whileHover={{ y: -5, boxShadow: "0 12px 20px -5px rgba(0, 0, 0, 0.1)" }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm"
+                        >
+                            <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">Requirements</h2>
+                            <ul className="list-disc pl-5 space-y-1">
+                                {data.requirements.map((item: string, index: number) => (
+                                    <li key={index} className="text-sm text-gray-700">{item}</li>
+                                ))}
+                            </ul>
+                        </motion.div>
+                    )}
+                </div>
+
+                {data.imageUrl && (
+                    <div className="flex justify-center">
+                        <img 
+                            src={data.imageUrl} 
+                            alt={data.title} 
+                            className="h-40 object-contain rounded shadow-sm"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=Image+Not+Available';
+                            }}
+                        />
+                    </div>
+                )}
+
+                <button 
+                    onClick={() => navigate(`/admin/course/${data.id}`)} 
+                    className="px-6 py-3 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                >
+                    Edit Course
+                </button>
+            </motion.div>
+        );
+    };
+
+    // Add useEffect for handling Escape key press
+    useEffect(() => {
+        const handleEscapeKey = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setShowFilters(false);
             }
         };
 
-        return (
-            <div className="mb-4">
-                <FilterComponent
-                    onFilter={e => setFilterText(e.target.value)}
-                    onClear={handleClear}
-                    filterText={filterText}
-                />
-            </div>
-        );
-    }, [filterText, resetPaginationToggle]);
+        // Add event listener for keydown
+        document.addEventListener('keydown', handleEscapeKey);
 
-    //filter data based on search text
-    useEffect(() => {
-        const filtered = data.filter(item => {
-            const searchText = filterText.toLowerCase();
-            return (
-                item.title?.toLowerCase().includes(searchText) ||
-                item.description?.toLowerCase().includes(searchText) ||
-                item.price?.toString().includes(searchText) ||
-                item.published?.toString().includes(searchText)
-            );
-        });
-        setFilteredData(filtered);
-    }, [filterText, data]);
+        // Clean up event listener on component unmount
+        return () => {
+            document.removeEventListener('keydown', handleEscapeKey);
+        };
+    }, []);
 
     return (
-        <div className="  p-4">
-
-            <div className="overflow-x-auto bg-white rounded-lg shadow">
-                <DataTable
-                    
-                    responsive
-                    title="Courses"
-                    columns={columns}
-                    data={filteredData}
-                    selectableRows
-                    expandableRows
-                    expandableRowsComponent={ExpandedComponent}
-                    pagination
-                    expandOnRowClicked
-                    expandableRowsHideExpander
-                    //@ts-ignore
-                    onSelectedRowsChange={handleRowSelected}
-                    contextActions={contextActions}
-                    clearSelectedRows={toggleClearSelectedRows}
-                    paginationComponentOptions={paginationComponentOptions}
-                    fixedHeader
-                    progressPending={progressPending}
-                    progressComponent={<div className="flex justify-center items-center h-full">
-                        <div className="w-10 h-10 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
-                    </div>}
-                    paginationResetDefaultPage={resetPaginationToggle}
-                    subHeader
-                    subHeaderComponent={subHeaderComponentMemo}
-                />
+        <div className="min-h-screen bg-gray-50">
+            <div className="container mx-auto px-4 py-8">
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-gray-200">
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Course Management</h1>
+                        <p className="text-gray-600 mt-2">View and manage course listings</p>
+                    </div>
+                    <div className="p-6">
+                        <div className="overflow-x-auto bg-white min-h-[200px] rounded-lg shadow">
+                            <DataTable
+                                responsive
+                                title="Courses"
+                                columns={columns}
+                                data={filteredData}
+                                pagination
+                                paginationComponentOptions={paginationComponentOptions}
+                                fixedHeader
+                                progressPending={progressPending}
+                                progressComponent={<div className="flex justify-center items-center h-64">
+                                    <div className="w-10 h-10 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+                                </div>}
+                                paginationResetDefaultPage={resetPaginationToggle}
+                                subHeader
+                                subHeaderComponent={subHeaderComponentMemo}
+                                highlightOnHover
+                                pointerOnHover
+                                expandableRows
+                                expandableRowsComponent={ExpandableRowComponent}
+                                expandableRowExpanded={row => expandedRow && expandedRow.id === row.id}
+                                onRowExpandToggled={handleRowExpanded}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Delete Dialog */}
-            {isDeleteDialogOpen && (
-                <CourseDeletingDialog isLoading={isLoading} setIsDeleteDialogOpen={setIsDeleteDialogOpen} handleDeleteCourse={handleDeleteCourse} selectedRows={selectedRows} />
+            {/* Filter sidebar */}
+            <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${showFilters ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className="p-6 h-full overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-bold">Filter Courses</h2>
+                        <button
+                            onClick={() => setShowFilters(false)}
+                            className="text-gray-500 hover:text-gray-700"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div className="space-y-4">
+                        <div>
+                            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                value={filters.title}
+                                onChange={handleFilterChange}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Filter by title"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                            <input
+                                type="text"
+                                id="description"
+                                name="description"
+                                value={filters.description}
+                                onChange={handleFilterChange}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Filter by description"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                            <select
+                                id="categoryId"
+                                name="categoryId"
+                                value={filters.categoryId}
+                                onChange={handleFilterChange}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            >
+                                <option value="">All Categories</option>
+                                {subcategories && subcategories.length > 0 ? (
+                                    subcategories.map(category => (
+                                        <option key={category.id} value={category.id.toString()}>
+                                            {category.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option value="" disabled>Loading categories...</option>
+                                )}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                            <input
+                                type="text"
+                                id="price"
+                                name="price"
+                                value={filters.price}
+                                onChange={handleFilterChange}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Filter by price"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="language" className="block text-sm font-medium text-gray-700 mb-1">Language</label>
+                            <input
+                                type="text"
+                                id="language"
+                                name="language"
+                                value={filters.language}
+                                onChange={handleFilterChange}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Filter by language"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="published" className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select
+                                id="published"
+                                name="published"
+                                value={filters.published}
+                                onChange={handleFilterChange}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            >
+                                <option value="">All Statuses</option>
+                                <option value="true">Published</option>
+                                <option value="false">Draft</option>
+                            </select>
+                        </div>
+
+                        <div className="pt-4 flex gap-2">
+                            <button
+                                onClick={resetFilters}
+                                className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md transition-colors"
+                            >
+                                Reset
+                            </button>
+                            <button
+                                onClick={() => setShowFilters(false)}
+                                className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
+                            >
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Overlay for filters sidebar */}
+            {showFilters && (
+                <div
+                    className="fixed inset-0 bg-white/70 backdrop-blur-sm z-40"
+                    onClick={() => setShowFilters(false)}
+                    aria-hidden="true"
+                ></div>
             )}
         </div>
     );

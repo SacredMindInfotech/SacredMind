@@ -1,12 +1,13 @@
-import Services from "../components/ui/services";
-import Hero from "../components/ui/hero";
-import Partners from "../components/ui/partners";
+import Services from "../components/ui/landingPageComponents/services";
+import Hero from "../components/ui/landingPageComponents/hero";
+import Partners from "../components/ui/landingPageComponents/partners";
 import { useRef } from "react";
-import About from "../components/ui/about";
-import CareerContact from "../components/ui/career&contact";
-// import UpcomingCourses from "../components/ui/upcomingCourses";
+import About from "../components/ui/landingPageComponents/about";
+import CareerContact from "../components/ui/landingPageComponents/career&contact";
 import { useNavigate } from "react-router-dom";
 import { holiOfferBannerClickedEvent } from "../lib/pixel-event";
+import UpcomingCourses from "../components/ui/landingPageComponents/upcomingCourses";
+import PopularCourses from "../components/ui/landingPageComponents/popularCourses";
 const Landing = () => {
     const navigate = useNavigate();
     const contactRef=useRef<HTMLDivElement>(null);
@@ -19,25 +20,15 @@ const Landing = () => {
 
             <div className="flex flex-col">                
 
-                {/* Hero Section */}
                 <Hero scrollToContact={scrollToContact} ></Hero>
-
-                {/* parternship */}
+                <PopularCourses/> 
                 <Partners></Partners>
-
-                {/* about */}
                 <About></About>
-
-                {/* Services */}
                 <Services></Services>
-
-                {/* Upcoming Courses */}
-                {/* <UpcomingCourses></UpcomingCourses> */}
-
-                {/* Contact */}
+                <UpcomingCourses></UpcomingCourses>
                 <CareerContact ref={contactRef}></CareerContact>
 
-                <div className="fixed flex flex-col gap-2 bottom-4 montserrat-700 right-4 bg-gradient-to-r from-green-700 via-green-800 to-green-900 text-white p-2 sm:p-3 rounded-lg shadow-lg w-[280px] sm:w-[320px] md:w-[360px]">
+                <div className=" z-20 fixed flex flex-col gap-2 bottom-4 montserrat-700 right-4 bg-gradient-to-r from-green-700 via-green-800 to-green-900 text-white p-2 sm:p-3 rounded-lg shadow-lg w-[280px] sm:w-[320px] md:w-[360px]">
                     <p className="text-xs sm:text-sm md:text-base animate-pulse">🎉 Get enrolled in our HR Payroll Course | Special Festive Offer !!</p>
                     <button onClick={() => {
                         holiOfferBannerClickedEvent();

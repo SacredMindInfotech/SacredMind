@@ -10,22 +10,34 @@ interface Categories {
     parentId: number | null;
 }
 
-interface Courses {
-    category: Categories;
-    categoryId: number;
-    description: string;
+interface Course {
     id: number;
-    imageUrl: string | null;
-    price: number;
     title: string;
-    updatedAt: string;
+    description: string;
+    isActive: boolean;
+    isStarted: boolean;
+    price: number;
+    imageUrl: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    published: boolean;
+    categoryId: number;
+    category: {
+        name: string;
+    };
+    overview: string[] | null;
+    learningOutcomes: string[] | null;
+    requirements: string[] | null;
+    forwhom: string[] | null;
+    language: string;
+    courseNotice: string | null;
 }
 const Category = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [category, setCategory] = useState<Categories | null>(null);
-    const [courses, setCourses] = useState<Courses[]>([]);
+    const [courses, setCourses] = useState<Course[]>([]);
     const [subcategories, setSubcategories] = useState<Categories[]>([]);
     const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -106,17 +118,22 @@ const Category = () => {
                         <div className="text-xl sm:text-2xl font-semibold mb-4 montserrat-500">~Available Courses~</div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
                             {courses.map((course) => (
-                                <div key={course.id} className="p-4 sm:p-6 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
-                                    <h2 className="text-lg sm:text-2xl font-semibold mb-2 sm:mb-4 montserrat-500">
+                                <div 
+                                    key={course.id} 
+                                    className="p-4 sm:p-6 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)]  hover:border-white hover:bg-white transition duration-200 montserrat-secondary relative overflow-hidden"
+                                    style={{
+                                        backgroundImage: course.imageUrl ? `linear-gradient(rgba(17, 24, 39, 0.75), rgba(17, 24, 39, 0.5)), url(${course.imageUrl})` : 'none',
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}
+                                >
+                                    <h2 className="text-lg sm:text-2xl font-semibold mb-2 sm:mb-4 montserrat-500 relative z-10">
                                         {course.title}
                                     </h2>
-                                    <p className="text-gray-600 mb-4 sm:mb-6 line-clamp-2 montserrat-400 text-sm sm:text-base">
+                                    <p className="text-gray-300 mb-4 sm:mb-6 line-clamp-2 montserrat-400 text-sm sm:text-base relative z-10">
                                         {course.description}
                                     </p>
-                                    <div className="flex justify-between items-center">
-                                        {/* <span className="text-xl font-bold text-blue-600 montserrat-700">
-                                            ${course.price}
-                                        </span> */}
+                                    <div className="flex justify-between items-center relative z-10">
                                         <button
                                             onClick={() => navigate(`/course/${course.id}`)}
                                             className="cursor-pointer px-4 sm:px-8 py-1.5 sm:py-2 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary"

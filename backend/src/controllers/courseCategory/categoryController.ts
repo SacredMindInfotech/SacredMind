@@ -21,8 +21,10 @@ export const getParentCategoriesController = async (
       return;
     }
     res.status(200).json(categories);
+    return
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+    return
   }
 };
 
@@ -44,8 +46,10 @@ export const getCategoryByIdController = async (
       return;
     }
     res.status(200).json(category);
+    return
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+    return
   }
 };
 
@@ -76,8 +80,10 @@ export const getCoursesByCategoryIdController = async (
       return;
     }
     res.status(200).json(courses);
+    return
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+    return
   }
 };
 
@@ -95,7 +101,9 @@ export const getOnlySubcategoriesController = async (req: Request, res: Response
       return;
     }
     res.status(200).json(categories);
+    return
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+    return
   }
 };

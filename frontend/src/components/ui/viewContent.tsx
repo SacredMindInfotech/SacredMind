@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 
-import { SecureVideo } from "./videoPlayer";
+import { SecureVideo, VideoProtection } from "./videoPlayer";
 import { LoadingScreen } from "./loadingScreen";
 
 
@@ -82,11 +82,13 @@ const ViewContent = () => {
                             </a>
                         ) : contentKey?.match(/\.(mp4|webm|ogg)$/) ? (
                             <div className="w-full sm:mt-20 md:w-3/5 h-60 md:h-96 flex justify-center items-center">
+                                <VideoProtection>
                                 <SecureVideo src={fileUrl} />
+                                </VideoProtection>
                             </div>
                         ) : contentKey?.match(/\.(jpg|jpeg|png|gif)$/) ? (
                             <img src={fileUrl} alt="File Preview" className="w-full md:w-auto h-60 md:h-96" style={{ objectFit: 'contain' }} />
-                        ) : contentKey?.match(/\.(xlsx|xls)$/) ? (
+                        ) : contentKey?.match(/\.(xlsx|xls|csv)$/) ? (
                             <a href={fileUrl} target="_blank" download={`${contentKey}`} className="underline cursor-pointer text-center">
                                 Click here to download the Excel file
                             </a>

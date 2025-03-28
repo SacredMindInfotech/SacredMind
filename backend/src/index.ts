@@ -10,9 +10,8 @@ import jobRouter from "./routers/jobRouter";
 import jobCategoryRouter from "./routers/jobCategoryRouter";
 import coursePaymentRouter from "./routers/coursePaymentRouter";
 import paymentVerifyRouter from "./routers/paymentVerifyRouter";
-import tokenRouter from "./routers/tokenRouter";
+import tokenRouter from "./routers/discountTokenRouter";
 import contentRouter from "./routers/contentRouter";
-import { isUserEnrolled } from "./middleware/isUserEnrolled";
 
 const app = express();
 
@@ -52,7 +51,6 @@ app.use("/api/v1/paymentVerify",  paymentVerifyRouter);
 
 //accessing  paid course content
 app.use("/api/v1/content",isUser,contentRouter);
-
 
 
 app.listen(3000, () => {
