@@ -70,7 +70,12 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
             topics: {
               orderBy: { serialNumber: "asc" },
               include: {
-                contents: true,
+                contents: {
+                  select: {
+                    name: true,
+                    type: true
+                  }
+                }
               },
             },
           },
@@ -85,7 +90,7 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
 
 export const getModulesByCourseIdController = async (req: Request, res: Response) => {
   try{

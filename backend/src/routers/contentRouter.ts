@@ -9,7 +9,7 @@ const contentRouter = Router();
 contentRouter.get("/:id", isUserEnrolled,getContentByIdController);
 
 //get particular content of a course by cloudflare key
-// api/v1/content/content/:key
+// api/v1/content/content/:key/stream-file
 contentRouter.get("/:id/stream-file", isUserEnrolled,getContentByKeyController);
 
 export default contentRouter;

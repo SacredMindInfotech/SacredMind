@@ -5,14 +5,15 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import { enrolledClickedEvent, enrolledSuccessEvent } from "../../lib/pixel-event";
 
 
-// add modules in courses also, user can see the modules and topics in the course before purchasing
+
+
 interface Course {
     id: number;
     title: string;
     description: string;
-    isActive: boolean;
-    isStarted: boolean;
     price: number;
+    isActive: boolean;
+    showCourseNotice: boolean;
     imageUrl: string | null;
     createdAt: Date;
     updatedAt: Date;
@@ -26,7 +27,26 @@ interface Course {
     requirements: string[] | null;
     forwhom: string[] | null;
     language: string;
+    modules: Module[];
     courseNotice: string | null;
+}
+
+interface Module {
+    id: number;
+    title: string;
+    topics: Topic[];
+}
+
+interface Topic {
+    id: number;
+    title: string;
+    description: string;
+    contents: Content[];
+}
+
+interface Content {
+    name: string;
+    type: string;
 }
 
 const Course = () => {
@@ -40,6 +60,8 @@ const Course = () => {
     const { user, isLoaded } = useUser();
     const [isPurchased, setIsPurchased] = useState<boolean>(false);
     const enrollButtonRef = useRef<HTMLButtonElement | null>(null);
+    const [openedModule, setOpenedModule] = useState<number[]>([0]);
+    const [openedTopic, setOpenedTopic] = useState<string[]>([]);
 
 
     //checking if the user has a pending payment for the course
@@ -193,12 +215,12 @@ const Course = () => {
                         <h1 className="text-3xl sm:text-6xl font-bold mb-4 montserrat-700">{course.title}</h1>
                         <div className="flex flex-wrap justify-center items-center">
                             <span
-                                className="bg-white text-xs sm:text-sm m-2 sm:m-4 text-gray-800 px-4 sm:px-6 py-1 sm:py-2 rounded-full cursor-pointer hover:bg-gray-900 hover:text-white transition duration-200 montserrat-500"
+                                className="bg-white text-xs sm:text-sm m-2 sm:m-4 text-gray-800 px-4 sm:px-6 py-1 sm:py-2 rounded-full  hover:bg-gray-900 hover:text-white transition duration-200 montserrat-500"
                             >
                                 <span className="mr-2">📚</span>
                                 {course.category.name}
                             </span>
-                            <p className="bg-white text-xs sm:text-sm m-2 sm:m-4 text-gray-800 px-4 sm:px-6 py-1 sm:py-2 rounded-full cursor-pointer hover:bg-gray-900 hover:text-white transition duration-200 montserrat-500">
+                            <p className="bg-white text-xs sm:text-sm m-2 sm:m-4 text-gray-800 px-4 sm:px-6 py-1 sm:py-2 rounded-full  hover:bg-gray-900 hover:text-white transition duration-200 montserrat-500">
                                 <span className="mr-2">🌐</span>
                                 {course.language}
                             </p>
@@ -238,54 +260,10 @@ const Course = () => {
                         </div>
                     </div>
 
-                    {/* Course Details Section */}
-                    <div className="flex flex-col lg:flex-row gap-6">
-
-                        <div className="flex flex-col gap-6 max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-                            <div className="flex flex-col gap-4">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl sm:text-2xl montserrat-700">What you'll learn</span>
-                                    <span className="text-xl">📚</span>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
-                                    {course.learningOutcomes?.map((item, index) => (
-                                        <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
-                                            <span className="text-green-500 text-lg">✓</span>
-                                            <span className="text-gray-700 text-sm">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-4">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl sm:text-2xl montserrat-700">Requirements</span>
-                                    <span className="text-xl">⚡</span>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
-                                    {course.requirements?.map((item, index) => (
-                                        <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
-                                            <span className="text-blue-500 text-lg">●</span>
-                                            <span className="text-gray-700 text-sm">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-4">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xl sm:text-2xl montserrat-700">Who this course is for</span>
-                                    <span className="text-xl">👥</span>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
-                                    {course.forwhom?.map((item, index) => (
-                                        <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
-                                            <span className="text-purple-500 text-lg">→</span>
-                                            <span className="text-gray-700 text-sm">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-6 sticky top-24 h-fit w-full lg:w-96 lg:block">
+                    {/* Course Content Preview and Overview Section */}
+                    <div className="flex flex-col lg:flex-row gap-6 mb-12">
+                        {/* Course Overview */}
+                        <div className="flex flex-col gap-6 sticky top-24 h-fit w-full lg:w-1/3">
                             <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
                                 <span className="text-xl sm:text-2xl montserrat-700 text-gray-900">Course Overview</span>
                                 <span className="text-2xl">📖</span>
@@ -298,14 +276,133 @@ const Course = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
+                        {/* Course Content Preview */}
+                        <div className="flex flex-col gap-4 w-full lg:w-2/3">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl sm:text-2xl montserrat-700">Course Content Preview</span>
+                                <span className="text-xl">📝</span>
+                            </div>
+                            <div className="bg-gray-50 p-4 rounded-lg shadow-sm w-full">
+                                {course.modules?.map((module, moduleIndex) => (
+                                    <div key={moduleIndex} className="bg-gray-100 p-4 rounded-lg mb-4">
+                                        <div
+                                            className="flex justify-between items-center cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-200 rounded-lg p-2"
+                                            onClick={() => {
+                                                if (openedModule?.includes(moduleIndex)) {
+                                                    setOpenedModule(openedModule.filter(index => index !== moduleIndex))
+                                                } else {
+                                                    setOpenedModule([...(openedModule), moduleIndex])
+                                                }
+                                            }}
+                                        >
+                                            <h3 className="text-lg font-bold">
+                                                Module {moduleIndex + 1} - {module.title}
+                                            </h3>
 
+                                            <svg
+                                                className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedModule?.includes(moduleIndex) ? 'rotate-180' : ''}`}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                        {openedModule?.includes(moduleIndex) && (
+                                            <div className="space-y-3 pl-3">
+                                                {module.topics?.map((topic, topicIndex) => (
+                                                    <div key={`${moduleIndex}-${topicIndex}`} className="border-l-2 border-gray-500 pl-3">
+                                                        <div className="flex gap-2 items-center cursor-pointer" onClick={
+                                                            () => {
+                                                                const topicKey = `${moduleIndex}-${topicIndex}`;
+                                                                if (openedTopic?.includes(topicKey)) {
+                                                                    setOpenedTopic(openedTopic.filter(index => index !== topicKey))
+                                                                } else {
+                                                                    setOpenedTopic([...(openedTopic), topicKey])
+                                                                }
+                                                            }
+                                                        } >
+                                                            <h4 className="text-sm font-medium mb-2">
+                                                                {topicIndex + 1}. {topic.title}
+                                                            </h4>
+                                                            <svg className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedTopic?.includes(`${moduleIndex}-${topicIndex}`) ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                            </svg>
+                                                        </div>
+                                                        {openedTopic?.includes(`${moduleIndex}-${topicIndex}`) && (
+                                                            <div className="flex flex-col gap-1">
+                                                                <p className="text-gray-600 text-sm mb-1">
+                                                                    {topic.description}
+                                                                </p>
+                                                                {topic.contents?.map((content, contentIndex) => (
+                                                                    <div key={contentIndex} className="p-2 max-w-xl bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
+                                                                        <div className="flex text-sm flex-col gap-1">
+                                                                            <span className="font-bold">{content.name}</span>
+                                                                            <span className="text-gray-600 text-xs">{content.type}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        
+                        
                     </div>
 
+                    {/* Course Details Section */}
+                    <div className="flex flex-col gap-6 max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl sm:text-2xl montserrat-700">What you'll learn</span>
+                                <span className="text-xl">📚</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
+                                {course.learningOutcomes?.map((item, index) => (
+                                    <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
+                                        <span className="text-green-500 text-lg">✓</span>
+                                        <span className="text-gray-700 text-sm">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl sm:text-2xl montserrat-700">Requirements</span>
+                                <span className="text-xl">⚡</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
+                                {course.requirements?.map((item, index) => (
+                                    <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
+                                        <span className="text-blue-500 text-lg">●</span>
+                                        <span className="text-gray-700 text-sm">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl sm:text-2xl montserrat-700">Who this course is for</span>
+                                <span className="text-xl">👥</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
+                                {course.forwhom?.map((item, index) => (
+                                    <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
+                                        <span className="text-purple-500 text-lg">→</span>
+                                        <span className="text-gray-700 text-sm">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
-               
         </div>
     )
 }
