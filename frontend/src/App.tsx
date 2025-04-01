@@ -26,10 +26,9 @@ import ViewContent from './components/ui/viewContent'
 import OnlyPaidUsers from './components/onlyPaidUsers'
 import CategoryManagement from './pages/dashboard/categoryManagement'
 import Careers from './pages/careers'
-import EditCourse from './components/ui/dashboard/course/EditCourse'
 import EditJob from './components/ui/dashboard/job/editJob'
 import AddCourse from './components/ui/dashboard/course/addCourse'
-
+import EditCourse from './components/ui/dashboard/course/editCourse'
 function App() {
   const Router = createBrowserRouter([
 
