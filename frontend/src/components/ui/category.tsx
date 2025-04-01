@@ -80,13 +80,15 @@ const Category = () => {
     }, [selectedSubcategory]);
 
     // Filter published courses
-    const publishedCourses = courses.filter(course => course.published === true);
-
+    let publishedCourses:Course[]=[];
+    if(courses.length > 0){
+    publishedCourses = courses?.filter(course => course.published === true);
+    }
     return (
         <div>
             <div className="max-w-7xl mx-auto px-4 py-16">
                 {/* Hero Section */}
-                <div className="text-center mb-8 md:mb-16 min-h-[30vh] md:min-h-[50vh] flex flex-col justify-center items-center bg-gray-100 px-2 md:px-4">
+                <div className="text-center mb-8 md:mb-16 min-h-[30vh] md:min-h-[30vh] flex flex-col justify-center items-center bg-gray-100 px-2 md:px-4">
                     {category && (
                         <>
                             <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold mb-2 md:mb-4 montserrat-700">{category.name}</h1>
