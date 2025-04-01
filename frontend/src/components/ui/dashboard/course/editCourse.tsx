@@ -57,7 +57,7 @@ interface Content {
 interface Category {
     id: number;
     name: string;
-    parentId: number | null;
+    parentId: number;
 }
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
