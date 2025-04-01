@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { LoadingScreen } from '../loadingScreen';
 
 interface Course {
     id: number;
@@ -86,7 +87,7 @@ const PopularCourses = () => {
 
     // Fallback content for when there are no courses or during loading/error states
     const renderFallbackContent = () => {
-        if (loading) return <p className="text-center py-10">Loading popular courses...</p>;
+        if (loading) return <LoadingScreen></LoadingScreen>;
         if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
         if (courses.length === 0) return <p className="text-center py-10">No popular courses available at the moment.</p>;
     };

@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { LoadingScreen } from "../loadingScreen";
-import { FiBook, FiBookOpen } from "react-icons/fi";
+import { LoadingScreen } from "../../loadingScreen";
+import { FiBook, FiBookOpen, FiUsers } from "react-icons/fi";
 import { Toaster } from "react-hot-toast";
 import CourseModules from "./courseModules";
 import Details from "./courseDetails";
-import { useAuth } from "@clerk/clerk-react";
+import CourseEnrollments from "./courseEnrollments";
 
 interface Course {
     id: number;
@@ -21,7 +21,7 @@ interface Course {
     updatedAt: Date;
     published: boolean;
     categoryId: number;
-    category: Category | null;
+    category: Category ;
     overview: string[];
     learningOutcomes: string[];
     requirements: string[];
@@ -29,6 +29,7 @@ interface Course {
     language: string;
     courseNotice: string | null;
     modules: Module[];
+    
 }
 interface Module {
     id: number;
@@ -64,19 +65,13 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const EditCourse = () => {
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(true);
-    const [selectedTab, setSelectedTab] = useState<'details' | 'module'>('details');
+    const [selectedTab, setSelectedTab] = useState<'details' | 'module' | 'users'>('details');
     const { id } = useParams();
-    const { getToken } = useAuth();
 
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const token = await getToken();
-                const res = await axios.get(`${backendUrl}api/v1/course/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
                 setCourse(res.data as Course);
             } catch (error) {
                 console.error("Error fetching course:", error);
@@ -85,12 +80,12 @@ const EditCourse = () => {
             }
         }
         fetchCourse();
-    }, [id, getToken]);
+    }, [id]);
 
     if (loading) {
         return <LoadingScreen />;
     }
-    
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="container mx-auto px-4 py-8">
@@ -100,19 +95,26 @@ const EditCourse = () => {
                         <div className="w-full md:w-64 bg-gray-900 text-white p-6">
                             <h2 className="text-xl font-bold mb-8 border-b border-gray-700 pb-4">Course Management</h2>
                             <div className="flex flex-col gap-3">
-                                <button 
-                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'details' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`} 
+                                <button
+                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'details' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`}
                                     onClick={() => setSelectedTab('details')}
                                 >
                                     <FiBook className="inline-block mr-3" />
                                     Course Details
                                 </button>
                                 <button
-                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'module' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`} 
+                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'module' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`}
                                     onClick={() => setSelectedTab('module')}
                                 >
                                     <FiBookOpen className="inline-block mr-3" />
                                     Course Modules
+                                </button>
+                                <button
+                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'users' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`}
+                                    onClick={() => setSelectedTab('users')}
+                                >
+                                    <FiUsers className="inline-block mr-3" />
+                                    Users Enrolled
                                 </button>
                             </div>
                         </div>
@@ -133,10 +135,13 @@ const EditCourse = () => {
 
                             <div className="p-6">
                                 {selectedTab === 'details' && (
-                                    <Details course={course} />
+                                    <Details course={course!} />
                                 )}
                                 {selectedTab === 'module' && (
                                     <CourseModules course={course!} />
+                                )}
+                                {selectedTab === 'users' && (
+                                    <CourseEnrollments course={course!} />
                                 )}
                             </div>
                         </div>

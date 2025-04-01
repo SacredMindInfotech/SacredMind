@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import CategoryStats from "../../components/ui/dashboard/category/categoryStats";
+import AddCategory from "../../components/ui/dashboard/category/addCategory";
+import { toast } from "react-hot-toast";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -16,7 +19,6 @@ interface Category {
 const CategoryManagement = () => {
     const [categories, setCategories] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [newCategoryName, setNewCategoryName] = useState("");
     const [selectedParentId, setSelectedParentId] = useState<number | null>(null);
     const [expandedCategories, setExpandedCategories] = useState<Record<number, boolean>>({});
@@ -42,7 +44,7 @@ const CategoryManagement = () => {
             [categoryId]: !prev[categoryId]
         }));
     };
-    
+
     // Toggle subcategory courses display and fetch courses if needed
     const toggleSubcategoryCourses = async (subcategoryId: number) => {
         // If courses are already loaded, just toggle visibility
@@ -50,35 +52,35 @@ const CategoryManagement = () => {
             //@ts-ignore
             setCoursesForSubcategory(prev => ({
                 ...prev,
-                [subcategoryId]: prev[subcategoryId] ? undefined : prev[subcategoryId]
+                [subcategoryId]: undefined
             }));
-            return;
-        }
-        
-        // Otherwise fetch courses for this subcategory
-        try {
-            const res = await axios.get(`${backendUrl}api/v1/category/${subcategoryId}/courses`);
-            //@ts-ignore
-            setCoursesForSubcategory(prev => ({
-                ...prev,
-                [subcategoryId]: res.data
-            }));
-        } catch (err) {
-            console.error(`Error fetching courses for subcategory ${subcategoryId}:`, err);
+        } else {
+            // Otherwise fetch courses for this subcategory
+            try {
+                const res = await axios.get(`${backendUrl}api/v1/category/${subcategoryId}/courses`);
+                //@ts-ignore
+                setCoursesForSubcategory(prev => ({
+                    ...prev,
+                    [subcategoryId]: res.data
+                }));
+            } catch (err) {
+                console.error(`Error fetching courses for subcategory ${subcategoryId}:`, err);
+                toast.error("Failed to fetch courses for this subcategory");
+            }
         }
     };
-    
+
     // Navigate to course details page
     const navigateToCourse = (courseId: number) => {
         navigate(`/admin/course/${courseId}`);
     };
-    
+
     // Fetch categories and organize them hierarchically
     const fetchCategories = async () => {
         try {
             setLoading(true);
             const res = await axios.get(`${backendUrl}api/v1/category`);
-            
+
             // Process each category to get its subcategories and course counts
             const processedCategories = await Promise.all(
                 //@ts-ignore
@@ -87,7 +89,7 @@ const CategoryManagement = () => {
                         // Get category details including subcategories
                         const categoryRes = await axios.get(`${backendUrl}api/v1/category/${cat.name}`);
                         const categoryData = categoryRes.data;
-                        
+
                         // Process subcategories to get course counts
                         let subcategories = [];
                         //@ts-ignore
@@ -105,7 +107,7 @@ const CategoryManagement = () => {
                                 })
                             );
                         }
-                        
+
                         return {
                             //@ts-ignore
                             ...categoryData,
@@ -120,11 +122,10 @@ const CategoryManagement = () => {
                     }
                 })
             );
-            
+
             setCategories(processedCategories);
         } catch (err) {
             console.error("Error fetching categories:", err);
-            setError("Failed to load categories");
         } finally {
             setLoading(false);
         }
@@ -137,121 +138,122 @@ const CategoryManagement = () => {
     // Apply filters to categories
     useEffect(() => {
         if (!categories) return;
-        
+
         let filtered = [...categories];
-        
+
         // Filter by name
         if (filters.name) {
-            filtered = filtered.filter(cat => 
+            filtered = filtered.filter(cat =>
                 cat.name.toLowerCase().includes(filters.name.toLowerCase())
             );
         }
-        
+
         // Filter by subcategory count
         if (filters.minSubcategories) {
             const min = parseInt(filters.minSubcategories);
-            filtered = filtered.filter(cat => 
+            filtered = filtered.filter(cat =>
                 (cat.subcategories?.length || 0) >= min
             );
         }
-        
+
         if (filters.maxSubcategories) {
             const max = parseInt(filters.maxSubcategories);
-            filtered = filtered.filter(cat => 
+            filtered = filtered.filter(cat =>
                 (cat.subcategories?.length || 0) <= max
             );
         }
-        
+
         // Filter by has subcategories
         if (filters.hasSubcategories === 'yes') {
-            filtered = filtered.filter(cat => 
+            filtered = filtered.filter(cat =>
                 (cat.subcategories?.length || 0) > 0
             );
         } else if (filters.hasSubcategories === 'no') {
-            filtered = filtered.filter(cat => 
+            filtered = filtered.filter(cat =>
                 (cat.subcategories?.length || 0) === 0
             );
         }
-        
+
         // Sort categories
         filtered.sort((a, b) => {
             if (filters.sortBy === 'name') {
-                return filters.sortOrder === 'asc' 
+                return filters.sortOrder === 'asc'
                     ? a.name.localeCompare(b.name)
                     : b.name.localeCompare(a.name);
             } else {
                 const aCount = a.subcategories?.length || 0;
                 const bCount = b.subcategories?.length || 0;
-                return filters.sortOrder === 'asc' 
+                return filters.sortOrder === 'asc'
                     ? aCount - bCount
                     : bCount - aCount;
             }
         });
-        
+
         setFilteredCategories(filtered);
     }, [categories, filters]);
 
     const handleAddCategory = async () => {
         if (!newCategoryName.trim()) return;
-        
+
         try {
             const token = await getToken();
             const response = await axios.post(`${backendUrl}api/v1/admin/categories`, {
                 name: newCategoryName,
                 parentId: selectedParentId ? selectedParentId : null
-            },{
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
             });
             if (response.status === 201) {
+                toast.success("Category added successfully");
                 setNewCategoryName("");
                 setSelectedParentId(null);
                 fetchCategories();
             }
-            
+
         } catch (err) {
             console.error("Error adding category:", err);
-            setError("Failed to add category");
+            toast.error("Failed to add category");
         }
     };
-    
+
     const handleDeleteCategory = async (id: number, isParent: boolean, courseCount: number = 0) => {
-        // Check if it's a subcategory with courses
-        if (!isParent && courseCount > 0) {
-            alert("Cannot delete subcategory with associated courses");
-            return;
-        }
-        
-        // Check if it's a parent category with subcategories that have courses
-        if (isParent) {
-            const hasCoursesInSubcategories = categories?.find(cat => cat.id === id)?.subcategories?.some(
-                //@ts-ignore
-                subCat => (subCat.courseCount || 0) > 0
-            );
-            
-            if (hasCoursesInSubcategories) {
-                alert("Cannot delete category with courses in its subcategories");
+        try {
+            // Check if it's a subcategory with courses
+            if (!isParent && courseCount > 0) {
+                toast.error("Cannot delete subcategory with associated courses");
                 return;
             }
-        }
-        
-        try {
+
+            // Check if it's a parent category with subcategories that have courses
+            if (isParent) {
+                const category = categories.find(cat => cat.id === id);
+                const hasCoursesInSubcategories = category?.subcategories?.some(
+                    (subCat: any) => subCat.courseCount > 0
+                );
+
+                if (hasCoursesInSubcategories) {
+                    toast.error("Cannot delete category with courses in its subcategories");
+                    return;
+                }
+            }
+
             const token = await getToken();
-            const response = await axios.delete(`${backendUrl}api/v1/admin/categories/${id}`,{
+            const response = await axios.delete(`${backendUrl}api/v1/admin/categories/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
             });
             if (response.status === 200) {
+                toast.success("Category deleted successfully");
                 fetchCategories();
             }
         } catch (err) {
+            toast.error("Failed to delete category");
             console.error("Error deleting category:", err);
-            //@ts-ignore
-            setError(err.response.data.error);
         }
     };
 
@@ -279,12 +281,12 @@ const CategoryManagement = () => {
     // Get statistics
     const getCategoryStats = () => {
         if (!categories) return { total: 0, withSubcategories: 0, withoutSubcategories: 0, totalSubcategories: 0 };
-        
+
         const total = categories.length;
         const withSubcategories = categories.filter(cat => (cat.subcategories?.length || 0) > 0).length;
         const withoutSubcategories = total - withSubcategories;
         const totalSubcategories = categories.reduce((sum, cat) => sum + (cat.subcategories?.length || 0), 0);
-        
+
         return { total, withSubcategories, withoutSubcategories, totalSubcategories };
     };
 
@@ -295,12 +297,13 @@ const CategoryManagement = () => {
             <div className="container mx-auto px-4 py-8">
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div className="flex flex-col md:flex-row">
+
                         {/* Sidebar */}
                         <div className="w-full md:w-64 bg-gray-900 text-white p-6">
                             <h2 className="text-xl font-bold mb-8 border-b border-gray-700 pb-4">Category Management</h2>
                             <div className="flex flex-col gap-3">
-                                <button 
-                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'categories' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`} 
+                                <button
+                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'categories' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`}
                                     onClick={() => setSelectedTab('categories')}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
@@ -309,7 +312,7 @@ const CategoryManagement = () => {
                                     Categories
                                 </button>
                                 <button
-                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'statistics' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`} 
+                                    className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'statistics' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`}
                                     onClick={() => setSelectedTab('statistics')}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
@@ -339,37 +342,9 @@ const CategoryManagement = () => {
 
                             <div className="p-6">
                                 {/* Add Category Form */}
-                                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                                    <h2 className="text-lg font-semibold mb-3">Add New Category</h2>
-                                    <div className="flex flex-col md:flex-row gap-3">
-                                        <input
-                                            type="text"
-                                            value={newCategoryName}
-                                            onChange={(e) => setNewCategoryName(e.target.value)}
-                                            placeholder="Category name"
-                                            className="px-3 py-2 border rounded-md"
-                                        />
-                                        <select 
-                                            className="px-3 py-2 border rounded-md"
-                                            value={selectedParentId || ""}
-                                            onChange={(e) => setSelectedParentId(e.target.value ? Number(e.target.value) : null)}
-                                        >
-                                            <option value="">No parent (Main category)</option>
-                                            {categories?.map(cat => (
-                                                <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                            ))}
-                                        </select>
-                                        <button 
-                                            onClick={handleAddCategory}
-                                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                                        >
-                                            Add Category
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                {error && <div className="text-red-500 mb-4">{error}</div>}
-                                
+                               <AddCategory  newCategoryName={newCategoryName} setNewCategoryName={setNewCategoryName} selectedParentId={selectedParentId} setSelectedParentId={setSelectedParentId} handleAddCategory={handleAddCategory} categories={categories}></AddCategory>
+
+
                                 {selectedTab === 'categories' && (
                                     <div>
                                         <div className="mb-4 flex justify-end items-center w-full">
@@ -383,7 +358,7 @@ const CategoryManagement = () => {
                                                 Filters
                                             </button>
                                         </div>
-                                        
+
                                         {loading ? (
                                             <div className="flex justify-center items-center h-40">
                                                 <div className="w-10 h-10 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
@@ -397,7 +372,7 @@ const CategoryManagement = () => {
                                                                 <div className="flex justify-between items-center mb-2">
                                                                     <div className="flex items-center">
                                                                         {category.subcategories && category.subcategories.length > 0 ? (
-                                                                            <button 
+                                                                            <button
                                                                                 onClick={() => toggleCategoryExpansion(category.id)}
                                                                                 className="mr-2 text-gray-600 focus:outline-none"
                                                                             >
@@ -415,25 +390,24 @@ const CategoryManagement = () => {
                                                                             ({category.subcategories?.length || 0} subcategories)
                                                                         </span>
                                                                     </div>
-                                                                    <button 
+                                                                    <button
                                                                         onClick={() => handleDeleteCategory(category.id, true, category.courseCount)}
-                                                                        className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
+                                                                        className="px-3 py-1 rounded-md border border-white bg-red-600 text-white hover:shadow-[4px_4px_0px_0px_rgba(255,0,0,0.3)] hover:text-white hover:border-red-700 hover:bg-red-700 transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                                                                     >
                                                                         Delete
                                                                     </button>
                                                                 </div>
-                                                                
+
                                                                 {category.subcategories && category.subcategories.length > 0 ? (
                                                                     <div className={`ml-6 mt-2 ${expandedCategories[category.id] ? 'block' : 'hidden'}`}>
                                                                         <h4 className="text-md font-medium mb-2">Subcategories:</h4>
                                                                         <ul className="space-y-2">
-                                                                            {category.subcategories.map((subcat:any) => (
+                                                                            {category.subcategories.map((subcat: any) => (
                                                                                 <li key={subcat.id} className="p-2 bg-gray-50 rounded">
                                                                                     <div className="flex justify-between items-center">
                                                                                         <div className="flex items-center">
-                                                                                            {/* @ts-ignore */}
                                                                                             {subcat.courseCount > 0 && (
-                                                                                                <button 
+                                                                                                <button
                                                                                                     onClick={() => toggleSubcategoryCourses(subcat.id)}
                                                                                                     className="mr-2 text-gray-600 focus:outline-none"
                                                                                                 >
@@ -446,29 +420,33 @@ const CategoryManagement = () => {
                                                                                             )}
                                                                                             <span>{subcat.name} {subcat.courseCount ? `(${subcat.courseCount} courses)` : ''}</span>
                                                                                         </div>
-                                                                                        <button 
+                                                                                        <button
                                                                                             onClick={() => handleDeleteCategory(subcat.id, false, subcat.courseCount)}
                                                                                             className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-xs"
                                                                                         >
                                                                                             Delete
                                                                                         </button>
                                                                                     </div>
-                                                                                    
+
                                                                                     {/* Display courses for this subcategory */}
                                                                                     {coursesForSubcategory[subcat.id] && (
                                                                                         <div className="mt-2 ml-6">
                                                                                             <h5 className="text-sm font-medium mb-1">Courses:</h5>
-                                                                                            <ul className="space-y-1">
-                                                                                                {coursesForSubcategory[subcat.id].map(course => (
-                                                                                                    <li 
-                                                                                                        key={course.id} 
-                                                                                                        className="p-1 pl-2 bg-gray-100 rounded cursor-pointer hover:bg-gray-200"
-                                                                                                        onClick={() => navigateToCourse(course.id)}
-                                                                                                    >
-                                                                                                        {course.title}
-                                                                                                    </li>
-                                                                                                ))}
-                                                                                            </ul>
+                                                                                            {coursesForSubcategory[subcat.id].length > 0 ? (
+                                                                                                <ul className="space-y-1">
+                                                                                                    {coursesForSubcategory[subcat.id].map(course => (
+                                                                                                        <li
+                                                                                                            key={course.id}
+                                                                                                            className="p-1 pl-2 bg-gray-100 rounded cursor-pointer hover:bg-gray-200"
+                                                                                                            onClick={() => navigateToCourse(course.id)}
+                                                                                                        >
+                                                                                                            {course.title}
+                                                                                                        </li>
+                                                                                                    ))}
+                                                                                                </ul>
+                                                                                            ) : (
+                                                                                                <p className="text-sm text-gray-500">No courses in this subcategory</p>
+                                                                                            )}
                                                                                         </div>
                                                                                     )}
                                                                                 </li>
@@ -488,57 +466,9 @@ const CategoryManagement = () => {
                                         )}
                                     </div>
                                 )}
-                                
+
                                 {selectedTab === 'statistics' && (
-                                    <div className="bg-white p-6 rounded-lg shadow">
-                                        <h2 className="text-xl font-bold mb-6">Category Statistics</h2>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
-                                                <div className="flex items-center justify-between">
-                                                    <div>
-                                                        <p className="text-blue-800 text-sm font-medium">Total Categories</p>
-                                                        <p className="text-3xl font-bold text-blue-900">{stats.total}</p>
-                                                    </div>
-                                                    <div className="p-3 bg-blue-100 rounded-full">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path fillRule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3 1h10v8H5V6zm6 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <p className="mt-2 text-sm text-blue-700">Main categories in the system</p>
-                                            </div>
-                                            
-                                            <div className="bg-green-50 p-6 rounded-lg border border-green-100">
-                                                <div className="flex items-center justify-between">
-                                                    <div>
-                                                        <p className="text-green-800 text-sm font-medium">With Subcategories</p>
-                                                        <p className="text-3xl font-bold text-green-900">{stats.withSubcategories}</p>
-                                                    </div>
-                                                    <div className="p-3 bg-green-100 rounded-full">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <p className="mt-2 text-sm text-green-700">Categories with child categories</p>
-                                            </div>
-                                            
-                                            <div className="bg-purple-50 p-6 rounded-lg border border-purple-100">
-                                                <div className="flex items-center justify-between">
-                                                    <div>
-                                                        <p className="text-purple-800 text-sm font-medium">Total Subcategories</p>
-                                                        <p className="text-3xl font-bold text-purple-900">{stats.totalSubcategories}</p>
-                                                    </div>
-                                                    <div className="p-3 bg-purple-100 rounded-full">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <p className="mt-2 text-sm text-purple-700">Child categories in the system</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <CategoryStats stats={stats} />
                                 )}
                             </div>
                         </div>
@@ -551,7 +481,7 @@ const CategoryManagement = () => {
                 <div className="p-6">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-bold">Filters</h2>
-                        <button 
+                        <button
                             onClick={() => setShowFilters(false)}
                             className="text-gray-500 hover:text-gray-700"
                         >
@@ -560,7 +490,7 @@ const CategoryManagement = () => {
                             </svg>
                         </button>
                     </div>
-                    
+
                     <div className="space-y-4">
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
@@ -574,7 +504,7 @@ const CategoryManagement = () => {
                                 placeholder="Filter by name"
                             />
                         </div>
-                        
+
                         <div>
                             <label htmlFor="minSubcategories" className="block text-sm font-medium text-gray-700 mb-1">Min Subcategories</label>
                             <input
@@ -588,7 +518,7 @@ const CategoryManagement = () => {
                                 placeholder="Minimum subcategories"
                             />
                         </div>
-                        
+
                         <div>
                             <label htmlFor="maxSubcategories" className="block text-sm font-medium text-gray-700 mb-1">Max Subcategories</label>
                             <input
@@ -602,7 +532,7 @@ const CategoryManagement = () => {
                                 placeholder="Maximum subcategories"
                             />
                         </div>
-                        
+
                         <div>
                             <label htmlFor="hasSubcategories" className="block text-sm font-medium text-gray-700 mb-1">Has Subcategories</label>
                             <select
@@ -617,7 +547,7 @@ const CategoryManagement = () => {
                                 <option value="no">Without Subcategories</option>
                             </select>
                         </div>
-                        
+
                         <div>
                             <label htmlFor="sortBy" className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
                             <select
@@ -631,7 +561,7 @@ const CategoryManagement = () => {
                                 <option value="subcategoryCount">Subcategory Count</option>
                             </select>
                         </div>
-                        
+
                         <div>
                             <label htmlFor="sortOrder" className="block text-sm font-medium text-gray-700 mb-1">Sort Order</label>
                             <select
@@ -645,7 +575,7 @@ const CategoryManagement = () => {
                                 <option value="desc">Descending</option>
                             </select>
                         </div>
-                        
+
                         <div className="pt-4 flex gap-2">
                             <button
                                 onClick={resetFilters}
@@ -666,7 +596,7 @@ const CategoryManagement = () => {
 
             {/* Overlay for filters sidebar */}
             {showFilters && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/20 z-40"
                     onClick={() => setShowFilters(false)}
                 ></div>

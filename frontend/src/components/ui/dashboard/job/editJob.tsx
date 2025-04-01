@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
-import { LoadingScreen } from "../loadingScreen";
 import {  FiEye } from "react-icons/fi";
 import { toast, Toaster } from "react-hot-toast";
+import { LoadingScreen } from "../../loadingScreen";
 
 interface Job {
     id: number;
@@ -64,36 +64,24 @@ const EditJob = () => {
         const fetchJob = async () => {
             try {
                 const token = await getToken();
-                const response = await axios.get(`${backendUrl}api/v1/job/${id}`, {
+                const response= await axios.get(`${backendUrl}api/v1/job/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                //@ts-ignore
-                setJob(response.data);
+                const data=response.data as Job;
+                setJob(response.data as Job);
                 setFormData({
-                    //@ts-ignore
-                    title: response.data.title,
-                    //@ts-ignore
-                    description: response.data.description,
-                    //@ts-ignore
-                    responsibilities: response.data.responsibilities,
-                    //@ts-ignore
-                    requirements: response.data.requirements,
-                    //@ts-ignore
-                    skills: response.data.skills,
-                    //@ts-ignore
-                    published: response.data.published,
-                    //@ts-ignore
-                    location: response.data.location,
-                    //@ts-ignore
-                    salary: response.data.salary || '',
-                    //@ts-ignore
-                    type: response.data.type,
-                    //@ts-ignore
-                    experience: response.data.experience,
-                    //@ts-ignore
-                    education: response.data.education,
-                    //@ts-ignore
-                    jobCategoryId: response.data.jobCategoryId
+                    title: data.title,
+                    description: data.description,
+                    responsibilities: data.responsibilities,
+                    requirements: data.requirements,
+                    skills: data.skills,
+                    published: data.published,
+                    location: data.location,
+                    salary: data.salary || '',
+                    type: data.type,
+                    experience: data.experience,
+                    education: data.education,
+                    jobCategoryId: data.jobCategoryId
                 });
             } catch (error) {
                 console.error("Error fetching job:", error);

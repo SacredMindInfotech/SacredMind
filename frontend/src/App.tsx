@@ -3,31 +3,32 @@ import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Landing from './pages/landing'
 import Footer from './components/ui/footer'
-import Contact from './components/ui/contact'
+import Contact from './pages/contact'
 import Navbar from './components/ui/navbar'
 import Category from './components/ui/category'
 import Course from './components/ui/course'
 import AdminLayout from './pages/adminLayout'
-import UserManagement from './components/ui/dashboard/userManagement'
-import CourseManagement from './components/ui/dashboard/courseManagement'
-import OrderManagement from './components/ui/dashboard/orderManagement'
+import UserManagement from './pages/dashboard/userManagement'
+import CourseManagement from './pages/dashboard/courseManagement'
+import OrderManagement from './pages/dashboard/orderManagement'
 import AdminDashboard from './components/ui/dashboard/adminDashboard'
-import Careers from './components/ui/careers'
 import ProtectedRoutes from './components/protected-routes'
-import JobDetails from './components/ui/jobDetails'
-import JobManagement from './components/ui/dashboard/jobManagement'
-import PrivacyPolicy from './components/ui/PrivacyPolicy'
-import TermsAndConditions from './components/ui/TermsAndConditions'
-import SalesAndRefunds from './components/ui/SalesAndRefunds'
+import JobDetails from './pages/jobDetails'
+import JobManagement from './pages/dashboard/jobManagement'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsAndConditions from './pages/TermsAndConditions'
+import SalesAndRefunds from './pages/SalesAndRefunds'
 import Purchases from './components/ui/purchases'
 import CourseContent from './components/ui/courseContent'
 import MetaPixel from './MetaPixel'
-import PricingPolicy from './components/ui/pricingPolicy'
+import PricingPolicy from './pages/pricingPolicy'
 import ViewContent from './components/ui/viewContent'
 import OnlyPaidUsers from './components/onlyPaidUsers'
-import EditCourse from './components/ui/dashboard/EditCourse'
-import CategoryManagement from './components/ui/dashboard/categoryManagement'
-import EditJob from './components/ui/dashboard/editJob'
+import CategoryManagement from './pages/dashboard/categoryManagement'
+import Careers from './pages/careers'
+import EditCourse from './components/ui/dashboard/course/EditCourse'
+import EditJob from './components/ui/dashboard/job/editJob'
+import AddCourse from './components/ui/dashboard/course/addCourse'
 
 function App() {
   const Router = createBrowserRouter([
@@ -88,8 +89,9 @@ function App() {
         { path: "", element: <AdminDashboard /> },
         { path: "users", element: <UserManagement /> },
         { path: "courses", element: <CourseManagement /> },
-        { path: "categories", element: <CategoryManagement /> },
         { path: "course/:id", element: <EditCourse /> },
+        { path: "course/add", element: <AddCourse /> },
+        { path: "categories", element: <CategoryManagement /> },
         { path: "orders", element: <OrderManagement /> },
         { path: "jobs", element: <JobManagement /> },
         { path: "jobs/:id", element: <EditJob /> },

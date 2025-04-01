@@ -1,7 +1,7 @@
 import {  useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { LoadingScreen } from "./loadingScreen";
+import { LoadingScreen } from "../components/ui/loadingScreen";
 
 interface Job {
     id: number;

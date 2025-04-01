@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LoadingScreen } from "./loadingScreen";
 
 
 interface Categories {
@@ -78,6 +79,9 @@ const Category = () => {
         fetchCourses();
     }, [selectedSubcategory]);
 
+    // Filter published courses
+    const publishedCourses = courses.filter(course => course.published === true);
+
     return (
         <div>
             <div className="max-w-7xl mx-auto px-4 py-16">
@@ -113,11 +117,12 @@ const Category = () => {
                 )}
 
                 {/* Courses Grid Section */}
-                {courses.length > 0 && (
+                {publishedCourses.length > 0 && (
                     <div className="flex flex-col gap-8 max-w-7xl mx-auto px-4 py-16">
                         <div className="text-xl sm:text-2xl font-semibold mb-4 montserrat-500">~Available Courses~</div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-                            {courses.map((course) => (
+                            {publishedCourses.map((course) => (
+                            
                                 <div 
                                     key={course.id} 
                                     className="p-4 sm:p-6 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)]  hover:border-white hover:bg-white transition duration-200 montserrat-secondary relative overflow-hidden"
@@ -150,13 +155,13 @@ const Category = () => {
                 {/* Empty State */}
                 { loading ? (
                     <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                        <LoadingScreen></LoadingScreen>
                     </div>
                 ) : (
-                    courses.length === 0 && (
+                    publishedCourses.length === 0 && (
                         <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100">
                             <h2 className="text-2xl font-semibold mb-4 montserrat-500">No courses available yet</h2>
-                        <p className="text-gray-600 montserrat-400">Check back soon for new courses in this category</p>
+                            <p className="text-gray-600 montserrat-400">Check back soon for new courses in this category</p>
                         </div>
                     )
                 )}

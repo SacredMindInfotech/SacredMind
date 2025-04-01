@@ -393,24 +393,11 @@ const CourseManagement = () => {
                     )}
                 </div>
 
-                {data.imageUrl && (
-                    <div className="flex justify-center">
-                        <img 
-                            src={data.imageUrl} 
-                            alt={data.title} 
-                            className="h-40 object-contain rounded shadow-sm"
-                            onError={(e) => {
-                                (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=Image+Not+Available';
-                            }}
-                        />
-                    </div>
-                )}
-
                 <button 
                     onClick={() => navigate(`/admin/course/${data.id}`)} 
                     className="px-6 py-3 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                 >
-                    Edit Course
+                    View Course
                 </button>
             </motion.div>
         );
@@ -433,13 +420,25 @@ const CourseManagement = () => {
         };
     }, []);
 
+    const navigate = useNavigate();
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="container mx-auto px-4 py-8">
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div className="p-6 border-b border-gray-200">
-                        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Course Management</h1>
-                        <p className="text-gray-600 mt-2">View and manage course listings</p>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Course Management</h1>
+                                <p className="text-gray-600 mt-2">View and manage course listings</p>
+                            </div>
+                            <button 
+                                onClick={() => navigate('/admin/course/add')} 
+                                className="w-full md:w-40 px-3 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                            >
+                                Add New Course
+                            </button>
+                        </div>
                     </div>
                     <div className="p-6">
                         <div className="overflow-x-auto bg-white min-h-[200px] rounded-lg shadow">
