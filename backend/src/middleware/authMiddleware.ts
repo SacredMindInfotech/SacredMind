@@ -27,8 +27,6 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
       res.status(401).json({ error: "Unauthorized: User not found" });
       return;
     }
-  
-
 
     if (user.role !== "ADMIN") {
       res.status(403).json({ error: "Forbidden: Admin access required" });

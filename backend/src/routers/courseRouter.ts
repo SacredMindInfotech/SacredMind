@@ -8,7 +8,6 @@ const courseRouter = express.Router();
 // api/v1/course/
 courseRouter.get("/", getAllCoursesController);
 
-
 //route to get popular courses
 // api/v1/course/popular
 courseRouter.get("/popular", getPopularCoursesController);

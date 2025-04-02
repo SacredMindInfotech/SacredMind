@@ -85,3 +85,31 @@ export const isPurchaseController = async (req: Request, res: Response) => {
   }
 };
 
+
+export const updatePhoneNumberController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { phoneNumber } = req.body;
+
+    // Check if the phone number is already registered
+    const existingUser = await prisma.user.findMany({
+      where: { phoneNumber: phoneNumber },
+    });
+    if (existingUser.length > 0) {
+      res.status(400).json({ error: "Phone number is already registered" });
+      return;
+    }
+
+    const user = await prisma.user.update({
+      where: { clerkuserId: id },
+      data: { phoneNumber: phoneNumber },
+    });
+
+    res.status(200).json(user);
+    return;
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+}

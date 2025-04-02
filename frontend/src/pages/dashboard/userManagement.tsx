@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 interface User {
     id: number;
     clerkuserId: string;
+    phoneNumber: string | null;
     email: string;
     firstName: string;
     lastName: string | null;

@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { holiOfferBannerClickedEvent } from "../../lib/pixel-event";
+// import AddPhoneNumberModal from "./AddPhoneNumberModal";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Navbar = () => {
     const { getToken } = useAuth();
     const currentPath = useLocation().pathname;
     const exploreRef = useRef<HTMLDivElement>(null);
+    // const [showPhoneNumberModal,setShowPhoneNumberModal]=useState(false);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -37,6 +39,11 @@ const Navbar = () => {
                 // console.log(response);
                 //@ts-ignore
                 setIsAdmin(response.data.role === "ADMIN");
+                //@ts-ignore
+                // if(!response.data.phoneNumber){
+                //     setShowPhoneNumberModal(true);
+                //     document.body.style.overflow="hidden";
+                // }
             } catch (error) {
                 console.error("Error fetching admin status:", error);
             }
@@ -304,6 +311,11 @@ const Navbar = () => {
                         <SignIn fallbackRedirectUrl={currentPath}   signUpFallbackRedirectUrl={currentPath} />
                     </div>
                 )}
+                {/* {showPhoneNumberModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/5 backdrop-blur-lg" >
+                        <AddPhoneNumberModal setShowPhoneNumberModal={setShowPhoneNumberModal} id={user!.id} />
+                    </div>
+                )} */}
             </motion.div>
 
         </div>

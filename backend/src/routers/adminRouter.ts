@@ -1,65 +1,67 @@
 import { Router } from "express";
 import {
+  addUserToCourseController,
+  removeUserFromCourseController,
   createCourseController,
   deleteCourseByIdController,
+  getEnrollmentsController,
   updateCourseByIdController,
-} from "../controllers/admin/courseOperations/course";
+} from "../controllers/admin/course/course";
 import {
   getAllUsersController,
   updateUserRoleController,
-} from "../controllers/admin/userOperations/user";
+} from "../controllers/admin/user/user";
 import {
   createCategoryController,
   deleteCategoryByIdController,
   updateCategoryByIdController,
-} from "../controllers/admin/CourseCategoryOperations/category";
+} from "../controllers/admin/CourseCategory/category";
 import {
   getCourseStats,
   getDashboardStats,
   getSalesStats,
   getUserStats,
-} from "../controllers/admin/dashboardOperations/dashboard";
+} from "../controllers/admin/dashboard/dashboard";
 import {
   getAllOrdersController,
   getOrderByIdController,
-} from "../controllers/admin/ordersOperations/order";
+} from "../controllers/admin/orders/order";
 import {
   createJobController,
   updateJobByIdController,
   deleteJobByIdController,
-} from "../controllers/admin/jobOperations/job";
+} from "../controllers/admin/job/job";
 import {
   createJobCategoryController,
   deleteJobCategoryByIdController,
   updateJobCategoryByIdController,
-} from "../controllers/admin/jobCategoryOperations/jobCategory";
-import {
-  createDiscountTokenController,
-  deleteDiscountTokenByIdController,
-  getAllDiscountTokensController,
-  updateDiscountTokenByIdController,
-} from "../controllers/discountTokens/discountTokenController";
-import {
-  createModuleController,
-  deleteModuleByIdController,
-  updateModuleByIdController,
-} from "../controllers/module/moduleController";
+} from "../controllers/admin/jobCategory/jobCategory";
+
+
 import {
   createTopicController,
   deleteTopicByIdController,
   updateTopicByIdController,
 } from "../controllers/topic/topicController";
-import { createContentController, deleteContentByIdController, updateContentByIdController } from "../controllers/content/contentController";
+import { createContentController, deleteContentByIdController, updateContentByIdController } from "../controllers/admin/content/content";
 import { uploadS3 } from "../middleware/multer";
+import { createModuleController, deleteModuleByIdController, updateModuleByIdController } from "../controllers/admin/courseModule/moduleController";
+import { createDiscountTokenController, deleteDiscountTokenByIdController, getAllDiscountTokensController, updateDiscountTokenByIdController } from "../controllers/admin/discoutToken/discountTokens";
 
 const adminRouter = Router();
 
 // POST	/api/v1/admin/courses	Create a new course
-adminRouter.post("/courses", createCourseController);
+adminRouter.post("/courses",uploadS3.single("image"), createCourseController);
 // PUT	/api/v1/admin/courses/:id	Update course details
-adminRouter.put("/courses/:id", updateCourseByIdController);
+adminRouter.put("/courses/:id",uploadS3.single("image"), updateCourseByIdController);
 // DELETE	/api/v1/admin/courses/:id	Delete a course
 adminRouter.delete("/courses/:id", deleteCourseByIdController);
+// GET /api/v1/admin/courses/:id/enrollments	Get all enrollments for a course
+adminRouter.get("/courses/:id/enrollments", getEnrollmentsController);
+//POST /api/v1/admin/:courseId/adduser Add a user to a course
+adminRouter.post("/:courseId/adduser", addUserToCourseController);
+//POST /api/v1/admin/:courseId/removeuser Remove a user from a course
+adminRouter.post("/:courseId/removeuser", removeUserFromCourseController);
 
 // GET	/api/v1/admin/users	Get all users
 adminRouter.get("/users", getAllUsersController);
@@ -109,6 +111,8 @@ adminRouter.get("/discountTokens", getAllDiscountTokensController);
 adminRouter.put("/discountTokens/:id", updateDiscountTokenByIdController);
 // DELETE	/api/v1/admin/discountTokens/:id	Delete a discount token
 adminRouter.delete("/discountTokens/:id", deleteDiscountTokenByIdController);
+
+
 
 //POST /api/v1/admin/:courseId/module   Creating new module of a course by courseId
 adminRouter.post("/:courseId/modules", createModuleController);

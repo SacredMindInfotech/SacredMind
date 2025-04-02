@@ -70,12 +70,7 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
             topics: {
               orderBy: { serialNumber: "asc" },
               include: {
-                contents: {
-                  select: {
-                    name: true,
-                    type: true
-                  }
-                }
+                contents: true
               },
             },
           },

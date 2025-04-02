@@ -2,7 +2,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { enrolledClickedEvent, enrolledSuccessEvent } from "../../lib/pixel-event";
+import { enrolledClickedEvent } from "../../lib/pixel-event";
+import { LoadingScreen } from "./loadingScreen";
+import PaymentCheckOutModal from "../../pages/paymentCheckOutPage";
 
 
 
@@ -52,16 +54,18 @@ interface Content {
 const Course = () => {
     const { id } = useParams();
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    const [course, setCourse] = useState<Course | null>(null);
-    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { isSignedIn } = useAuth();
     const { getToken } = useAuth();
+
+    const [course, setCourse] = useState<Course | null>(null);
+    const [loading, setLoading] = useState(true);
     const { user, isLoaded } = useUser();
     const [isPurchased, setIsPurchased] = useState<boolean>(false);
     const enrollButtonRef = useRef<HTMLButtonElement | null>(null);
     const [openedModule, setOpenedModule] = useState<number[]>([0]);
     const [openedTopic, setOpenedTopic] = useState<string[]>([]);
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
 
     //checking if the user has a pending payment for the course
@@ -72,29 +76,25 @@ const Course = () => {
             coursePayment();
         }
     }, [isSignedIn, isLoaded, user, id]);
-    
+  
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
-
-    //fetching the course details, by id from the url
-    useEffect(() => {
+        //fetching the discount code from the url and storing it in local storage
+        const urlParams = new URLSearchParams(window.location.search);
+        const discountCode = urlParams.get("discount_code");
+        if (discountCode) {
+            localStorage.setItem("discount_code", discountCode);
+        }
+        
+        //fetching the course details, by id from the url
         const fetchCourse = async () => {
             const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
             setCourse(res.data as Course);
             setLoading(false);
         }
         fetchCourse();
+
     }, [id]);
 
-    //fetching the discount code from the url and storing it in local storage
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const discountCode = urlParams.get("discount_code");
-        if (discountCode) {
-            localStorage.setItem("discount_code", discountCode);
-        }
-    }, [id]);
 
     //checking if the user has purchased the course or not before
     useEffect(() => {
@@ -116,25 +116,12 @@ const Course = () => {
         fetchIsPurchased();
     }, [id, isLoaded, user]);
 
-    //razorpay script
-    const loadScript = (src: string) => {
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = () => resolve(true);
-            script.onerror = () => resolve(false);
-            document.body.appendChild(script);
-        });
-    }
 
     const handleSignIn = () => {
         localStorage.setItem(`pendingPayment_${id}`, 'true');
         navigate("?sign-in=true");
     }
 
-    useEffect(() => {
-        loadScript("https://checkout.razorpay.com/v1/checkout.js");
-    }, []);
 
     const coursePayment = async () => {
         try {
@@ -145,60 +132,9 @@ const Course = () => {
                 return;
             }
 
-            const token = await getToken();
-            const discountToken = localStorage.getItem("discount_code");
-            const res = await axios.post(`${backendUrl}api/v1/payment/${id}`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    discountToken: discountToken
-                }
-            });
-            // @ts-ignore
-            let amount = res.data.order.amount;
-            const paymentObject = new (window as any).Razorpay({
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-                // @ts-ignore
-                order_id: res.data.order.id,
-                // @ts-ignore
-                amount: res.data.order.amount,
-                // @ts-ignore
-                currency: res.data.order.currency,
-                // @ts-ignore
-                name: "SacredMind Infotech",
-                handler: async (response: any) => {
-
-                    const razorpay_order_id = response.razorpay_order_id;
-                    const razorpay_payment_id = response.razorpay_payment_id;
-                    const razorpay_signature = response.razorpay_signature;
-
-
-                    console.log(user?.id);
-
-                    const res = await axios.post(`${backendUrl}api/v1/paymentVerify/`, {
-                        razorpay_order_id,
-                        razorpay_payment_id,
-                        razorpay_signature,
-                        courseId: id,
-                        clerkUserId: user?.id,
-                        amount: amount / 100
-                    })
-                    // @ts-ignore
-                    if (res.status === 200) {
-                        enrolledSuccessEvent();
-                        setIsPurchased(true);
-                        // window.location.reload();
-
-                    }
-                    else {
-                        alert("Payment Failed");
-                    }
-                }
-            })
-            paymentObject.open();
-
+            setShowCheckoutModal(true);
         } catch (error) {
             console.log(error);
-            localStorage.removeItem(`pendingPayment_${id}`);
         }
     }
 
@@ -206,7 +142,7 @@ const Course = () => {
         <div>
             {loading ? (
                 <div className="flex justify-center items-center min-h-screen">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                    <LoadingScreen></LoadingScreen>
                 </div>
             ) : course && (
                 <div className="max-w-7xl mx-auto px-4 py-8 sm:py-16">
@@ -401,6 +337,12 @@ const Course = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {showCheckoutModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600/60 backdrop-blur-lg" >
+                    <PaymentCheckOutModal id={id!} price={course?.price!} clerkUserId={user?.id!} courseName={course?.title!} setShowCheckoutModal={setShowCheckoutModal} />
                 </div>
             )}
         </div>

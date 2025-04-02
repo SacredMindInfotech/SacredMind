@@ -37,6 +37,7 @@ interface User {
     id: number;
     email: string;
     firstName: string;
+    phoneNumber: string | null;
     lastName: string | null;
 }
 

@@ -8,5 +8,8 @@ export default defineConfig({
   esbuild: {
     target: 'esnext',
     platform: 'node',
+  },
+  optimizeDeps: {
+    exclude: ['js-big-decimal']
   }
 })

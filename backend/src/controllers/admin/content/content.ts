@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import prisma from "../../PrismaClient";
+import prisma from "../../../PrismaClient";
 import {
   PutObjectCommand,
   CopyObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
-import s3Client from "../../config/s3Client";
+import s3Client from "../../../config/s3Client";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -13,16 +13,18 @@ const bucketName = process.env.AWS_S3_BUCKET_NAME;
 
 export const createContentController = async (req: Request, res: Response) => {
   try {
-    const { topicId } = req.params;
-    const { name, type, courseName } = req.body;
-
-    const s3FilePath = `courses/${courseName}/`;
     const file = req.file;
-    const keySuffix = file?.originalname.split(".").pop();
     if (!file) {
       res.status(400).json({ error: "No file uploaded" });
       return;
     }
+    
+    const { topicId } = req.params;
+    const { name, type, courseName } = req.body;
+    
+    const keySuffix = file?.originalname.split(".").pop();
+    const s3FilePath = `courses/${courseName}/`;
+    
     const fileName = name + "." + keySuffix;
     const uploadParam = {
       Bucket: bucketName,
@@ -61,6 +63,8 @@ export const updateContentByIdController = async (
   try {
     const { contentId } = req.params;
     const { name, courseName, key } = req.body;
+    console.log(req.body);
+    console.log(req.params);
 
     const keySuffix = key.split(".")[1];
 
@@ -107,6 +111,8 @@ export const deleteContentByIdController = async (
   try {
     const { contentId } = req.params;
     const { key } = req.query;
+    console.log(req.query);
+    console.log(req.params);
 
     // Delete the file from S3 bucket
     const deleteParams = {

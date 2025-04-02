@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import prisma from "../../PrismaClient";
+import prisma from "../../../PrismaClient";
 
 export const createModuleController = async (req: Request, res: Response) => {
   try {

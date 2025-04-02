@@ -1,5 +1,5 @@
 import express from "express";
-import { getPurchasesByUserIdController, getUserbyIdController, isPurchaseController } from "../controllers/user/userController";
+import { getPurchasesByUserIdController, getUserbyIdController, isPurchaseController, updatePhoneNumberController } from "../controllers/user/userController";
 
 const userRouter = express.Router();
 
@@ -14,6 +14,10 @@ userRouter.get("/purchases/:id", getPurchasesByUserIdController);
 //router to check if user has purchased a course
 // api/v1/user/isPurchase/:id
 userRouter.get("/isPurchase/:id", isPurchaseController);
+
+//router to update phone number
+// api/v1/user/updatePhoneNumber/:id
+userRouter.put("/updatePhoneNumber/:id", updatePhoneNumberController);
 
 
 

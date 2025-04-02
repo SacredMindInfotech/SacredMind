@@ -22,13 +22,13 @@ export const coursePaymentController = async (req: Request, res: Response) => {
         console.log(error);
       }
     }
-
+    
     let discountedPrice = course!.price;
     if (discountTokenData?.courseIds.includes(course!.id)) {
-      discountedPrice = discountTokenData?.isActive
+      discountedPrice = discountTokenData.expiresAt > new Date()
         ? Math.round(
             course!.price * (1 - discountTokenData.discountPercentage / 100)
-          ) - 1
+          ) 
         : course!.price;
     }
 

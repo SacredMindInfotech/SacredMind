@@ -17,6 +17,7 @@ model User {
   id           Int           @id @default(autoincrement())
   clerkuserId  String        @unique
   email        String        @unique
+  phoneNumber  String?
   firstName    String
   lastName     String?
   imageUrl     String?
@@ -141,7 +142,7 @@ model Transaction {
   razorpaySignature String?
   amount            Float
   currency          String            @default("INR")
-  status            TransactionStatus @default(PENDING) // SUCCESS, FAILED, PENDING
+  status            TransactionStatus @default(PENDING)
   createdAt         DateTime          @default(now())
 
   user   User   @relation(fields: [userId], references: [id])

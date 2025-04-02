@@ -68,7 +68,7 @@ export const getCoursesByCategoryIdController = async (
     const courses = await prisma.course.findMany({
       where: {
         categoryId: parseInt(id),
-        published: true,
+        // published: true,
       },
       include: {
         category: true,
