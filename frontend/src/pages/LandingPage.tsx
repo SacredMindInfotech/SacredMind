@@ -2,11 +2,11 @@ import Services from "../components/ui/landingPage/services";
 import Hero from "../components/ui/landingPage/hero";
 import Partners from "../components/ui/landingPage/partners";
 import { useRef } from "react";
-import About from "../components/ui/landingPage/About";
 import CareerContact from "../components/ui/landingPage/career&contact";
 import { holiOfferBannerClickedEvent } from "../lib/pixel-event";
 import UpcomingCourses from "../components/ui/landingPage/upcomingCourses";
 import PopularCourses from "../components/ui/landingPage/popularCourses";
+import About from "../components/ui/landingPage/about";
 const Landing = () => {
     const contactRef=useRef<HTMLDivElement>(null);
     const scrollToContact = () => {

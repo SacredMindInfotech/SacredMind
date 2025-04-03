@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { enrolledClickedEvent } from "../lib/pixel-event";
 import CoursePageShimmerEffect from "../components/ui/loaders/CoursePageLoader";
-import PaymentCheckOutModal from "../components/ui/paymentCheckOutModal";
+import PaymentCheckOutModal from "../components/ui/PaymentCheckOutModal";
 
 
 
