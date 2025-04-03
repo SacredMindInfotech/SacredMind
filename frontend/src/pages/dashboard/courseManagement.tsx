@@ -123,6 +123,10 @@ const CourseManagement = () => {
     const [expandedRow, setExpandedRow] = useState<any>(null);
     const [showFilters, setShowFilters] = useState(false);
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
 
     // Filter state
     const [filters, setFilters] = useState({
@@ -292,7 +296,7 @@ const CourseManagement = () => {
     const ExpandableRowComponent = ({ data }: any) => {
         const navigate = useNavigate();
         return (
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -393,8 +397,8 @@ const CourseManagement = () => {
                     )}
                 </div>
 
-                <button 
-                    onClick={() => navigate(`/admin/course/${data.id}`)} 
+                <button
+                    onClick={() => navigate(`/admin/course/${data.id}`)}
                     className="px-6 py-3 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                 >
                     View Course
@@ -432,8 +436,8 @@ const CourseManagement = () => {
                                 <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Course Management</h1>
                                 <p className="text-gray-600 mt-2">View and manage course listings</p>
                             </div>
-                            <button 
-                                onClick={() => navigate('/admin/course/add')} 
+                            <button
+                                onClick={() => navigate('/admin/course/add')}
                                 className="w-full md:w-40 px-3 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                             >
                                 Add New Course
@@ -463,6 +467,15 @@ const CourseManagement = () => {
                                 expandableRowsComponent={ExpandableRowComponent}
                                 expandableRowExpanded={row => expandedRow && expandedRow.id === row.id}
                                 onRowExpandToggled={handleRowExpanded}
+                                customStyles={
+                                    {
+                                        rows: {
+                                            style: {
+                                                backgroundColor: '#e5e7eb',
+                                            }
+                                        }
+                                    }
+                                }
                             />
                         </div>
                     </div>

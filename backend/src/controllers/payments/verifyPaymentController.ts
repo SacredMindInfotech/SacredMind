@@ -35,7 +35,6 @@ export const verifyPaymentController = async (req: Request, res: Response) => {
     }
 
     if (generatedSignature === razorpay_signature) {
-      //db operation
       const transaction=await prisma.transaction.create({
         data:{
           userId: user.id,

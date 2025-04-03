@@ -4,20 +4,20 @@ import { getPurchasesByUserIdController, getUserbyIdController, isPurchaseContro
 const userRouter = express.Router();
 
 //route to get user by id
-// api/v1/user/:id
-userRouter.get("/:id", getUserbyIdController);
+// api/v1/user/:clerkUserId
+userRouter.get("/:clerkUserId", getUserbyIdController);
 
 //router to get all courses purchased by user
-// api/v1/user/purchases/:id
-userRouter.get("/purchases/:id", getPurchasesByUserIdController);
+// api/v1/user/:userId/purchases
+userRouter.get("/:clerkUserId/purchases/", getPurchasesByUserIdController);
 
 //router to check if user has purchased a course
-// api/v1/user/isPurchase/:id
-userRouter.get("/isPurchase/:id", isPurchaseController);
+// api/v1/user/isPurchase/:courseId
+userRouter.get("/isPurchase/:courseId", isPurchaseController);
 
 //router to update phone number
-// api/v1/user/updatePhoneNumber/:id
-userRouter.put("/updatePhoneNumber/:id", updatePhoneNumberController);
+// api/v1/user/:userId/updatePhoneNumber
+userRouter.put("/:userId/updatePhoneNumber", updatePhoneNumberController);
 
 
 

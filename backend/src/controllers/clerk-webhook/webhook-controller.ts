@@ -16,14 +16,14 @@ const WebhookController = async (req: Request, res: Response) => {
     );
   }
 
-  // Create new Svix instance with secret
+  // new Svix instance with secret
   const wh = new Webhook(SIGNING_SECRET);
 
-  // Get headers and body
+  // headers and body
   const headers = req.headers;
   const payload = req.body;
 
-  // Get Svix headers for verification
+  // Svix headers for verification
   const svix_id = headers["svix-id"];
   const svix_timestamp = headers["svix-timestamp"];
   const svix_signature = headers["svix-signature"];
@@ -77,7 +77,6 @@ const WebhookController = async (req: Request, res: Response) => {
     };
 
     await createUser(user as User);
-    console.log("User created successfully");
   } 
 
   else if (eventType === "user.updated") {
@@ -100,14 +99,12 @@ const WebhookController = async (req: Request, res: Response) => {
       };
 
       await updateUserbyId({id, data:user as User});
-      console.log("User updated successfully");
 
   } 
   
   else if (eventType === "user.deleted") {
     const { id } = evt.data;
     await deleteUserbyId({clerkuserId:id});
-    console.log("User deleted successfully");
   }
 
   return void res.status(200).json({

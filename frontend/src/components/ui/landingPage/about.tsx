@@ -1,20 +1,63 @@
+import { useRef } from 'react';
 
 const About = () => {
-
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    
+    const aboutItems = [
+        {
+            name: "Quality Education",
+            description: "Providing excellence through online and offline courses",
+            imgUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3"
+        },
+        {
+            name: "Industry Certification",
+            description: "CBCE Skill India (CBCE-PB0991) certified programs",
+            imgUrl: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3"
+        },
+        {
+            name: "Tailored Courses",
+            description: "Custom learning paths focused on industry-ready skills",
+            imgUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3"
+        }
+    ];
 
     return (
         <div className="relative w-full h-full">
-
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
-                
-                <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center py-16 bg-gray-100">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">About Us</h1>
-                    <p className="text-xl mt-10 text-gray-600 max-w-3xl">
-                        SacredMind Pvt Ltd is a multi-product-based coaching institute providing quality education through online and offline courses. <p className="font-bold" >In collaboration with CBCE Skill India (CBCE-PB0991)
-                            </p> we develop tailored courses focused on empowering learners with industry-ready skills and certification programs.
+                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 mb-16">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold montserrat-700">
+                        About Us
+                    </h1>
+                    <p className="text-xl text-gray-600 lg:max-w-[50%]">
+                        SacredMind Pvt Ltd is a multi-product-based coaching institute providing quality education through online and offline courses.
                     </p>
                 </div>
 
+                <div className="relative">
+                    <div 
+                        ref={scrollContainerRef}
+                        className="grid grid-flow-col auto-cols-[70%] sm:auto-cols-[45%] md:auto-cols-[30%] lg:grid-flow-row lg:grid-cols-4 gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 pr-4 lg:overflow-visible"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
+                        {aboutItems.map((item, index) => (
+                            <div key={index} className="group relative overflow-hidden rounded-lg aspect-square snap-start">
+                                <img 
+                                    src={item.imgUrl} 
+                                    alt={item.name} 
+                                    className="w-full h-full object-cover brightness-50 group-hover:scale-110 transition-transform duration-500"
+                                />
+                                <div className="absolute bottom-0 left-0 p-4 w-full">
+                                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white montserrat-500">
+                                        {item.name}
+                                    </h3>
+                                    <p className="text-white text-sm md:text-base mt-2 opacity-90">
+                                        {item.description}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

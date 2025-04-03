@@ -2,10 +2,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { enrolledClickedEvent } from "../../lib/pixel-event";
-import { LoadingScreen } from "./loadingScreen";
-import PaymentCheckOutModal from "../../pages/paymentCheckOutPage";
-
+import { enrolledClickedEvent } from "../lib/pixel-event";
+import CoursePageShimmerEffect from "../components/ui/loaders/CoursePageLoader";
+import PaymentCheckOutModal from "../components/ui/paymentCheckOutModal";
 
 
 
@@ -61,7 +60,7 @@ const Course = () => {
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(true);
     const { user, isLoaded } = useUser();
-    const [isPurchased, setIsPurchased] = useState<boolean>(false);
+    const [isPurchased, setIsPurchased] = useState<boolean | null>(null);
     const enrollButtonRef = useRef<HTMLButtonElement | null>(null);
     const [openedModule, setOpenedModule] = useState<number[]>([0]);
     const [openedTopic, setOpenedTopic] = useState<string[]>([]);
@@ -76,45 +75,44 @@ const Course = () => {
             coursePayment();
         }
     }, [isSignedIn, isLoaded, user, id]);
-  
+
+
+
+    //fetching the course details, by id from the url
+    const fetchCourse = async () => {
+        const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
+        setCourse(res.data as Course);
+        setLoading(false);
+    }
+    const fetchIsPurchased = async () => {
+        if (!isLoaded || !user) return;
+
+        const token = await getToken();
+
+        //returns boolean value
+        const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                clerkuserId: user.id
+            }
+        });
+        // @ts-ignore
+        setIsPurchased(res.data.purchased);
+    }
     useEffect(() => {
-        //fetching the discount code from the url and storing it in local storage
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        //fetching the discount code from the url and storing it in local storage, to ensure if a user used a link with discount code, it will be used (if user routes to another page and comes back to the course page, the discount code will be used).
         const urlParams = new URLSearchParams(window.location.search);
         const discountCode = urlParams.get("discount_code");
         if (discountCode) {
             localStorage.setItem("discount_code", discountCode);
         }
-        
-        //fetching the course details, by id from the url
-        const fetchCourse = async () => {
-            const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
-            setCourse(res.data as Course);
-            setLoading(false);
-        }
+
         fetchCourse();
+        fetchIsPurchased()
 
-    }, [id]);
-
-
-    //checking if the user has purchased the course or not before
-    useEffect(() => {
-        const fetchIsPurchased = async () => {
-            if (!isLoaded || !user) return;
-
-            const token = await getToken();
-
-            //returns boolean value
-            const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    clerkuserId: user.id
-                }
-            });
-            // @ts-ignore
-            setIsPurchased(res.data.purchased);
-        }
-        fetchIsPurchased();
     }, [id, isLoaded, user]);
+
 
 
     const handleSignIn = () => {
@@ -133,6 +131,7 @@ const Course = () => {
             }
 
             setShowCheckoutModal(true);
+            document.body.style.overflow="hidden";
         } catch (error) {
             console.log(error);
         }
@@ -141,9 +140,7 @@ const Course = () => {
     return (
         <div>
             {loading ? (
-                <div className="flex justify-center items-center min-h-screen">
-                    <LoadingScreen></LoadingScreen>
-                </div>
+                <CoursePageShimmerEffect />
             ) : course && (
                 <div className="max-w-7xl mx-auto px-4 py-8 sm:py-16">
                     {/* Hero Section */}
@@ -163,9 +160,10 @@ const Course = () => {
                         </div>
 
                         <p className="text-base sm:text-xl text-gray-600">{course.description}</p>
+                        {/* button section */}
                         <div className="mt-6 sm:mt-8 flex flex-col items-center gap-4 sm:gap-6">
                             {course.isActive ? (
-                                isPurchased ? (
+                                isPurchased === true ? (
                                     <div>
                                         <button
                                             onClick={() => navigate(`/course/${id}/content`)}
@@ -175,17 +173,15 @@ const Course = () => {
                                         </button>
                                     </div>
                                 ) : (
-
                                     <button
                                         ref={enrollButtonRef}
                                         onClick={() => {
-                                            {isSignedIn ? coursePayment() : handleSignIn()}
+                                            { isSignedIn ? coursePayment() : handleSignIn() }
                                         }}
                                         className="cursor-pointer px-8 sm:px-12 py-2 sm:py-3 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
                                         Enroll Now
                                     </button>
-
-                                )
+                                ) 
                             ) : (
                                 <button
                                     onClick={() => navigate("/contact")}
@@ -196,7 +192,7 @@ const Course = () => {
                         </div>
                     </div>
 
-                    {/* Course Content Preview and Overview Section */}
+                    {/* Course Content Preview and Overview */}
                     <div className="flex flex-col lg:flex-row gap-6 mb-12">
                         {/* Course Overview */}
                         <div className="flex flex-col gap-6 sticky top-24 h-fit w-full lg:w-1/3">
@@ -288,11 +284,11 @@ const Course = () => {
                                 ))}
                             </div>
                         </div>
-                        
-                        
+
+
                     </div>
 
-                    {/* Course Details Section */}
+                    {/* Course Details  */}
                     <div className="flex flex-col gap-6 max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-2">
@@ -348,5 +344,6 @@ const Course = () => {
         </div>
     )
 }
+
 
 export default Course;

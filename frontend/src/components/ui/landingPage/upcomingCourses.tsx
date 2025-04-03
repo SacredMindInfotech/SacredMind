@@ -85,7 +85,7 @@ const UpcomingCourses = () => {
                     Explore our upcoming courses
                     </h1>
                     <p className="text-xl text-gray-600 lg:max-w-[50%]">
-                    Discover a world of learning opportunities through our upcoming courses, where industry experts and thought leaders will guide you in acquiring new expertise, expanding your horizons, and reaching your full potential.
+                    Discover our upcoming courses, where industry experts and thought leaders will guide you in acquiring new expertise, expanding your horizons, and reaching your full potential.
                     </p>
                 </div>
 

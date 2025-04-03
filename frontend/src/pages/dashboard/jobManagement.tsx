@@ -377,6 +377,15 @@ const JobManagement = () => {
                                 subHeaderComponent={subHeaderComponentMemo}
                                 highlightOnHover
                                 pointerOnHover
+                                customStyles={
+                                    {
+                                        rows: {
+                                            style: {
+                                                backgroundColor: '#e5e7eb',
+                                            }
+                                        }
+                                    }
+                                }
                             />
                         </div>
                     </div>

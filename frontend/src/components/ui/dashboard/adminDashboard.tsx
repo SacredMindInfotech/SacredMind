@@ -60,7 +60,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 bg-gradient-to-r from-gray-200 via-gray-400 to-yellow-200 p-6 rounded-lg min-h-screen">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>

@@ -4,8 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 
-import { SecureVideo, VideoProtection } from "./videoPlayer";
 import { LoadingScreen } from "./loadingScreen";
+import { SecureVideo, VideoProtection } from "./videoPlayer";
 
 
 const ViewContent = () => {

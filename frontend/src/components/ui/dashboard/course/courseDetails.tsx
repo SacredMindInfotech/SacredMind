@@ -63,6 +63,8 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Details = ({ course }:{course: Course}) => {
     const { getToken } = useAuth();
+    const navigate = useNavigate();
+
     const [isLoading, setIsLoading] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -84,11 +86,14 @@ const Details = ({ course }:{course: Course}) => {
         imageUrl: ''
     });
     const [selectedImage, setSelectedImage] = useState<File | null>(null);  
-
     const [categories, setCategories] = useState<Category[]>([]);
     const [categorySearch, setCategorySearch] = useState('');
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
 
     useEffect(() => {
         const fetchCategories = async () => {

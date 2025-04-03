@@ -1,9 +1,9 @@
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
-import { enrolledSuccessEvent } from "../lib/pixel-event";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LoadingScreen } from "../components/ui/loadingScreen";
+import { LoadingScreen } from "./loadingScreen";
+import { enrolledSuccessEvent } from "../../lib/pixel-event";
 
 
 interface DiscountToken {
@@ -50,10 +50,10 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                 const discountToken = localStorage.getItem("discount_code");
                 if (!discountToken) return;
 
+                //we get discount token data from backend, if its valid and not expired
                 const res = await axios.get(`${backendUrl}api/v1/discountToken/${discountToken}`);
                 const discountTokenData = res.data as DiscountToken;
 
-                console.log("real price", price);
                 if (res.status === 200) {
                     let discountPrice = price;
                     if (discountTokenData.courseIds.includes(Number(id)) &&
@@ -62,22 +62,26 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                         discountPrice = Math.round((1 - discountTokenData.discountPercentage / 100) * price)
                     }
                     setDiscountedPrice(discountPrice);
-                    console.log("discounted price", discountPrice);
                 }
             } catch (error) {
                 console.error("Error validating discount token:", error);
             }
-            setLoading(false);
         }
         validateDiscountToken();
+        setLoading(false);
     }, [id, price, backendUrl])
+
+    function closeModal(){
+        setShowCheckoutModal(false);
+        document.body.style.overflow="visible";
+    }
 
 
     const coursePayment = async () => {
         try {
             const token = await getToken();
             const discountToken = localStorage.getItem("discount_code");
-            const res = await axios.post(`${backendUrl}api/v1/payment/${id}`,{}, {
+            const res = await axios.post(`${backendUrl}api/v1/createPaymentOrder/${id}`,{}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     discountToken: discountToken
@@ -99,7 +103,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                     const razorpay_signature = response.razorpay_signature;
 
 
-                    const res = await axios.post(`${backendUrl}api/v1/paymentVerify/`, {
+                    const res = await axios.post(`${backendUrl}api/v1/verifyPayment/`, {
                         razorpay_order_id,
                         razorpay_payment_id,
                         razorpay_signature,
@@ -109,9 +113,10 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                     })
                     if (res.status === 200) {
                         enrolledSuccessEvent();
+                        closeModal();
                         localStorage.removeItem(`pendingPayment_${id}`);
                         localStorage.removeItem("discount_code");
-                        navigate(`/course/${id}`);
+                        window.location.reload();
                     }
                     else {
                         alert("Payment Failed");
@@ -133,9 +138,8 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
     return (
         <div className=" bg-gradient-to-r from-gray-100 via-gray-400 to-yellow-200
          min-h-[70vh] w-full max-w-xl mx-auto p-4 sm:p-6 rounded-md shadow-lg relative overflow-y-auto">
-            {/* Close button */}
             <button 
-                onClick={() => setShowCheckoutModal(false)}
+                    onClick={closeModal}
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors"
                 aria-label="Close modal"
             >
@@ -150,7 +154,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
             </div>
             <div className="flex flex-col">
 
-                <div className="text-xs p-4 sm:p-10 montserrat-secondary">Payment for <br />
+                <div className="text-xs p-4 sm:p-10 font-serif montserrat-secondary">Payment for <br />
                     <span className="font-bold text-lg sm:text-xl break-words"> {courseName}
                     </span>
                 </div>
@@ -158,30 +162,30 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                 <div className="p-4 sm:p-10 bg-gray-50 rounded-lg mx-2 sm:mx-4">
                     <div className="flex flex-col gap-3">
                         <div className="flex justify-between text-gray-700 text-sm sm:text-base">
-                            <div>Original Price</div>
+                            <div className="font-bold">Original Price</div>
                             <div>₹{price}</div>
                         </div>
                         <div className="flex justify-between text-green-600 text-sm sm:text-base">
-                            <div>Discount</div>
+                            <div className="font-bold">Discount</div>
                             <div>-₹{price - discountedPrice}</div>
                         </div>
                         <div className="flex justify-between text-gray-700 text-sm sm:text-base">
-                            <div>After Discount</div>
+                            <div className="font-bold">After Discount</div>
                             <div>₹{discountedPrice}</div>
                         </div>
                         <div className="flex justify-between text-gray-700 text-sm sm:text-base">
-                            <div>GST</div>
+                            <div className="font-bold">GST</div>
                             <div>₹{(discountedPrice * 0.18)}</div>
                         </div>
                         <hr className="my-4 border-gray-300" />
                         <div className="flex justify-between font-bold text-base sm:text-lg">
-                            <div>Total</div>
+                            <div className="font-bold">Total</div>
                             <div>₹{(discountedPrice + (discountedPrice * 0.18))}</div>
                         </div>
                     </div>
                     <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
                         <button
-                            onClick={() => setShowCheckoutModal(false)}
+                            onClick={closeModal}
                             className="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap text-sm sm:text-base"
                         >
                             Cancel

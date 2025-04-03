@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
-import { LoadingScreen } from "./loadingScreen";
-
+import { LoadingScreen } from "../components/ui/loadingScreen";
 
 interface Purchases {
     id: number;
@@ -44,7 +43,7 @@ const Purchases = () => {
         const fetchPurchases = async () => {
             try {
                 const token = await getToken();
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/v1/user/purchases/${user!.id}`, {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/v1/user/${user!.id}/purchases`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

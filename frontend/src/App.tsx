@@ -1,12 +1,12 @@
 
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Landing from './pages/landing'
+import Landing from './pages/LandingPage'
 import Footer from './components/ui/footer'
 import Contact from './pages/contact'
 import Navbar from './components/ui/navbar'
-import Category from './components/ui/category'
-import Course from './components/ui/course'
+import Category from './pages/category'
+import Course from './pages/course'
 import AdminLayout from './pages/adminLayout'
 import UserManagement from './pages/dashboard/userManagement'
 import CourseManagement from './pages/dashboard/courseManagement'
@@ -18,8 +18,7 @@ import JobManagement from './pages/dashboard/jobManagement'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsAndConditions from './pages/TermsAndConditions'
 import SalesAndRefunds from './pages/SalesAndRefunds'
-import Purchases from './components/ui/purchases'
-import CourseContent from './components/ui/courseContent'
+import CourseContent from './pages/courseContent'
 import MetaPixel from './MetaPixel'
 import PricingPolicy from './pages/pricingPolicy'
 import ViewContent from './components/ui/viewContent'
@@ -29,7 +28,8 @@ import Careers from './pages/careers'
 import EditJob from './components/ui/dashboard/job/editJob'
 import AddCourse from './components/ui/dashboard/course/addCourse'
 import EditCourse from './components/ui/dashboard/course/editCourse'
-// import PaymentCheckOutModal from './pages/paymentCheckOutPage'
+import Purchases from './pages/purchases'
+import UserDetails from './components/ui/dashboard/user/UserDetails'
 function App() {
   const Router = createBrowserRouter([
 
@@ -42,7 +42,7 @@ function App() {
       </>
     },
     {
-      path: "/category/:id",
+      path: "/category/:categoryName",
       element: <>
         <Navbar></Navbar>
         <Category></Category>
@@ -88,6 +88,7 @@ function App() {
       children: [
         { path: "", element: <AdminDashboard /> },
         { path: "users", element: <UserManagement /> },
+        { path: "user/:clerkUserId", element: <UserDetails /> },
         { path: "courses", element: <CourseManagement /> },
         { path: "course/:id", element: <EditCourse /> },
         { path: "course/add", element: <AddCourse /> },

@@ -8,6 +8,10 @@ import { holiOfferBannerClickedEvent } from "../../lib/pixel-event";
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const { getToken } = useAuth();
+    const { isLoaded, user } = useUser();
+    const exploreRef = useRef<HTMLDivElement>(null);
+    const currentPath = useLocation().pathname;
 
     const [showSignIn, setShowSignIn] = useState(false);
     const [search, setSearch] = useSearchParams();
@@ -18,17 +22,13 @@ const Navbar = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isExploreOpen, setIsExploreOpen] = useState(false);
     const [isMobileExploreOpen, setIsMobileExploreOpen] = useState(false);
-    const { isLoaded, user } = useUser();
-    const { getToken } = useAuth();
-    const currentPath = useLocation().pathname;
-    const exploreRef = useRef<HTMLDivElement>(null);
     // const [showPhoneNumberModal,setShowPhoneNumberModal]=useState(false);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const fetchAdminStatus = async () => {
-            if (!isLoaded || !user?.id) return; // Ensure user is loaded
+            if (!isLoaded || !user?.id) return; 
             try {
                 const token = await getToken();
                 const response = (await axios.get(`${backendUrl}api/v1/user/${user.id}`, {
@@ -36,6 +36,7 @@ const Navbar = () => {
                         Authorization: `Bearer ${token}`
                     }
                 }));
+                console.log(response.data);
                 // console.log(response);
                 //@ts-ignore
                 setIsAdmin(response.data.role === "ADMIN");
@@ -114,7 +115,7 @@ const Navbar = () => {
 
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
-                navigate("/course/20?discount_code=eidoffer")
+                window.location.href = "/course/20?discount_code=eidoffer"
             }} 
             className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-2 cursor-pointer">
                 <div className="flex flex-col justify-center items-center">

@@ -2,14 +2,12 @@ import Services from "../components/ui/landingPage/services";
 import Hero from "../components/ui/landingPage/hero";
 import Partners from "../components/ui/landingPage/partners";
 import { useRef } from "react";
-import About from "../components/ui/landingPage/about";
+import About from "../components/ui/landingPage/About";
 import CareerContact from "../components/ui/landingPage/career&contact";
-import { useNavigate } from "react-router-dom";
 import { holiOfferBannerClickedEvent } from "../lib/pixel-event";
 import UpcomingCourses from "../components/ui/landingPage/upcomingCourses";
 import PopularCourses from "../components/ui/landingPage/popularCourses";
 const Landing = () => {
-    const navigate = useNavigate();
     const contactRef=useRef<HTMLDivElement>(null);
     const scrollToContact = () => {
         contactRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -32,7 +30,7 @@ const Landing = () => {
                     <p className="text-xs sm:text-sm md:text-base animate-pulse">🎉 Get enrolled in our HR Payroll Course | Special Festive Offer !!</p>
                     <button onClick={() => {
                         holiOfferBannerClickedEvent();
-                        navigate("/course/20?discount_code=eidoffer")
+                        window.location.href = "/course/20?discount_code=eidoffer"
                         }} className="bg-white w-full sm:max-w-[200px] cursor-pointer text-green-800 px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold hover:bg-green-50 transition-colors">
                         Enroll Now
                     </button>

@@ -6,8 +6,7 @@ dotenv.config();
 
 export const getUserbyIdController = async (req: Request, res: Response) => {
   try {
-    // const { id } = req.params;
-    const clerkuserId = req.params.id;
+    const clerkuserId = req.params.clerkUserId;
     if (!clerkuserId) {
       res.status(400).json({
         error: "Please provide either id or clerkuserId to get user details",
@@ -17,6 +16,9 @@ export const getUserbyIdController = async (req: Request, res: Response) => {
 
     const user = await prisma.user.findUnique({
       where: { clerkuserId },
+      include: {
+        courses: true,
+      }
     });
     if (!user) {
       res.status(404).json({ error: "User not found" });
@@ -34,7 +36,7 @@ export const getPurchasesByUserIdController = async (
   res: Response
 ) => {
   try {
-    const clerkUserId = req.params.id;
+    const clerkUserId = req.params.clerkUserId;
     const user = await prisma.user.findUnique({
       where: { clerkuserId: clerkUserId },
     });
@@ -51,7 +53,7 @@ export const getPurchasesByUserIdController = async (
 
 export const isPurchaseController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { courseId } = req.params;
     const clerkUserId = req.headers.clerkuserid as string;
 
     if (!clerkUserId) {
@@ -72,7 +74,7 @@ export const isPurchaseController = async (req: Request, res: Response) => {
       where: {
         userId_courseId: {
           userId: user.id,
-          courseId: Number(id),
+          courseId: Number(courseId),
         },
       },
     });
@@ -88,7 +90,7 @@ export const isPurchaseController = async (req: Request, res: Response) => {
 
 export const updatePhoneNumberController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
     const { phoneNumber } = req.body;
 
     // Check if the phone number is already registered
@@ -101,7 +103,7 @@ export const updatePhoneNumberController = async (req: Request, res: Response) =
     }
 
     const user = await prisma.user.update({
-      where: { clerkuserId: id },
+      where: { clerkuserId: userId },
       data: { phoneNumber: phoneNumber },
     });
 

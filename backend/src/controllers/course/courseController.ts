@@ -59,9 +59,9 @@ export const getPopularCoursesController = async (req: Request, res: Response) =
 
 export const getCourseByIdController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { courseId } = req.params;
     const course = await prisma.course.findUnique({
-      where: { id: Number(id) },
+      where: { id: Number(courseId) },
       include: {
         category: true,
         modules: {
@@ -89,9 +89,9 @@ export const getCourseByIdController = async (req: Request, res: Response) => {
 
 export const getModulesByCourseIdController = async (req: Request, res: Response) => {
   try{
-    const { id } = req.params;
+    const { courseId } = req.params;
     const modules = await prisma.module.findMany({
-      where: { courseId: Number(id) },
+      where: { courseId: Number(courseId) },
       include: {
         topics: {
           include: {

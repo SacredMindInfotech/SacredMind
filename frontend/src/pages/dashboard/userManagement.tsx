@@ -2,7 +2,9 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import DataTable from 'react-data-table-component';
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import RoleChangingDialog from "../../components/ui/dashboard/user/roleChangingDialog";
+import ExpandedComponent from "../../components/ui/dashboard/user/expandedUserDetails";
+import { useNavigate } from "react-router-dom";
 
 
 interface User {
@@ -53,6 +55,19 @@ const columns = [
         name: 'role',
         selector: (row: any) => row.role,
         sortable: true,
+        cell: (row: any) => {
+            let bgColor = 'bg-green-100 text-green-800';
+            if (row.role === 'ADMIN') {
+                bgColor = 'bg-red-100 text-red-800';
+            } else if (row.role === 'MANAGER') {
+                bgColor = 'bg-blue-100 text-blue-800';
+            }
+            return (
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${bgColor}`}>
+                    {row.role}
+                </span>
+            );
+        }
     },
     {
         name: 'createdAt',
@@ -66,195 +81,29 @@ const columns = [
     },
 ];
 
-//expanded user details component
-const ExpandedComponent = ({ data }: { data: any }) => (
-    <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="p-8 space-y-6 bg-white shadow-xl rounded-xl mx-4 my-6 border border-gray-100"
-        style={{ 
-            maxWidth: "calc(100% - 2rem)",
-            marginLeft: "auto",
-            marginRight: "auto",
-            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02)"
-        }}
-    >
-        <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="mb-6 flex items-center gap-4"
-        >
-            {data.imageUrl ? (
-                <img 
-                    src={data.imageUrl}
-                    alt={`${data.firstName} ${data.lastName}`} 
-                    className="h-16 w-16 rounded-full object-cover border-2 border-blue-100"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/64?text=User';
-                    }}
-                />
-            ) : (
-                <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-                    {data.firstName.charAt(0)}{data.lastName?.charAt(0)}
-                </div>
-            )}
-            <div>
-                <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${
-                    data.role === "ADMIN" ? "bg-red-100 text-red-800" : 
-                    data.role === "MANAGER" ? "bg-blue-100 text-blue-800" : 
-                    "bg-green-100 text-green-800"
-                } mb-2`}>
-                    {data.role}
-                </span>
-                <h1 className="text-2xl font-bold text-gray-800">{data.firstName} {data.lastName}</h1>
-                <p className="text-gray-600">{data.email}</p>
-            </div>
-        </motion.div>
-
-        <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col gap-6"
-        >
-            <motion.div 
-                whileHover={{ y: -5, boxShadow: "0 12px 20px -5px rgba(0, 0, 0, 0.1)" }}
-                transition={{ duration: 0.2 }}
-                className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm"
-            >
-                <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">User ID</h2>
-                <p className="text-sm text-gray-800 font-mono bg-gray-50 p-2 rounded overflow-x-auto">{data.clerkuserId}</p>
-            </motion.div>
-
-            <motion.div 
-                whileHover={{ y: -5, boxShadow: "0 12px 20px -5px rgba(0, 0, 0, 0.1)" }}
-                transition={{ duration: 0.2 }}
-                className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm"
-            >
-                {/* <h2 className="text-sm font-semibold text-gray-500 uppercase mb-2">Dates</h2> */}
-                <div className="space-y-2">
-                    <div className="flex flex-col">
-                        <span className="text-xs text-gray-500">Created at</span>
-                        <span className="text-sm font-medium text-gray-800">{data.createdAt}</span>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-xs text-gray-500">Updated at</span>
-                        <span className="text-sm font-medium text-gray-800">{data.updatedAt}</span>
-                    </div>
-                </div>
-            </motion.div>
-        </motion.div>
-    </motion.div>
-);
-
-//role changing dialog
-const RoleChangingDialog = ({ isLoading, setIsRoleDialogOpen, handleRoleChange }: { isLoading: boolean, setIsRoleDialogOpen: (value: boolean) => void, handleRoleChange: (newRole: "ADMIN" | "MANAGER" | "USER") => void }) => {
-    return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md transform transition-all">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold text-gray-900">Select New Role</h2>
-                    <button
-                        onClick={() => !isLoading && setIsRoleDialogOpen(false)}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div className="space-y-3">
-                    <button
-                        onClick={() => !isLoading && handleRoleChange("ADMIN")}
-                        disabled={isLoading}
-                        className="w-full p-3 text-left hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-3 group disabled:opacity-50"
-                    >
-                        <span className="p-2 bg-red-100 rounded-lg group-hover:bg-red-200 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-600" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                            </svg>
-                        </span>
-                        <div>
-                            <div className="font-medium text-gray-900">Admin</div>
-                            <div className="text-sm text-gray-500">Full system access</div>
-                        </div>
-                    </button>
-                    <button
-                        onClick={() => !isLoading && handleRoleChange("MANAGER")}
-                        disabled={isLoading}
-                        className="w-full p-3 text-left hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-3 group disabled:opacity-50"
-                    >
-                        <span className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-                            </svg>
-                        </span>
-                        <div>
-                            <div className="font-medium text-gray-900">Manager</div>
-                            <div className="text-sm text-gray-500">Limited administrative access</div>
-                        </div>
-                    </button>
-                    <button
-                        onClick={() => !isLoading && handleRoleChange("USER")}
-                        disabled={isLoading}
-                        className="w-full p-3 text-left hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-3 group disabled:opacity-50"
-                    >
-                        <span className="p-2 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                            </svg>
-                        </span>
-                        <div>
-                            <div className="font-medium text-gray-900">User</div>
-                            <div className="text-sm text-gray-500">Standard user access</div>
-                        </div>
-                    </button>
-                </div>
-
-                <div className="mt-6 flex justify-end gap-3"></div>
-                <button
-                    onClick={() => !isLoading && setIsRoleDialogOpen(false)}
-                    disabled={isLoading}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-                >
-                    Cancel
-                </button>
-                {isLoading && (
-                    <div className="flex items-center gap-2 text-sm text-blue-600">
-                        <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Updating roles...
-                    </div>
-                )}
-            </div>
-
-        </div>
-    );
-};
 
 const UserManagement = () => {
+
+    const { getToken } = useAuth();
+    const navigate = useNavigate();
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     const [users, setUsers] = useState<User[]>([]);
     const [adminCount, setAdminCount] = useState(0);
     const [managerCount, setManagerCount] = useState(0);
     const [userCount, setUserCount] = useState(0);
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    //data is used to search for keywords in the table and update filtered data
+    // data is used to search for keywords in the table and update filtered data
     const [data, setData] = useState<{
         email: string;
+        id: number;
         firstName: string;
         lastName: string | null;
         role: "ADMIN" | "USER" | "MANAGER";
         createdAt: string;
         updatedAt: string;
         clerkuserId: string;
+        phoneNumber: string | null;
     }[]>([]);
-    const { getToken } = useAuth();
     const [selectedRows, setSelectedRows] = useState<SelectedRows | null>(null);
     const [toggleClearSelectedRows, setToggleClearSelectedRows] = useState(false);
     const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
@@ -270,12 +119,24 @@ const UserManagement = () => {
         role: '' as '' | 'ADMIN' | 'MANAGER' | 'USER',
         createdAfter: '',
         createdBefore: '',
+        phoneNumber: ''
     });
+    //this is the data that is displayed in the table
     const [filteredData, setFilteredData] = useState<typeof data>([]);
-    const [expandedRow, setExpandedRow] = useState<any>(null);
+    const [expandedRow, setExpandedRow] = useState<{
+        clerkuserId: string;
+        id: number;
+        firstName: string;
+        lastName: string | null;
+        email: string;
+        phoneNumber: string | null;
+        role: string;
+        createdAt: string;
+        updatedAt: string;
+    } | null>(null);
     const [selectedTab, setSelectedTab] = useState<'users' | 'roles'>('users');
 
-    //fetch users
+    //fetch all users
     useEffect(() => {
         const fetchUsers = async () => {
             const token = await getToken();
@@ -299,10 +160,17 @@ const UserManagement = () => {
         setManagerCount(managerCount);
         setUserCount(userCount);
     };
-
     useEffect(() => {
         fetchCounts();
     }, [users]);
+
+    useEffect(() => {
+        if (isRoleDialogOpen) {
+            document.body.style.overflow="hidden";
+        } else {
+            document.body.style.overflow="visible";
+        }
+    }, [isRoleDialogOpen]);
 
     //set data for table
     useEffect(() => {
@@ -323,7 +191,8 @@ const UserManagement = () => {
                     month: '2-digit',
                     year: '2-digit'
                 }),
-                clerkuserId: user.clerkuserId
+                clerkuserId: user.clerkuserId,
+                phoneNumber: user.phoneNumber
             }));
             setData(formattedData);
             setFilteredData(formattedData);
@@ -388,7 +257,7 @@ const UserManagement = () => {
     const contextActions = useMemo(
         () => (
             <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 text-sm font-medium montserrat-500"
                 onClick={() => setIsRoleDialogOpen(true)}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -398,13 +267,22 @@ const UserManagement = () => {
             </button>
         ), []);
 
-    // Apply advanced filters
+    // Apply  filters
     useEffect(() => {
         const filtered = data.filter(item => {
-            // Advanced filters
+         
             if (filters.email && !item.email.toLowerCase().includes(filters.email.toLowerCase())) return false;
             if (filters.firstName && !item.firstName.toLowerCase().includes(filters.firstName.toLowerCase())) return false;
             if (filters.lastName && item.lastName && !item.lastName.toLowerCase().includes(filters.lastName.toLowerCase())) return false;
+            
+            // Phone number filter - handle null values
+            if (filters.phoneNumber) {
+                // If we're filtering by phone number but the user has no phone number, exclude them
+                if (!item.phoneNumber) return false;
+                // Otherwise check if their phone number includes the filter text
+                if (!item.phoneNumber.includes(filters.phoneNumber)) return false;
+            }
+            
             if (filters.role && item.role !== filters.role) return false;
             
             // Date filters - convert DD/MM/YY format to Date objects
@@ -451,6 +329,7 @@ const UserManagement = () => {
             role: '',
             createdAfter: '',
             createdBefore: '',
+            phoneNumber: ''
         });
         setResetPaginationToggle(!resetPaginationToggle);
     };
@@ -464,10 +343,24 @@ const UserManagement = () => {
         }));
     };
 
-    // Update subHeaderComponent to only show the filter toggle button
+    // filter toggle button and reset button when filters are applied
     const subHeaderComponentMemo = useMemo(() => {
+        // Check if any filter is applied
+        const isAnyFilterApplied = Object.values(filters).some(value => value !== '');
+        
         return (
-            <div className="mb-4 flex justify-end items-center w-full">
+            <div className="mb-4 flex justify-end items-center montserrat-400 w-full gap-2">
+                {isAnyFilterApplied && (
+                    <button
+                        onClick={resetFilters}
+                        className="flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-md transition-colors"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                        Reset Filters
+                    </button>
+                )}
                 <button
                     onClick={() => setShowFilters(!showFilters)}
                     className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
@@ -479,17 +372,18 @@ const UserManagement = () => {
                 </button>
             </div>
         );
-    }, [showFilters]);
+    }, [showFilters, filters, resetFilters]);
 
     return (
         <div className="min-h-screen bg-gray-50 relative">
             <div className="container mx-auto px-4 py-8">
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div className="flex flex-col md:flex-row">
+
                         {/* Sidebar */}
                         <div className="w-full md:w-64 bg-gray-900 text-white p-6">
-                            <h2 className="text-xl font-bold mb-8 border-b border-gray-700 pb-4">User Management</h2>
-                            <div className="flex flex-col gap-3">
+                            <h2 className="text-xl font-bold mb-8 border-b montserrat-700 border-gray-700 pb-4">User Management</h2>
+                            <div className="flex flex-col gap-3 montserrat-500">
                                 <button 
                                     className={`p-3 rounded-md flex items-center transition-all ${selectedTab === 'users' ? 'bg-white text-gray-900 font-medium' : 'hover:bg-gray-800'}`} 
                                     onClick={() => setSelectedTab('users')}
@@ -512,13 +406,13 @@ const UserManagement = () => {
                         </div>
 
                         {/* Main Content */}
-                        <div className="flex-1">
-                            
+                        <div className="flex-1 ">
                             <div className="p-6">
                                 {selectedTab === 'users' && (
                                     <div className="overflow-x-auto bg-white min-h-[200px] rounded-lg shadow">
                                         <DataTable
                                             title="Users"
+                                            className="montserrat-500 bg-gradient-to-r from-gray-200 via-gray-400 to-yellow-200 p-10 border-gray-700"
                                             columns={columns}
                                             data={filteredData}
                                             selectableRows
@@ -532,14 +426,21 @@ const UserManagement = () => {
                                             paginationComponentOptions={paginationComponentOptions}
                                             fixedHeader
                                             progressPending={progressPending}
-                                            progressComponent={<div className="flex justify-center items-center h-full">
-                                                <div className="w-10 h-10 border-t-2 border-b-2 border-gray-900 rounded-full animate-spin"></div>
-                                            </div>}
+                                            progressComponent={<ProgressLoader></ProgressLoader>}
                                             paginationResetDefaultPage={resetPaginationToggle}
                                             subHeader
                                             subHeaderComponent={subHeaderComponentMemo}
                                             highlightOnHover
                                             pointerOnHover
+                                            customStyles={
+                                                {
+                                                    rows: {
+                                                        style: {
+                                                            backgroundColor: '#e5e7eb',
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         />
                                     </div>
                                 )}
@@ -655,6 +556,19 @@ const UserManagement = () => {
                                 placeholder="Filter by last name"
                             />
                         </div>
+                        <div>
+                            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                            <input
+                                type="text"
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                value={filters.phoneNumber}
+                                onChange={handleFilterChange}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Filter by phone number"
+                            />
+                        </div>
+
                         
                         <div>
                             <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">Role</label>
@@ -713,27 +627,12 @@ const UserManagement = () => {
                 </div>
             </div>
 
-            {/* Overlay for filters sidebar - removed blur effect */}
-            {showFilters && (
-                <div 
-                    className="fixed inset-0 bg-black/20 z-40"
-                    onClick={() => setShowFilters(false)}
-                ></div>
-            )}
-
-            {/* Overlay when expanded component is shown */}
-            {expandedRow && (
-                <div 
-                    className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
-                    onClick={() => setExpandedRow(null)}
-                ></div>
-            )}
 
             {/* Expanded user details sidebar */}
             {expandedRow && (
-                <div className="fixed top-4 bottom-4 right-0 h-[90%] w-full md:w-1/3 bg-white shadow-2xl z-50 overflow-y-auto transition-transform duration-300 ease-in-out transform translate-x-0 rounded-lg mr-4">
+                <div className="fixed top-4 bottom-4 right-0 h-[70%] w-full md:w-1/3 bg-white shadow-2xl z-50 overflow-y-auto transition-transform duration-300 ease-in-out transform translate-x-0 rounded-lg mr-4">
                     <div className="p-4 sticky top-0 bg-white z-10 flex justify-between items-center rounded-lg">
-                        <h2 className="text-xl font-bold">User Details</h2>
+                        <h2 className=""></h2>
                         <button 
                             onClick={() => setExpandedRow(null)}
                             className="text-gray-500 hover:text-gray-700"
@@ -744,6 +643,9 @@ const UserManagement = () => {
                         </button>
                     </div>
                     <ExpandedComponent data={expandedRow} />
+                    <button onClick={() => navigate(`/admin/user/${expandedRow?.clerkuserId}`)} className="w-full p-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md transition-colors">
+                        View Details
+                    </button>
                 </div>
             )}
 
@@ -756,3 +658,41 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
+
+const ProgressLoader = () => {
+    return (
+        <div className="w-full p-4">
+            <div className="animate-pulse space-y-4">
+                {/* Header shimmer */}
+                <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+                
+                {/* Table rows shimmer */}
+                {[...Array(5)].map((_, index) => (
+                    <div key={index} className="flex space-x-4">
+                        <div className="h-12 bg-gray-200 rounded w-12"></div>
+                        <div className="flex-1 space-y-2 py-1">
+                            <div className="grid grid-cols-6 gap-4">
+                                <div className="h-4 bg-gray-200 rounded col-span-1"></div>
+                                <div className="h-4 bg-gray-200 rounded col-span-1"></div>
+                                <div className="h-4 bg-gray-200 rounded col-span-1"></div>
+                                <div className="h-4 bg-gray-200 rounded col-span-1"></div>
+                                <div className="h-4 bg-gray-200 rounded col-span-1"></div>
+                                <div className="h-4 bg-gray-200 rounded col-span-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                
+                {/* Pagination shimmer */}
+                <div className="flex justify-between items-center pt-4">
+                    <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+                    <div className="flex space-x-2">
+                        <div className="h-8 w-8 bg-gray-200 rounded"></div>
+                        <div className="h-8 w-8 bg-gray-200 rounded"></div>
+                        <div className="h-8 w-8 bg-gray-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};

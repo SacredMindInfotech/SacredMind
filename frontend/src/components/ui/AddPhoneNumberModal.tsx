@@ -29,7 +29,7 @@ const AddPhoneNumberModal = ({ id, setShowPhoneNumberModal }: { id: string, setS
 
         const token = await getToken();
         try {
-            const response = await axios.put(`${backendUrl}api/v1/user/updatePhoneNumber/${id}`, 
+            const response = await axios.put(`${backendUrl}api/v1/user/${id}/updatePhoneNumber`, 
                 { phoneNumber: fullPhoneNumber },
                 {
                     headers: {

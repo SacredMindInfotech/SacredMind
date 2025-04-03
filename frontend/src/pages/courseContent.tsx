@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
-import { LoadingScreen } from "./loadingScreen";
+import CourseContentPageLoader from "../components/ui/loaders/CourseContentPageLoader";
 
 
 interface Module {
@@ -84,7 +84,7 @@ const CourseContent = () => {
     }, [id]);
 
 
-    if (loading) return <LoadingScreen />;
+    if (loading) return <CourseContentPageLoader />;
 
     return (
         <div className="relative w-full h-full">

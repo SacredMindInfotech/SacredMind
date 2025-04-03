@@ -64,18 +64,18 @@ export const updateUserbyId = async ({
 };
 
 export const deleteUserbyId = async ({
-  id,
+  // id,
   clerkuserId,
 }: {
-  id?: number;
+  // id?: number;
   clerkuserId?: string;
 }) => {
   try {
-    if (!id && !clerkuserId) {
-      throw new Error("Please provide either id or clerkUserId to delete the user");
+    if (!clerkuserId) {
+      throw new Error("Please provide clerkUserId to delete the user");
     }
-
-    const whereCondition = id ? { id } : { clerkuserId };
+    console.log("clerkuserId", clerkuserId);
+    const whereCondition = { clerkuserId };
 
     const deletedUser = await prisma.user.delete({
       where: whereCondition,

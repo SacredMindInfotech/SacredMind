@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LoadingScreen } from "./loadingScreen";
+import CategoryPageShimmerEffect from "../components/ui/loaders/CategoryPageLoader";
 
 
 interface Categories {
@@ -34,55 +34,53 @@ interface Course {
     courseNotice: string | null;
 }
 const Category = () => {
-    const { id } = useParams();
+    const { categoryName } = useParams();
     const navigate = useNavigate();
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [category, setCategory] = useState<Categories | null>(null);
     const [courses, setCourses] = useState<Course[]>([]);
     const [subcategories, setSubcategories] = useState<Categories[]>([]);
-    const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(null);
+    const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
-    //fetch category 's subcategories by category id
+    //get category by name with its subcategories
     useEffect(() => {
         const fetchCategory = async () => {
-            const res = await axios.get(`${backendUrl}api/v1/category/${id}`);
+            const res = await axios.get(`${backendUrl}api/v1/category/${categoryName}`);
             setCategory(res.data as Categories);
             //@ts-ignore
-            if(res.data.subcategories.length > 0){
+            if (res.data.subcategories.length > 0) {
                 //@ts-ignore
-                setSubcategories(res.data.subcategories);   
+                setSubcategories(res.data.subcategories);
                 //@ts-ignore
-                setSelectedSubcategory(res.data.subcategories[0].id);
+                setSelectedSubcategoryId(res.data.subcategories[0].id);
             }
-            else{
+            else {
                 setLoading(false);
             }
         }
         fetchCategory();
-    }, [id]);
+    }, [categoryName]);
 
-    //use to list popular courses in the category
-    // useEffect(() => {
-    //    we have to fetch courses of the categories whose parentId is the id in the url
-    // }, [id]);
+    //render popular courses in the category also
+   
 
 
     //fetch courses of the selected subcategory
     useEffect(() => {
         const fetchCourses = async () => {
-            const res = await axios.get(`${backendUrl}api/v1/category/${selectedSubcategory}/courses`);
+            const res = await axios.get(`${backendUrl}api/v1/category/${selectedSubcategoryId}/courses`);
             //@ts-ignore
-            setCourses(res.data);  
+            setCourses(res.data);
             setLoading(false);
-        }                
+        }
         fetchCourses();
-    }, [selectedSubcategory]);
+    }, [selectedSubcategoryId]);
 
     // Filter published courses
-    let publishedCourses:Course[]=[];
-    if(courses.length > 0){
-    publishedCourses = courses?.filter(course => course.published === true);
+    let publishedCourses: Course[] = [];
+    if (courses.length > 0) {
+        publishedCourses = courses?.filter(course => course.published === true);
     }
     return (
         <div>
@@ -99,16 +97,16 @@ const Category = () => {
 
                 {/* Subcategories Section */}
                 {subcategories.length > 0 && (
-                    <div className="flex flex-col gap-4 max-w-7xl mx-auto px-4 py-8">
+                    <div className="flex flex-col gap-1 max-w-7xl mx-auto py-8">
                         <div className="text-xl font-semibold mb-2 montserrat-500">~Browse by Topic~</div>
                         <div className="flex gap-2 items-center flex-wrap">
                             {subcategories.map((subcategory, index) => (
                                 <div key={index}>
                                     <button
                                         key={subcategory.id}
-                                        className={`cursor-pointer px-3 sm:px-6 py-1 sm:py-2 rounded-md border text-xs sm:text-sm hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary ${selectedSubcategory === subcategory.id ? 'shadow-[2px_2px_0px_0px_rgba(0,0,0)] border-gray-900 bg-white text-black' : 'border-white bg-gray-900 text-white'
+                                        className={`cursor-pointer px-3 sm:px-6 py-1 sm:py-2 rounded-md border text-xs sm:text-sm hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary ${selectedSubcategoryId === subcategory.id ? 'shadow-[2px_2px_0px_0px_rgba(0,0,0)] border-gray-900 bg-white text-black' : 'border-white bg-gray-900 text-white'
                                             }`}
-                                        onClick={() => setSelectedSubcategory(subcategory.id)}
+                                        onClick={() => setSelectedSubcategoryId(subcategory.id)}
                                     >
                                         {subcategory.name}
                                     </button>
@@ -124,9 +122,9 @@ const Category = () => {
                         <div className="text-xl sm:text-2xl font-semibold mb-4 montserrat-500">~Available Courses~</div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
                             {publishedCourses.map((course) => (
-                            
-                                <div 
-                                    key={course.id} 
+
+                                <div
+                                    key={course.id}
                                     className="p-4 sm:p-6 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)]  hover:border-white hover:bg-white transition duration-200 montserrat-secondary relative overflow-hidden"
                                     style={{
                                         backgroundImage: course.imageUrl ? `linear-gradient(rgba(17, 24, 39, 0.75), rgba(17, 24, 39, 0.5)), url(${course.imageUrl})` : 'none',
@@ -155,9 +153,9 @@ const Category = () => {
                 )}
 
                 {/* Empty State */}
-                { loading ? (
-                    <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100">
-                        <LoadingScreen></LoadingScreen>
+                {loading ? (
+                    <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center">
+                        <CategoryPageShimmerEffect />
                     </div>
                 ) : (
                     publishedCourses.length === 0 && (

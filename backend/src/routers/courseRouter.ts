@@ -8,18 +8,18 @@ const courseRouter = express.Router();
 // api/v1/course/
 courseRouter.get("/", getAllCoursesController);
 
-//route to get popular courses
+//route to get popular courses  - by number of users enrolled
 // api/v1/course/popular
 courseRouter.get("/popular", getPopularCoursesController);
 
-//route to get course by name of the course
+//route to get course by courseID of the course
 // api/v1/course/:id
-courseRouter.get("/:id", getCourseByIdController);
+courseRouter.get("/:courseId", getCourseByIdController);
 
 
 // Get all modules for a course
 // api/v1/course/:id/modules
-courseRouter.get("/:id/modules", getModulesByCourseIdController);
+courseRouter.get("/:courseId/modules", getModulesByCourseIdController);
 
 
 

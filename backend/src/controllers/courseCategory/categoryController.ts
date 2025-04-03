@@ -34,9 +34,9 @@ export const getCategoryByIdController = async (
   res: Response
 ) => {
   try {
-    const { id } = req.params;
+    const { categoryName } = req.params;
     const category = await prisma.category.findUnique({
-      where: { name: id },
+      where: { name: categoryName },
       include: {
         subcategories: true,
       },

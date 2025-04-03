@@ -44,11 +44,12 @@ app.use("/api/v1/discountToken", tokenRouter);
 
 //razorpay routes
 //to generare order 
-app.use("/api/v1/payment",  coursePaymentRouter);
+app.use("/api/v1/createPaymentOrder",  coursePaymentRouter);
 //to verify payment
-app.use("/api/v1/paymentVerify",  paymentVerifyRouter);
+app.use("/api/v1/verifyPayment",  paymentVerifyRouter);
 
 
+//just move these routes to courseRouter
 //accessing  paid course content
 app.use("/api/v1/content",isUser,contentRouter);
 
