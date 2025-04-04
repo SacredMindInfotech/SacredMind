@@ -26,7 +26,7 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
     return (
         <div className="w-full">
             <motion.div
-                className="flex flex-col md:flex-row mt-28 justify-between max-w-7xl mx-auto px-4 gap-40 relative"
+                className="flex flex-col md:flex-row mt-20 justify-between max-w-7xl mx-auto px-4 gap-40 relative"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"

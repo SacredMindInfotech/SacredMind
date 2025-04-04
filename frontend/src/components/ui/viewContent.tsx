@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 
 import { LoadingScreen } from "./loadingScreen";
-import { SecureVideo, VideoProtection } from "./videoPlayer";
+import { SecureVideo, VideoProtection } from "./VideoPlayer";
 
 
 const ViewContent = () => {

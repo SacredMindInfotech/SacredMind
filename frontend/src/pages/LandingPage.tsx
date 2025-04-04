@@ -6,7 +6,7 @@ import CareerContact from "../components/ui/landingPage/career&contact";
 import { holiOfferBannerClickedEvent } from "../lib/pixel-event";
 import UpcomingCourses from "../components/ui/landingPage/upcomingCourses";
 import PopularCourses from "../components/ui/landingPage/popularCourses";
-import About from "../components/ui/landingPage/about";
+import About from "../components/ui/landingPage/About";
 const Landing = () => {
     const contactRef=useRef<HTMLDivElement>(null);
     const scrollToContact = () => {
@@ -14,9 +14,9 @@ const Landing = () => {
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full ">
 
-            <div className="flex flex-col">                
+            <div className="flex flex-col  ">                
 
                 <Hero scrollToContact={scrollToContact} ></Hero>
                 <PopularCourses/> 
