@@ -68,7 +68,7 @@ const Contact = (props: any) => {
                                 <div className="bg-white/10 backdrop-blur-md p-4 md:p-8 rounded-lg max-w-2xl mx-auto w-full">
                                     <form onSubmit={onSubmit} className="space-y-4 md:space-y-6">
                                         <div className="space-y-2">
-                                            <span className="text-red-500">* required</span>
+                                            <span className="text-xl font-bold montserrat-500">Fill out the form our team will get back to you soon</span>
                                         </div>
 
                                         <div>

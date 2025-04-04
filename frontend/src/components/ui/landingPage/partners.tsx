@@ -33,7 +33,6 @@ const Partners = () => {
         visible: { opacity: 1, y: 0 },
     };
 
-    // Animation controls
     const controls = useAnimation();
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });

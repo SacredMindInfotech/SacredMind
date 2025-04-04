@@ -1,8 +1,9 @@
 import { useRef } from 'react';
+import { motion } from 'framer-motion';
 
 const About = () => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    
+
     const aboutItems = [
         {
             name: "Quality Education",
@@ -22,28 +23,40 @@ const About = () => {
     ];
 
     return (
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full" >
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 mb-16">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold montserrat-700">
+                    <h1 className="text-4xl relative md:text-5xl lg:text-6xl font-bold montserrat-700">
                         About Us
+                        <svg
+                        className='absolute left-5 top-10 sm:top-12 lg:top-14 bottom-0 translate-y-1 w-[200px] sm:w-[300px]'
+                         viewBox="0 0 563 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <motion.path
+                            initial={{ pathLength: 0 }}
+                            whileInView={{ pathLength: 1 }}
+                            transition={{
+                                duration: 0.5,
+                                ease: "easeInOut",
+                            }}
+                             d="M0.949448 28.8373C347.022 4.27447 825.974 -16.0579 384.378 24.2907" stroke="#F4CC15" strokeWidth="5" />
+                        </svg>
                     </h1>
-                    <p className="text-xl text-gray-600 lg:max-w-[50%]">
+                    <p className="text-xl text-gray-600 montserrat-400 lg:max-w-[50%]">
                         SacredMind Pvt Ltd is a multi-product-based coaching institute providing quality education through online and offline courses.
                     </p>
                 </div>
 
                 <div className="relative">
-                    <div 
+                    <div
                         ref={scrollContainerRef}
                         className="grid grid-flow-col auto-cols-[70%] sm:auto-cols-[45%] md:auto-cols-[30%] lg:grid-flow-row lg:grid-cols-4 gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 pr-4 lg:overflow-visible"
                         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                     >
                         {aboutItems.map((item, index) => (
                             <div key={index} className="group relative overflow-hidden rounded-lg aspect-square snap-start">
-                                <img 
-                                    src={item.imgUrl} 
-                                    alt={item.name} 
+                                <img
+                                    src={item.imgUrl}
+                                    alt={item.name}
                                     className="w-full h-full object-cover brightness-50 group-hover:scale-110 transition-transform duration-500"
                                 />
                                 <div className="absolute bottom-0 left-0 p-4 w-full">
@@ -51,7 +64,13 @@ const About = () => {
                                         {item.name}
                                     </h3>
                                     <p className="text-white text-sm md:text-base mt-2 opacity-90">
-                                        {item.description}
+                                        {item.name === "Industry Certification" ? (
+                                            <span>CBCE Skill India <strong>(CBCE-PB0991)</strong> certified programs</span>
+                                        ) : item.name === "Quality Education" ? (
+                                            <span>Providing excellence through <strong>online and offline</strong> courses</span>
+                                        ) : (
+                                            item.description
+                                        )}
                                     </p>
                                 </div>
                             </div>
