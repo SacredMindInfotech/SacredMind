@@ -128,9 +128,9 @@ const PopularCourses = () => {
                                             <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded-md text-gray-700">
                                                 {course.category.name}
                                             </span>
-                                            <span className="text-sm font-medium text-gray-900">
+                                            {/* <span className="text-sm font-medium text-gray-900">
                                                 ₹{course.price.toFixed(2)}
-                                            </span>
+                                            </span> */}
                                         </div>
                                     </div>
                                 </div>
