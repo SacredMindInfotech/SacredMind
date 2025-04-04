@@ -121,18 +121,14 @@ const UpcomingCourses = () => {
                                             <h3 className="text-xl font-bold montserrat-700 line-clamp-2 group-hover:text-gray-900 transition-colors">
                                                 {course.title}
                                             </h3>
-                                            <span className="text-xl font-extrabold text-gray-900 ml-2">₹{course.price}</span>
+                                           
                                         </div>
                                         <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded-md text-gray-700">
                                                 {course.category.name}
                                             </span>
-                                            <button
-                                                className="px-4 py-2 rounded-md border-2 border-gray-900 bg-gray-900 text-white font-bold hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
-                                            >
-                                                Notify Me
-                                            </button>
+                                           
                                         </div>
                                     </div>
                                 </div>
