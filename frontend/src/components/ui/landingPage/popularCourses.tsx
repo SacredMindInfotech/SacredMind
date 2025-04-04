@@ -78,7 +78,7 @@ const PopularCourses = () => {
     };
 
     return (
-        <div className="relative w-full h-full">
+        <div className=" mt-5 relative w-full h-full bg-gradient-to-r from-purple-100 via-gray-100 to-gray-200">
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 mb-16">
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold montserrat-700">
@@ -128,9 +128,6 @@ const PopularCourses = () => {
                                             <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded-md text-gray-700">
                                                 {course.category.name}
                                             </span>
-                                            {/* <span className="text-sm font-medium text-gray-900">
-                                                ₹{course.price.toFixed(2)}
-                                            </span> */}
                                         </div>
                                     </div>
                                 </div>

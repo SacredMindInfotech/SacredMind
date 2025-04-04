@@ -18,7 +18,7 @@ const CareerContact = (props: any) => {
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">
                                 Careers
                             </h1>
-                            <p className="text-xl text-gray-600 mb-8">
+                            <p className="text-xl text-gray-600 mb-8 italic">
                                 Gain a heritage. Leave a legacy.
                             </p>
                             <button
@@ -34,12 +34,12 @@ const CareerContact = (props: any) => {
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">
                                 Contact Us
                             </h1>
-                            <p className="text-xl text-gray-600 mb-8">
+                            <p className="text-xl text-gray-600 mb-8 italic">
                                 What can we help you achieve.
                             </p>
                             <button
                                 onClick={() => router("/contact")}
-                                className="w-full max-w-48 md:w-48 px-6 py-4 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                                className="w-full max-w-48 md:w-48 px-6 py-4 rounded-md border shadow-[4px_4px_0px_0px_rgba(0,0,0)] text-black border-gray-900 bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                             >
                                 SPEAK TO US
                             </button>

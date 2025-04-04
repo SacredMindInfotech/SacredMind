@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
     const router = useNavigate();
 
-    // Define animation variants
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
@@ -26,7 +25,7 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
     return (
         <div className="w-full">
             <motion.div
-                className="flex flex-col md:flex-row mt-20 justify-between max-w-7xl mx-auto px-4 gap-40 relative"
+                className="flex flex-col md:flex-row mt-20 min-h-[300px] lg:min-h-[500px] justify-between max-w-7xl mx-auto px-4 gap-40 relative"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -35,7 +34,10 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
                     className="flex flex-col gap-5 items-start text-left w-full lg:w-1/2"
                     variants={itemVariants}
                 >
-                    <h1 className="montserrat-700 text-5xl md:text-7xl font-black">Beyond Limits, Beyond Learning</h1>
+                    <h1 className="montserrat-700 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black">Beyond
+                        <span className="montserrat-400 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">Limits,</span> Beyond 
+                        <span className="montserrat-400 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">Learning</span>
+                    </h1>
                     <p className="text-xl md:text-4xl montserrat-400 mt-3 text-gray-700">
                         A platform that helps you grow in your career
                     </p>

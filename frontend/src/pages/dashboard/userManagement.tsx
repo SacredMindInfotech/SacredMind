@@ -630,7 +630,7 @@ const UserManagement = () => {
 
             {/* Expanded user details sidebar */}
             {expandedRow && (
-                <div className="fixed top-4 bottom-4 right-0 h-[70%] w-full md:w-1/3 bg-white shadow-2xl z-50 overflow-y-auto transition-transform duration-300 ease-in-out transform translate-x-0 rounded-lg mr-4">
+                <div className="fixed top-4 bottom-4 right-0 h-[75%] w-1/4 bg-white shadow-2xl z-50 overflow-y-auto transition-transform duration-300 ease-in-out transform translate-x-0 rounded-lg mr-4">
                     <div className="p-4 sticky top-0 bg-white z-10 flex justify-between items-center rounded-lg">
                         <h2 className=""></h2>
                         <button 
@@ -643,7 +643,8 @@ const UserManagement = () => {
                         </button>
                     </div>
                     <ExpandedComponent data={expandedRow} />
-                    <button onClick={() => navigate(`/admin/user/${expandedRow?.clerkuserId}`)} className="w-full p-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md transition-colors">
+                    <button onClick={() => navigate(`/admin/user/${expandedRow?.clerkuserId}`)} 
+                    className="w-[200px] montserrat-500 ml-4 mb-10 p-3 bg-gray-400 hover:bg-gray-200 text-gray-800 rounded-md transition-colors">
                         View Details
                     </button>
                 </div>
