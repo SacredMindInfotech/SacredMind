@@ -43,6 +43,10 @@ export const getJobByIdController = async (req: Request, res: Response) => {
                 jobCategory:true,
             }
         });
+        if (!job) {
+            res.status(404).json({ message: "Job not found" });
+            return;
+        }
         res.status(200).json(job);
         return;
     } catch (error) {

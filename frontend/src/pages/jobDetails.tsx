@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 interface Job {
@@ -16,10 +16,51 @@ interface Job {
     salary: string | null;
 }
 
+const ShimmerEffect = () => {
+    return (
+        <div className="animate-pulse mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
+            <div className="flex flex-col gap-12">
+                {/* Top Section Shimmer */}
+                <div className="flex flex-col p-8 md:p-16 lg:p-28 bg-gray-100">
+                    <div className="h-12 bg-gray-200 rounded-lg w-3/4 mb-6"></div>
+                    <div className="h-6 bg-gray-200 rounded-lg w-full max-w-xl"></div>
+                </div>
+
+                {/* Bottom Section Shimmer */}
+                <div className="flex px-4 md:px-16 lg:p-28 flex-col justify-center py-8 md:py-16">
+                    <div className="bg-white/10 p-4 md:p-8 rounded-lg max-w-2xl mx-auto w-full">
+                        <div className="space-y-6">
+                            <div className="h-6 bg-gray-200 rounded-lg w-1/4"></div>
+                            <div className="h-24 bg-gray-200 rounded-lg w-full"></div>
+                            
+                            <div className="h-6 bg-gray-200 rounded-lg w-1/4 mt-8"></div>
+                            <div className="space-y-2">
+                                <div className="h-4 bg-gray-200 rounded-lg w-full"></div>
+                                <div className="h-4 bg-gray-200 rounded-lg w-5/6"></div>
+                                <div className="h-4 bg-gray-200 rounded-lg w-4/6"></div>
+                            </div>
+
+                            <div className="h-6 bg-gray-200 rounded-lg w-1/4 mt-8"></div>
+                            <div className="space-y-2">
+                                <div className="h-4 bg-gray-200 rounded-lg w-full"></div>
+                                <div className="h-4 bg-gray-200 rounded-lg w-5/6"></div>
+                                <div className="h-4 bg-gray-200 rounded-lg w-4/6"></div>
+                            </div>
+
+                            <div className="h-12 bg-gray-200 rounded-lg w-1/3 mt-8"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const JobDetails = () => {
     const { id } = useParams();
     const [job, setJob] = useState<Job | null>(null);
     const [applyModal, setApplyModal] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -33,6 +74,7 @@ const JobDetails = () => {
                 //@ts-ignore
                 setJob(response.data);
             } catch (error) {
+                navigate("/");
                 console.error("Error fetching job details:", error);
             }
         };
@@ -40,7 +82,7 @@ const JobDetails = () => {
     }, [id]);
 
     if (!job) {
-        return <div className="flex justify-center items-center h-screen text-gray-500">Loading...</div>;
+        return <ShimmerEffect />;
     }
 
     return (

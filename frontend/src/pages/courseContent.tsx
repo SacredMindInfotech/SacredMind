@@ -69,17 +69,24 @@ const CourseContent = () => {
     //fetching the course content
     useEffect(() => {
         const fetchCourse = async () => {
-            const backendUrl = import.meta.env.VITE_BACKEND_URL;
-            const token = await getToken();
-            const res = await axios.get(`${backendUrl}api/v1/course/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+            try {
+                const backendUrl = import.meta.env.VITE_BACKEND_URL;
+                const token = await getToken();
+                const res = await axios.get(`${backendUrl}api/v1/course/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                if (res.status === 204) {
+                    navigate("/");
                 }
-            });
-            setCourse(res.data as Course);
-            setLoading(false);
+                setCourse(res.data as Course);
+            } catch (error) {
+                navigate("/");
+            }
         }
         fetchCourse();
+        setLoading(false);
     }, [id]);
 
 

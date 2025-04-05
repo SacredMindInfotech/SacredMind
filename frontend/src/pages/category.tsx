@@ -52,20 +52,25 @@ const Category = () => {
     //get category by name with its subcategories
     useEffect(() => {
         const fetchCategory = async () => {
-            const res = await axios.get(`${backendUrl}api/v1/category/${categoryName}`);
-            setCategory(res.data as Categories);
-            //@ts-ignore
-            if (res.data.subcategories.length > 0) {
+            try {
+                const res = await axios.get(`${backendUrl}api/v1/category/${categoryName}`);
+                setCategory(res.data as Categories);
+                //@ts-ignore
+                if (res.data.subcategories.length > 0) {
                 //@ts-ignore
                 setSubcategories(res.data.subcategories);
                 //@ts-ignore
                 setSelectedSubcategoryId(res.data.subcategories[0].id);
             }
-            else {
-                setLoading(false);
+            // else {
+            //     setLoading(false);
+            // }
+            } catch (error) {
+                navigate("/");
             }
         }
         fetchCategory();
+        setLoading(false);
     }, [categoryName]);
 
    

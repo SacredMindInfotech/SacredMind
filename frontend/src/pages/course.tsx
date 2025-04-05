@@ -80,9 +80,13 @@ const Course = () => {
 
     //fetching the course details, by id from the url
     const fetchCourse = async () => {
-        const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
-        setCourse(res.data as Course);
-        setLoading(false);
+        try {
+            const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
+            setCourse(res.data as Course);
+            setLoading(false);
+        } catch (error) {
+            navigate("/");
+        }
     }
     const fetchIsPurchased = async () => {
         if (!isLoaded || !user) return;
@@ -152,7 +156,7 @@ const Course = () => {
                             </p>
                         </div>
 
-                        <p className="text-base sm:text-xl text-gray-600">{course.description}</p>
+                        <p className="text-base sm:text-xl montserrat-500 text-gray-600">{course.description}</p>
                         {/* button section */}
                         <div className="mt-6 sm:mt-8 flex flex-col items-center gap-4 sm:gap-6">
                             {course.isActive ? (
@@ -190,13 +194,13 @@ const Course = () => {
                         {/* Course Overview */}
                         <div className="flex flex-col gap-6 sticky top-24 h-fit w-full lg:w-1/3">
                             <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
-                                <span className="text-xl sm:text-2xl montserrat-700 text-gray-900">Course Overview</span>
+                                <span className="text-xl sm:text-2xl montserrat-500 text-gray-900">Course Overview</span>
                                 <span className="text-2xl">📖</span>
                             </div>
-                            <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <div className="bg-gradient-to-br from-gray-200 to-white p-6 rounded-xl shadow-sm border border-gray-100">
                                 <div className="flex flex-col gap-2">
                                     {course.overview?.map((item, index) => (
-                                        <p key={index} className="text-gray-700 leading-relaxed text-base">{item}</p>
+                                        <p key={index} className="text-gray-700 montserrat-400 leading-relaxed text-base">{item}</p>
                                     ))}
                                 </div>
                             </div>
@@ -204,7 +208,7 @@ const Course = () => {
                         {/* Course Content Preview */}
                         <div className="flex flex-col gap-4 w-full lg:w-2/3">
                             <div className="flex items-center gap-2">
-                                <span className="text-xl sm:text-2xl montserrat-700">Course Content Preview</span>
+                                <span className="text-xl sm:text-2xl montserrat-500">Course Content Preview</span>
                                 <span className="text-xl">📝</span>
                             </div>
                             <div className="bg-gray-50 p-4 rounded-lg shadow-sm w-full">
@@ -220,7 +224,7 @@ const Course = () => {
                                                 }
                                             }}
                                         >
-                                            <h3 className="text-lg font-bold">
+                                            <h3 className="text-lg montserrat-700">
                                                 Module {moduleIndex + 1} - {module.title}
                                             </h3>
 
@@ -247,7 +251,7 @@ const Course = () => {
                                                                 }
                                                             }
                                                         } >
-                                                            <h4 className="text-sm font-medium mb-2">
+                                                            <h4 className="text-sm montserrat-500 font-medium mb-2">
                                                                 {topicIndex + 1}. {topic.title}
                                                             </h4>
                                                             <svg className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedTopic?.includes(`${moduleIndex}-${topicIndex}`) ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -290,7 +294,7 @@ const Course = () => {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
                                 {course.learningOutcomes?.map((item, index) => (
-                                    <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
+                                    <div key={index} className="flex items-start gap-2 bg-white p-3 montserrat-500 rounded-md">
                                         <span className="text-green-500 text-lg">✓</span>
                                         <span className="text-gray-700 text-sm">{item}</span>
                                     </div>
