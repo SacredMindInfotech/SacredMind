@@ -115,7 +115,7 @@ const Navbar = () => {
 
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
-                window.location.href = "/course/20?discount_code=eidoffer"
+                navigate("/course/20")
             }} 
             className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-2 cursor-pointer">
                 <div className="flex flex-col justify-center items-center">

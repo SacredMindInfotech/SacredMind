@@ -18,7 +18,7 @@ export const isUserEnrolled = async (
         course: true,
       },
     });
-    if (!isUserEnrolled) {
+    if (!isUserEnrolled && user.role !== 'ADMIN') {
       res.status(401).json({ message: "User not enrolled in this course" });
       return;
     }

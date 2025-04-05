@@ -24,6 +24,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
 
     const [discountedPrice, setDiscountedPrice] = useState<number>(price);
     const [loading, setLoading] = useState<boolean>(false);
+    const [discountToken, setDiscountToken] = useState<string | null>(null);
 
 
 
@@ -37,7 +38,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
             document.body.appendChild(script);
         });
     }
-    
+
     useEffect(() => {
         loadScript("https://checkout.razorpay.com/v1/checkout.js");
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -47,8 +48,12 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
         const validateDiscountToken = async () => {
             try {
                 setLoading(true);
-                const discountToken = localStorage.getItem("discount_code");
-                if (!discountToken) return;
+                const isTokenPresent = await axios.get(`${backendUrl}api/v1/course/${id}/discountToken`);
+                //@ts-ignore
+                if (!isTokenPresent.data.token) return;
+                //@ts-ignore
+                const discountToken = isTokenPresent.data.token;
+                setDiscountToken(discountToken);
 
                 //we get discount token data from backend, if its valid and not expired
                 const res = await axios.get(`${backendUrl}api/v1/discountToken/${discountToken}`);
@@ -71,17 +76,16 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
         setLoading(false);
     }, [id, price, backendUrl])
 
-    function closeModal(){
+    function closeModal() {
         setShowCheckoutModal(false);
-        document.body.style.overflow="visible";
+        document.body.style.overflow = "visible";
     }
 
 
     const coursePayment = async () => {
         try {
             const token = await getToken();
-            const discountToken = localStorage.getItem("discount_code");
-            const res = await axios.post(`${backendUrl}api/v1/createPaymentOrder/${id}`,{}, {
+            const res = await axios.post(`${backendUrl}api/v1/createPaymentOrder/${id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     discountToken: discountToken
@@ -115,7 +119,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                         enrolledSuccessEvent();
                         closeModal();
                         localStorage.removeItem(`pendingPayment_${id}`);
-                        localStorage.removeItem("discount_code");
+                        localStorage.removeItem(`${courseName}`);
                         window.location.reload();
                     }
                     else {
@@ -138,8 +142,8 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
     return (
         <div className=" bg-gradient-to-r from-gray-100 via-gray-400 to-yellow-200
          min-h-[70vh] w-full max-w-xl mx-auto p-4 sm:p-6 rounded-md shadow-lg relative overflow-y-auto">
-            <button 
-                    onClick={closeModal}
+            <button
+                onClick={closeModal}
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors"
                 aria-label="Close modal"
             >
@@ -147,7 +151,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            
+
             <div className="mt-6 sm:mt-10 ml-4 sm:ml-10 flex items-center gap-3 sm:gap-5">
                 <img src="/logo.svg" alt="logo" className="w-8 h-8 sm:w-10 sm:h-10" />
                 <div className="text-xs montserrat-500 font-bold">SacredMind Infotech</div>
@@ -175,7 +179,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                         </div>
                         <div className="flex justify-between text-gray-700 text-sm sm:text-base">
                             <div className="font-bold">GST</div>
-                            <div>₹{(discountedPrice * 0.18)}</div>
+                            <div>₹{(discountedPrice * 0.18).toFixed(2)}</div>
                         </div>
                         <hr className="my-4 border-gray-300" />
                         <div className="flex justify-between font-bold text-base sm:text-lg">

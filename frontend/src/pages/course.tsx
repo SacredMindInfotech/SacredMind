@@ -101,13 +101,6 @@ const Course = () => {
     }
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        //fetching the discount code from the url and storing it in local storage, to ensure if a user used a link with discount code, it will be used (if user routes to another page and comes back to the course page, the discount code will be used).
-        const urlParams = new URLSearchParams(window.location.search);
-        const discountCode = urlParams.get("discount_code");
-        if (discountCode) {
-            localStorage.setItem("discount_code", discountCode);
-        }
-
         fetchCourse();
         fetchIsPurchased()
 

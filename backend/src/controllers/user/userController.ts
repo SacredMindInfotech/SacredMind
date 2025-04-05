@@ -78,7 +78,8 @@ export const isPurchaseController = async (req: Request, res: Response) => {
         },
       },
     });
-    res.status(200).json({ purchased: !!purchase });
+    const isAdmin = user.role === 'ADMIN';
+    res.status(200).json({ purchased: !!purchase || isAdmin });
     return;
   } catch (e) {
     console.error("Error checking purchase:", e);

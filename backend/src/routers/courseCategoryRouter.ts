@@ -19,7 +19,7 @@ categoryRouter.get("/:categoryName", getCategoryByIdController);
 
 //route to get courses of a sub-category
 //api/v1/category/:id/courses
-categoryRouter.get("/:id/courses", getCoursesByCategoryIdController);
+categoryRouter.get("/:categoryId/courses", getCoursesByCategoryIdController);
 
 
 

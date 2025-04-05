@@ -60,25 +60,24 @@ export const getCoursesByCategoryIdController = async (
   res: Response
 ) => {
   try {
-    const { id } = req.params;
-    if (!id) {
+    const { categoryId } = req.params;
+    if (!categoryId) {
       res.status(400).json({ error: "Category ID is required" });
       return;
     }
     const courses = await prisma.course.findMany({
       where: {
-        categoryId: parseInt(id),
-        // published: true,
+        categoryId: parseInt(categoryId),
       },
       include: {
         category: true,
       },
     });
 
-    if (courses.length === 0) {
-      res.status(204).json({ "Message": "No courses found" });
-      return;
-    }
+    // if (courses.length === 0) {
+    //   res.status(204).json({ "Message": "No courses found" });
+    //   return;
+    // }
     res.status(200).json(courses);
     return
   } catch (error) {

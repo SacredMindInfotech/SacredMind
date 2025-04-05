@@ -135,7 +135,7 @@ const EditCourse = () => {
 
                             <div className="p-6">
                                 {selectedTab === 'details' && (
-                                    <Details course={course!} />
+                                    <Details course={course!} setCourse={setCourse} />
                                 )}
                                 {selectedTab === 'module' && (
                                     <CourseModules course={course!} />

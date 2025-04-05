@@ -5,6 +5,7 @@ export const createCourseSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
   price: z.coerce.number().min(0, "Price must be a positive number"),
   published: z.boolean().optional(),
+  isActive: z.boolean().optional(),
   categoryId: z.coerce.number().int().positive("Invalid category ID"),
   overview: z.array(z.string()).optional(),
   learningOutcomes: z.array(z.string()).optional(),

@@ -18,10 +18,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//sync clerk user with database
+//sync clerk operations on user (create, update, delete) with database
 app.post("/api/webhooks/clerk", WebhookController);
 
-//admin routes - operations on courses, users, orders only by admin.
+//admin routes - operations on courses, users, orders etc only by admin.
 app.use("/api/v1/admin", isAdmin, adminRouter);
 
 //user routes
@@ -43,7 +43,7 @@ app.use("/api/v1/jobCategory", jobCategoryRouter);
 app.use("/api/v1/discountToken", tokenRouter);
 
 //razorpay routes
-//to generare order 
+//to generare order for course payment
 app.use("/api/v1/createPaymentOrder",  coursePaymentRouter);
 //to verify payment
 app.use("/api/v1/verifyPayment",  paymentVerifyRouter);

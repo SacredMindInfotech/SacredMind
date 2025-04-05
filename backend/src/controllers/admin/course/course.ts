@@ -18,6 +18,9 @@ export const createCourseController = async (req: Request, res: Response) => {
     if (req.body.published) {
       req.body.published = req.body.published === "true";
     }
+    if (req.body.isActive) {
+      req.body.isActive = req.body.isActive === "true";
+    }
     if (req.body.price) {
       req.body.price = Number(req.body.price);
     }
@@ -49,6 +52,7 @@ export const createCourseController = async (req: Request, res: Response) => {
       price,
       categoryId,
       published,
+      isActive,
       overview,
       learningOutcomes,
       requirements,
@@ -81,6 +85,7 @@ export const createCourseController = async (req: Request, res: Response) => {
           connect: { id: categoryId },
         },
         published,
+        isActive,
         overview,
         learningOutcomes,
         requirements,

@@ -22,7 +22,8 @@ const AddCourse = () => {
         title: '',
         description: '',
         price: 0,
-        published: false,
+        published: true,
+        isActive: false,
         categoryId: 0,
         overview: [] as string[],
         learningOutcomes: [] as string[],
@@ -115,9 +116,10 @@ const AddCourse = () => {
                 formData.append('price', String(course.price));
                 formData.append('categoryId', String(course.categoryId));
                 formData.append('published', String(course.published));
+                formData.append('isActive', String(course.isActive));
                 formData.append('language', course.language);
                 
-                // Handle array fields by stringifying them
+            // Handle array fields by stringifying them
                 formData.append('overview', JSON.stringify(course.overview));
                 formData.append('learningOutcomes', JSON.stringify(course.learningOutcomes));
                 formData.append('requirements', JSON.stringify(course.requirements));
@@ -402,7 +404,20 @@ const AddCourse = () => {
                             onChange={handleChange}
                             className="mr-2"
                         />
-                        <span className="text-sm font-medium">Publish course</span>
+                        <span className="text-sm font-medium">Make it public right now</span>
+                    </label>
+                </div>
+
+                <div className="mb-4">
+                    <label className="flex items-center">
+                        <input
+                            type="checkbox"
+                            name="isActive"
+                            checked={course.isActive}
+                            onChange={handleChange}
+                            className="mr-2"
+                        />
+                        <span className="text-sm font-medium">Is open for enrollments</span>
                     </label>
                 </div>
 

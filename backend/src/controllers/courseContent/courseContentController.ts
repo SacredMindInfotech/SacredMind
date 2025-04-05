@@ -6,36 +6,36 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const getContentByIdController = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const course = await prisma.course.findUnique({
-      where: {
-        id: parseInt(id),
-      },
-      include: {
-        modules: {
-          orderBy: { serialNumber: "asc" },
-          include: {
-            topics: {
-              orderBy: { serialNumber: "asc" },
-              include: {
-                contents: true,
-              },
-            },
-          },
-        },
-      },
-    });
+// export const getContentByIdController = async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params;
+//     const course = await prisma.course.findUnique({
+//       where: {
+//         id: parseInt(id),
+//       },
+//       include: {
+//         modules: {
+//           orderBy: { serialNumber: "asc" },
+//           include: {
+//             topics: {
+//               orderBy: { serialNumber: "asc" },
+//               include: {
+//                 contents: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//     });
 
-    res.status(200).json(course);
-    return;
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-    return;
-  }
-};
+//     res.status(200).json(course);
+//     return;
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Internal server error" });
+//     return;
+//   }
+// };
 
 
 const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;

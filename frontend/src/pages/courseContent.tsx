@@ -71,12 +71,11 @@ const CourseContent = () => {
         const fetchCourse = async () => {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
             const token = await getToken();
-            const res = await axios.get(`${backendUrl}api/v1/content/${id}`, {
+            const res = await axios.get(`${backendUrl}api/v1/course/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             });
-            // @ts-ignore
             setCourse(res.data as Course);
             setLoading(false);
         }

@@ -18,6 +18,7 @@ interface Course {
     isActive: boolean;
     isStarted: boolean;
     price: number;
+    discountedPrice?: number;
     imageUrl: string | null;
     createdAt: Date;
     updatedAt: Date;
@@ -67,7 +68,6 @@ const Category = () => {
         fetchCategory();
     }, [categoryName]);
 
-    //render popular courses in the category also
    
 
 
@@ -75,11 +75,29 @@ const Category = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             const res = await axios.get(`${backendUrl}api/v1/category/${selectedSubcategoryId}/courses`);
-            //@ts-ignore
-            setCourses(res.data);
+            const coursesData = res.data as Course[];
+            
+            // Fetch discount prices for each course
+            const coursesWithDiscounts = await Promise.all(
+                coursesData.map(async (course: Course) => {
+                    try {
+                        const discountRes = await axios.get(`${backendUrl}api/v1/course/${course.id}/discountAmount`);
+                        return {
+                            ...course,
+                            //@ts-ignore
+                            discountedPrice: discountRes.data as number
+                        };
+                    } catch (error) {
+                        return course;
+                    }
+                })
+            );
+            setCourses(coursesWithDiscounts);
             setLoading(false);
         }
-        fetchCourses();
+        if (selectedSubcategoryId) {
+            fetchCourses();
+        }
     }, [selectedSubcategoryId]);
 
     // Filter published courses
@@ -151,7 +169,16 @@ const Category = () => {
                                     <div className="p-5">
                                         <div className="flex justify-between items-start mb-3">
                                             <h3 className="text-xl font-bold montserrat-700 line-clamp-4 group-hover:text-gray-900 transition-colors">{course.title}</h3>
-                                            <span className="text-xl font-extrabold text-gray-900 ml-2">₹{course.price}</span>
+                                            <div className="text-right ml-2">
+                                                {course.discountedPrice && course.discountedPrice > 0 ? (
+                                                    <>
+                                                        <span className="text-lg line-through text-gray-500">₹{course.price}</span>
+                                                        <span className="text-xl font-extrabold text-gray-900 ml-2">₹{course.discountedPrice}</span>
+                                                    </>
+                                                ) : (
+                                                    <span className="text-xl font-extrabold text-gray-900">₹{course.price}</span>
+                                                )}
+                                            </div>
                                         </div>
                                         <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
                                         <div className="flex justify-between items-center">

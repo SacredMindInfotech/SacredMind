@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "@clerk/clerk-react";
@@ -27,18 +27,20 @@ interface Course {
     forwhom: string[];
     language: string;
     modules: Module[];
-    category:Category;
-    showCourseNotice:boolean;
-    courseNotice:string | null;
+    category: Category;
+    showCourseNotice: boolean;
+    courseNotice: string | null;
 }
 interface Module {
     id: number;
+    serialNumber: number;
     title: string;
     courseId: number;
     topics: Topic[];
 }
 interface Topic {
     id: number;
+    serialNumber: number;
     title: string;
     description: string;
     moduleId: number;
@@ -55,13 +57,13 @@ interface Content {
 interface Category {
     id: number;
     name: string;
-    parentId: number ;
+    parentId: number;
 }
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
-const Details = ({ course }:{course: Course}) => {
+const Details = ({ course, setCourse }: { course: Course, setCourse: Dispatch<SetStateAction<Course | null>> }) => {
     const { getToken } = useAuth();
     const navigate = useNavigate();
 
@@ -85,7 +87,7 @@ const Details = ({ course }:{course: Course}) => {
         categoryId: 0,
         imageUrl: ''
     });
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);  
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [categorySearch, setCategorySearch] = useState('');
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -121,7 +123,6 @@ const Details = ({ course }:{course: Course}) => {
             imageUrl: course?.imageUrl || ``
         });
         setIsEditModalOpen(true);
-        console.log(editData);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -159,54 +160,55 @@ const Details = ({ course }:{course: Course}) => {
 
     const handleSubmit = async () => {
         setIsLoading(true);
-       try {
-        const token=await getToken();
+        try {
+            const token = await getToken();
 
-        const formData = new FormData();
-        formData.append('title', editData.title);
-        formData.append('description', editData.description);
-        formData.append('price', editData.price.toString());
-        formData.append('language', editData.language);
-        formData.append('isActive', editData.isActive.toString());
-        formData.append('published', editData.published.toString());
-        formData.append('categoryId', editData.categoryId.toString());
-        if(editData.imageUrl.length > 4){   
-            formData.append('imageUrl', editData.imageUrl);
-        }
-        editData.learningOutcomes.forEach((item: string, index: number) => {
-            formData.append(`learningOutcomes[${index}]`, item);
-        });
-
-        editData.requirements.forEach((item: string, index: number) => {
-            formData.append(`requirements[${index}]`, item);
-        });
-
-        editData.forwhom.forEach((item: string, index: number) => {
-            formData.append(`forwhom[${index}]`, item);
-        });
-        
-        formData.append('image', selectedImage!);
-
-        const response = await axios.put(`${backendUrl}api/v1/admin/courses/${course.id}`, formData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data'
+            const formData = new FormData();
+            formData.append('title', editData.title);
+            formData.append('description', editData.description);
+            formData.append('price', editData.price.toString());
+            formData.append('language', editData.language);
+            formData.append('isActive', editData.isActive.toString());
+            formData.append('published', editData.published.toString());
+            formData.append('categoryId', editData.categoryId.toString());
+            formData.append('showCourseNotice', editData.showCourseNotice.toString());
+            if (editData.imageUrl.length > 4) {
+                formData.append('imageUrl', editData.imageUrl);
             }
-        });
-        
-        if(response.status === 200){
-            setIsEditModalOpen(false);
-            toast.success("Course updated successfully");
-            window.location.reload();
+            editData.learningOutcomes.forEach((item: string, index: number) => {
+                formData.append(`learningOutcomes[${index}]`, item);
+            });
+
+            editData.requirements.forEach((item: string, index: number) => {
+                formData.append(`requirements[${index}]`, item);
+            });
+
+            editData.forwhom.forEach((item: string, index: number) => {
+                formData.append(`forwhom[${index}]`, item);
+            });
+
+            formData.append('image', selectedImage!);
+            console.log(editData);
+            const response = await axios.put(`${backendUrl}api/v1/admin/courses/${course.id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                const updatedCourse = response.data;
+                setCourse(updatedCourse as Course);
+                setIsEditModalOpen(false);
+                toast.success("Course updated successfully");
+            }
+            else {
+                toast.error("Failed to update course");
+            }
+        } catch (error) {
+            toast.error("Error updating course");
         }
-        else{
-            toast.error("Failed to update course");
-        }
-       } catch (error) {
-        console.log(error);
-        toast.error("Error updating course");
-       }
-       setIsLoading(false);
+        setIsLoading(false);
     };
 
     const handleDeleteCourse = async () => {
@@ -214,17 +216,17 @@ const Details = ({ course }:{course: Course}) => {
             toast.error('Please type "delete" to confirm');
             return;
         }
-        
+
         setIsLoading(true);
         try {
             const token = await getToken();
-            
+
             const response = await axios.delete(`${backendUrl}api/v1/admin/courses/${course.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            
+
             if (response.status === 200) {
                 toast.success("Course deleted successfully");
                 // Redirect to courses page after successful deletion
@@ -235,7 +237,6 @@ const Details = ({ course }:{course: Course}) => {
                 toast.error("Failed to delete course");
             }
         } catch (error) {
-            console.log(error);
             toast.error("Error deleting course");
         }
         setIsLoading(false);
@@ -243,13 +244,13 @@ const Details = ({ course }:{course: Course}) => {
     };
 
     // Filter categories based on search input
-    const filteredCategories = categories.filter(category => 
+    const filteredCategories = categories.filter(category =>
         category.name.toLowerCase().includes(categorySearch.toLowerCase())
     );
 
     // Handle category selection
     const handleCategorySelect = (categoryId: number) => {
-        setEditData({...editData, categoryId});
+        setEditData({ ...editData, categoryId });
         setShowCategoryDropdown(false);
     };
 
@@ -274,13 +275,13 @@ const Details = ({ course }:{course: Course}) => {
                     </div>
                 </div>
                 <div className="flex gap-4">
-                    <button 
+                    <button
                         onClick={openEditModal}
                         className="px-6 py-3 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                     >
                         Edit Details
                     </button>
-                    <button 
+                    <button
                         onClick={() => setIsDeleteModalOpen(true)}
                         className="px-6 py-3 rounded-md border border-white bg-red-600 text-white hover:shadow-[4px_4px_0px_0px_rgba(255,0,0,0.3)] hover:text-white hover:border-red-700 hover:bg-red-700 transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                     >
@@ -288,7 +289,7 @@ const Details = ({ course }:{course: Course}) => {
                     </button>
                 </div>
             </div>
-            
+
             {/* Course stats */}
             <div className="px-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -310,7 +311,7 @@ const Details = ({ course }:{course: Course}) => {
                     </div>
                 </div>
             </div>
-            
+
             {/* Course content */}
             <div className="px-6 pb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Description */}
@@ -323,7 +324,7 @@ const Details = ({ course }:{course: Course}) => {
                     </h2>
                     <p className="text-gray-700 whitespace-pre-line">{course?.description || 'No description provided.'}</p>
                 </div>
-                
+
                 {/* Course Notice */}
                 {course?.courseNotice && (
                     <div className="bg-yellow-50 rounded-xl p-6 hover:shadow-md transition-all">
@@ -339,7 +340,7 @@ const Details = ({ course }:{course: Course}) => {
                         </div>
                     </div>
                 )}
-                
+
                 {/* Overview */}
                 <div className="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-all">
                     <h2 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
@@ -352,7 +353,7 @@ const Details = ({ course }:{course: Course}) => {
                         <ul className="space-y-2">
                             {course?.overview?.map((item: string, index: number) => (
                                 <li key={index} className="flex gap-2 items-start">
-                                  <span className="text-gray-700">•</span> <span className="text-gray-700"> {item}</span>
+                                    <span className="text-gray-700">•</span> <span className="text-gray-700"> {item}</span>
                                 </li>
                             ))}
                         </ul>
@@ -360,7 +361,7 @@ const Details = ({ course }:{course: Course}) => {
                         <p className="text-gray-500 italic">No overview provided.</p>
                     )}
                 </div>
-                
+
                 {/* Learning Outcomes */}
                 <div className="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-all">
                     <h2 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
@@ -386,7 +387,7 @@ const Details = ({ course }:{course: Course}) => {
                         <p className="text-gray-500 italic">No learning outcomes provided.</p>
                     )}
                 </div>
-                
+
                 {/* Requirements */}
                 <div className="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-all">
                     <h2 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
@@ -412,7 +413,7 @@ const Details = ({ course }:{course: Course}) => {
                         <p className="text-gray-500 italic">No requirements specified.</p>
                     )}
                 </div>
-                
+
                 {/* For Whom */}
                 <div className="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-all">
                     <h2 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
@@ -441,7 +442,7 @@ const Details = ({ course }:{course: Course}) => {
             </div>
 
             {/* Edit Course Modal */}
-            <EditCourseModal 
+            <EditCourseModal
                 isEditModalOpen={isEditModalOpen}
                 setIsEditModalOpen={setIsEditModalOpen}
                 editData={editData}
@@ -464,7 +465,7 @@ const Details = ({ course }:{course: Course}) => {
             />
 
             {/* Delete Course Modal */}
-            <DeleteCourseModal 
+            <DeleteCourseModal
                 isDeleteModalOpen={isDeleteModalOpen}
                 setIsDeleteModalOpen={setIsDeleteModalOpen}
                 deleteConfirmation={deleteConfirmation}
@@ -475,9 +476,9 @@ const Details = ({ course }:{course: Course}) => {
 
             {/* Main content wrapper - adjusts width when any sidebar is open */}
             <div className={`transition-all duration-300 ${isEditModalOpen || isDeleteModalOpen ? 'pr-80' : ''}`}>
-              
+
             </div>
-            
+
             {/* Course Banner Image */}
             <div className="px-6 pb-8">
                 <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
@@ -486,12 +487,12 @@ const Details = ({ course }:{course: Course}) => {
                     </svg>
                     Course Banner Image
                 </h2>
-                
+
                 {course?.imageUrl ? (
                     <div className="bg-gray-50 rounded-xl p-4 hover:shadow-md transition-all">
-                        <img 
-                            src={course.imageUrl} 
-                            alt={`${course.title} banner`} 
+                        <img
+                            src={course.imageUrl}
+                            alt={`${course.title} banner`}
                             className="w-full h-auto max-h-[400px] object-contain rounded-lg"
                         />
                     </div>

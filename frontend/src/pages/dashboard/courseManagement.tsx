@@ -72,7 +72,7 @@ const columns = [
         name: 'Price',
         selector: (row: any) => row.price,
         sortable: true,
-        cell: (row: any) => `$${row.price}`,
+        cell: (row: any) => `₹${row.price}`,
     },
     {
         name: 'Status',
@@ -316,7 +316,7 @@ const CourseManagement = () => {
                             {data.language}
                         </span>
                         <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-800">
-                            ${data.price}
+                            ₹{data.price}
                         </span>
                     </div>
                 </div>

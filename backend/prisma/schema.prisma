@@ -32,14 +32,14 @@ model Course {
   id               Int           @id @default(autoincrement())
   title            String        @unique
   description      String
-  isActive         Boolean       @default(true)
+  isActive         Boolean       @default(false)
   showCourseNotice Boolean       @default(true)
   price            Float
   courseNotice     String?
   imageUrl         String?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  published        Boolean?      @default(false)
+  published        Boolean?      @default(true)
   users            UserCourse[]
   categoryId       Int
   category         Category      @relation(fields: [categoryId], references: [id])
