@@ -5,7 +5,7 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import { enrolledClickedEvent } from "../lib/pixel-event";
 import CoursePageShimmerEffect from "../components/ui/loaders/CoursePageLoader";
 import PaymentCheckOutModal from "../components/ui/PaymentCheckOutModal";
-
+import { toast, Toaster } from "react-hot-toast";
 
 
 interface Course {
@@ -65,6 +65,13 @@ const Course = () => {
     const [openedModule, setOpenedModule] = useState<number[]>([0]);
     const [openedTopic, setOpenedTopic] = useState<string[]>([]);
     const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+    useEffect(() => {
+        if (paymentSuccess) {
+            toast.success("Payment Successful");
+        }
+    }, [paymentSuccess]);
 
 
     //checking if the user has a pending payment for the course
@@ -112,20 +119,9 @@ const Course = () => {
 
 
 
-    const handleSignIn = () => {
-        localStorage.setItem(`pendingPayment_${id}`, 'true');
-        navigate("?sign-in=true");
-    }
-
-
     const coursePayment = async () => {
         try {
             enrolledClickedEvent();
-
-            if (!isSignedIn) {
-                handleSignIn();
-                return;
-            }
 
             setShowCheckoutModal(true);
             document.body.style.overflow="hidden";
@@ -156,7 +152,7 @@ const Course = () => {
                             </p>
                         </div>
 
-                        <p className="text-base sm:text-xl montserrat-500 text-gray-600">{course.description}</p>
+                        <p className="text-base montserrat-500 text-gray-600">{course.description}</p>
                         {/* button section */}
                         <div className="mt-6 sm:mt-8 flex flex-col items-center gap-4 sm:gap-6">
                             {course.isActive ? (
@@ -172,9 +168,7 @@ const Course = () => {
                                 ) : (
                                     <button
                                         ref={enrollButtonRef}
-                                        onClick={() => {
-                                            { isSignedIn ? coursePayment() : handleSignIn() }
-                                        }}
+                                        onClick={coursePayment}
                                         className="cursor-pointer px-8 sm:px-12 py-2 sm:py-3 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
                                         Enroll Now
                                     </button>
@@ -197,7 +191,7 @@ const Course = () => {
                                 <span className="text-xl sm:text-2xl montserrat-500 text-gray-900">Course Overview</span>
                                 <span className="text-2xl">📖</span>
                             </div>
-                            <div className="bg-gradient-to-br from-gray-200 to-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <div className="bg-gradient-to-br from-gray-300 to-white p-6 rounded-xl shadow-sm border border-gray-100">
                                 <div className="flex flex-col gap-2">
                                     {course.overview?.map((item, index) => (
                                         <p key={index} className="text-gray-700 montserrat-400 leading-relaxed text-base">{item}</p>
@@ -207,11 +201,11 @@ const Course = () => {
                         </div>
                         {/* Course Content Preview */}
                         <div className="flex flex-col gap-4 w-full lg:w-2/3">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center  gap-2">
                                 <span className="text-xl sm:text-2xl montserrat-500">Course Content Preview</span>
                                 <span className="text-xl">📝</span>
                             </div>
-                            <div className="bg-gray-50 p-4 rounded-lg shadow-sm w-full">
+                            <div className="bg-gradient-to-br from-gray-300 to-white p-4 rounded-lg shadow-sm w-full">
                                 {course.modules?.map((module, moduleIndex) => (
                                     <div key={moduleIndex} className="bg-gray-100 p-4 rounded-lg mb-4">
                                         <div
@@ -281,8 +275,6 @@ const Course = () => {
                                 ))}
                             </div>
                         </div>
-
-
                     </div>
 
                     {/* Course Details  */}
@@ -292,7 +284,7 @@ const Course = () => {
                                 <span className="text-xl sm:text-2xl montserrat-700">What you'll learn</span>
                                 <span className="text-xl">📚</span>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gradient-to-br from-gray-300 to-white p-4 rounded-lg shadow-sm">
                                 {course.learningOutcomes?.map((item, index) => (
                                     <div key={index} className="flex items-start gap-2 bg-white p-3 montserrat-500 rounded-md">
                                         <span className="text-green-500 text-lg">✓</span>
@@ -306,7 +298,7 @@ const Course = () => {
                                 <span className="text-xl sm:text-2xl montserrat-700">Requirements</span>
                                 <span className="text-xl">⚡</span>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gradient-to-br from-gray-300 to-white p-4 rounded-lg shadow-sm">
                                 {course.requirements?.map((item, index) => (
                                     <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
                                         <span className="text-blue-500 text-lg">●</span>
@@ -320,7 +312,7 @@ const Course = () => {
                                 <span className="text-xl sm:text-2xl montserrat-700">Who this course is for</span>
                                 <span className="text-xl">👥</span>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-gradient-to-br from-gray-300 to-white p-4 rounded-lg shadow-sm">
                                 {course.forwhom?.map((item, index) => (
                                     <div key={index} className="flex items-start gap-2 bg-white p-3 rounded-md">
                                         <span className="text-purple-500 text-lg">→</span>
@@ -335,9 +327,10 @@ const Course = () => {
 
             {showCheckoutModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600/60 backdrop-blur-lg" >
-                    <PaymentCheckOutModal id={id!} price={course?.price!} clerkUserId={user?.id!} courseName={course?.title!} setShowCheckoutModal={setShowCheckoutModal} />
+                    <PaymentCheckOutModal id={id!} price={course?.price!} clerkUserId={user?.id!} courseName={course?.title!} setShowCheckoutModal={setShowCheckoutModal} setPaymentSuccess={setPaymentSuccess} />
                 </div>
             )}
+            <Toaster />
         </div>
     )
 }

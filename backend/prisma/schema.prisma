@@ -14,18 +14,17 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  clerkuserId  String        @unique
-  email        String        @unique
-  phoneNumber  String?
-  firstName    String
-  lastName     String?
-  imageUrl     String?
-  role         Role?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  courses      UserCourse[]
-  transactions Transaction[]
+  id          Int          @id @default(autoincrement())
+  clerkuserId String       @unique
+  email       String       @unique
+  phoneNumber String?
+  firstName   String
+  lastName    String?
+  imageUrl    String?
+  role        Role?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  courses     UserCourse[]
 }
 
 model Course {
@@ -48,7 +47,6 @@ model Course {
   requirements     String[]
   forwhom          String[]
   language         String        @default("English")
-  transactions     Transaction[]
   modules          Module[]
 }
 
@@ -135,18 +133,17 @@ model JobCategory {
 
 model Transaction {
   id                Int               @id @default(autoincrement())
-  userId            Int
+  name              String
+  email             String
+  phone             String?
   courseId          Int
   razorpayOrderId   String            @unique
   razorpayPaymentId String? // Null if payment fails
   razorpaySignature String?
   amount            Float
   currency          String            @default("INR")
-  status            TransactionStatus @default(PENDING)
+  status            TransactionStatus @default(INITIATED)
   createdAt         DateTime          @default(now())
-
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
 }
 
 model DiscountToken {
@@ -181,7 +178,7 @@ enum JobLocation {
 }
 
 enum TransactionStatus {
+  INITIATED
   SUCCESS
   FAILED
-  PENDING
 }

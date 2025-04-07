@@ -9,8 +9,10 @@ dotenv.config();
 export const createUser = async (data: User) => {
   try {
     // Get admin and manager emails from .env, ensure they are lowercase for comparison
-    const adminEmails = process.env.ADMIN_EMAILS?.toLowerCase().split(",") || [];
-    const managerEmails = process.env.MANAGER_EMAILS?.toLowerCase().split(",") || [];
+    const adminEmails =
+      process.env.ADMIN_EMAILS?.toLowerCase().split(",") || [];
+    const managerEmails =
+      process.env.MANAGER_EMAILS?.toLowerCase().split(",") || [];
 
     // Default role is "USER"
     let role: "ADMIN" | "MANAGER" | "USER" = "USER";
@@ -22,15 +24,42 @@ export const createUser = async (data: User) => {
     }
 
     // Ensure email uniqueness
-    const existingUser = await prisma.user.findUnique({ where: { email: data.email } });
+    const existingUser = await prisma.user.findUnique({
+      where: { email: data.email },
+    });
     if (existingUser) {
-      return { error: "User already exists" };
+      return { error: "User already exists with this email" };
     }
 
     // Create user with the assigned role
     const user = await prisma.user.create({
       data: { ...data, role },
     });
+
+    const isUserPurchasedAnyCourse = await prisma.transaction.findMany({
+      where: {
+        email: data.email,
+        status: "SUCCESS",
+      },
+    });
+
+    if (isUserPurchasedAnyCourse) {
+
+      isUserPurchasedAnyCourse.map(async (course) => {
+        await prisma.userCourse.create({
+          data: {
+            userId: user.id,
+            courseId: course.courseId,
+          },
+        });
+      });
+
+      const addPhoneNumber = await prisma.user.update({
+        where: { id: user.id },
+        data: { phoneNumber: isUserPurchasedAnyCourse[0].phone },
+      });
+
+    }
 
     console.log("User created successfully:", user);
     return user;

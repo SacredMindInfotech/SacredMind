@@ -1,4 +1,4 @@
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -17,16 +17,27 @@ interface DiscountToken {
 }
 
 
-const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheckoutModal }: { id: string, price: number, clerkUserId: string, courseName: string, setShowCheckoutModal: (value: boolean) => void }) => {
+const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheckoutModal, setPaymentSuccess }: { id: string, price: number, clerkUserId: string, courseName: string, setShowCheckoutModal: (value: boolean) => void, setPaymentSuccess: (value: boolean) => void }) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const navigate = useNavigate();
     const { getToken } = useAuth();
+    const { isSignedIn } = useUser();
 
     const [discountedPrice, setDiscountedPrice] = useState<number>(price);
     const [loading, setLoading] = useState<boolean>(false);
     const [discountToken, setDiscountToken] = useState<string | null>(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: ''
+    });
 
-
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
 
     //razorpay script
     const loadScript = (src: string) => {
@@ -85,7 +96,12 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
     const coursePayment = async () => {
         try {
             const token = await getToken();
-            const res = await axios.post(`${backendUrl}api/v1/createPaymentOrder/${id}`, {}, {
+            const res = await axios.post(`${backendUrl}api/v1/createPaymentOrder/${id}`, {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                clerkUserId: clerkUserId
+            }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     discountToken: discountToken
@@ -93,6 +109,8 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
             });
             // @ts-ignore
             let orderDetails = res.data.order;
+            // @ts-ignore
+            let transactionId = res.data.transactionId;
 
             const paymentObject = new (window as any).Razorpay({
                 key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -113,9 +131,14 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                         razorpay_signature,
                         courseId: id,
                         clerkUserId,
-                        amount: orderDetails.amount / 100
+                        amount: orderDetails.amount / 100,
+                        transactionId: transactionId,
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone   
                     })
                     if (res.status === 200) {
+                        setPaymentSuccess(true);
                         enrolledSuccessEvent();
                         closeModal();
                         localStorage.removeItem(`pendingPayment_${id}`);
@@ -137,11 +160,16 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
         }
     }
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        coursePayment();
+    }
+
     if (loading) return <LoadingScreen />
 
     return (
-        <div className=" bg-gradient-to-r from-gray-100 via-gray-400 to-yellow-200
-         min-h-[70vh] w-full max-w-xl mx-auto p-4 sm:p-6 rounded-md shadow-lg relative overflow-y-auto">
+        <div className="bg-gradient-to-r from-gray-100 via-gray-400 to-yellow-200
+         min-h-[70vh] w-full max-w-6xl mx-auto p-4 sm:p-6 rounded-md shadow-lg relative overflow-y-auto">
             <button
                 onClick={closeModal}
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors"
@@ -152,58 +180,142 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                 </svg>
             </button>
 
-            <div className="mt-6 sm:mt-10 ml-4 sm:ml-10 flex items-center gap-3 sm:gap-5">
-                <img src="/logo.svg" alt="logo" className="w-8 h-8 sm:w-10 sm:h-10" />
-                <div className="text-xs montserrat-500 font-bold">SacredMind Infotech</div>
-            </div>
-            <div className="flex flex-col">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Left Side - Payment Details */}
+                <div className="flex flex-col">
+                    <div className="mt-6 sm:mt-10 ml-4 sm:ml-10 flex items-center gap-3 sm:gap-5">
+                        <img src="/logo.svg" alt="logo" className="w-8 h-8 sm:w-10 sm:h-10" />
+                        <div className="text-xs montserrat-500 font-bold">SacredMind Infotech</div>
+                    </div>
 
-                <div className="text-xs p-4 sm:p-10 font-serif montserrat-secondary">Payment for <br />
-                    <span className="font-bold text-lg sm:text-xl break-words"> {courseName}
-                    </span>
+                    <div className="flex flex-col">
+                        <div className="text-xs p-4 sm:p-10 font-serif montserrat-secondary">
+                            Payment for <br />
+                            <span className="font-bold text-lg sm:text-xl break-words">
+                                {courseName}
+                            </span>
+                        </div>
+
+                        <div className="p-4 sm:p-10 bg-gray-50 rounded-lg mx-2 sm:mx-4">
+                            <div className="flex flex-col gap-3">
+                                <div className="flex justify-between text-gray-700 text-sm sm:text-base">
+                                    <div className="font-bold">Original Price</div>
+                                    <div>₹{price}</div>
+                                </div>
+                                <div className="flex justify-between text-green-600 text-sm sm:text-base">
+                                    <div className="font-bold">Discount</div>
+                                    <div>-₹{price - discountedPrice}</div>
+                                </div>
+                                <div className="flex justify-between text-gray-700 text-sm sm:text-base">
+                                    <div className="font-bold">After Discount</div>
+                                    <div>₹{discountedPrice}</div>
+                                </div>
+                                <div className="flex justify-between text-gray-700 text-sm sm:text-base">
+                                    <div className="font-bold">GST</div>
+                                    <div>₹{(discountedPrice * 0.18).toFixed(2)}</div>
+                                </div>
+                                <hr className="my-4 border-gray-300" />
+                                <div className="flex justify-between font-bold text-base sm:text-lg">
+                                    <div className="font-bold">Total</div>
+                                    <div>₹{(discountedPrice + (discountedPrice * 0.18))}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {isSignedIn ? (
+                            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                                <button
+                                    onClick={closeModal}
+                                    className="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap text-sm sm:text-base"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={coursePayment}
+                                    className="px-6 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap font-bold text-sm sm:text-base"
+                                >
+                                    Pay ₹{(discountedPrice + (discountedPrice * 0.18))}
+                                </button>
+                            </div>
+                        ) : null}
+                    </div>
                 </div>
 
-                <div className="p-4 sm:p-10 bg-gray-50 rounded-lg mx-2 sm:mx-4">
-                    <div className="flex flex-col gap-3">
-                        <div className="flex justify-between text-gray-700 text-sm sm:text-base">
-                            <div className="font-bold">Original Price</div>
-                            <div>₹{price}</div>
-                        </div>
-                        <div className="flex justify-between text-green-600 text-sm sm:text-base">
-                            <div className="font-bold">Discount</div>
-                            <div>-₹{price - discountedPrice}</div>
-                        </div>
-                        <div className="flex justify-between text-gray-700 text-sm sm:text-base">
-                            <div className="font-bold">After Discount</div>
-                            <div>₹{discountedPrice}</div>
-                        </div>
-                        <div className="flex justify-between text-gray-700 text-sm sm:text-base">
-                            <div className="font-bold">GST</div>
-                            <div>₹{(discountedPrice * 0.18).toFixed(2)}</div>
-                        </div>
-                        <hr className="my-4 border-gray-300" />
-                        <div className="flex justify-between font-bold text-base sm:text-lg">
-                            <div className="font-bold">Total</div>
-                            <div>₹{(discountedPrice + (discountedPrice * 0.18))}</div>
-                        </div>
+                {/* Right Side - User Details Form */}
+                {!isSignedIn ? <div className="flex flex-col justify-center p-4 sm:p-10">
+                    <div className="bg-gray-50 rounded-lg p-6">
+                        <h3 className="text-xl font-bold mb-6 montserrat-700">Contact Information</h3>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1 montserrat-500">
+                                    Full Name *
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 focus:border-transparent montserrat-400"
+                                    placeholder="Enter your full name"
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 montserrat-500">
+                                    Email Address *
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 focus:border-transparent montserrat-400"
+                                    placeholder="Enter your email"
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1 montserrat-500">
+                                    Phone Number *
+                                </label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 focus:border-transparent montserrat-400"
+                                    placeholder="Enter your phone number"
+                                />
+                            </div>
+                            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                                <button
+                                    type="button"
+                                    onClick={closeModal}
+                                    className="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap text-sm sm:text-base"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-6 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap font-bold text-sm sm:text-base"
+                                >
+                                    Pay ₹{(discountedPrice + (discountedPrice * 0.18))}
+                                </button>
+                            </div>
+                        </form>
+
                     </div>
-                    <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between">
-                        <button
-                            onClick={closeModal}
-                            className="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap text-sm sm:text-base"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={coursePayment}
-                            className="px-6 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap font-bold text-sm sm:text-base"
-                        >
-                            Pay ₹{(discountedPrice + (discountedPrice * 0.18))}
-                        </button>
-                    </div>
-                </div>
+                </div> : null
+                }
+
+
             </div>
+
         </div>
-    )
+    );
 }
+
 export default PaymentCheckOutModal;

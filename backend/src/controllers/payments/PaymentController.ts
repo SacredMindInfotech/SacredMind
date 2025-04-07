@@ -6,6 +6,8 @@ export const coursePaymentController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const discountToken = req.headers.discounttoken as string;
+    const { name, email, phone,clerkUserId } = req.body;
+
 
     const course = await prisma.course.findUnique({
       where: { id: Number(id) },
@@ -45,7 +47,32 @@ export const coursePaymentController = async (req: Request, res: Response) => {
     const razorPayInstance = createRazorpayInstance();
     const order = await razorPayInstance.orders.create(options);
 
-    res.status(200).json({ order });
+    let transactionData = {
+      name,
+      email,
+      phone,
+      courseId: Number(id),
+      razorpayOrderId: order.id,
+      amount: totalAmount / 100,
+    };
+
+    if (clerkUserId) {
+      const user = await prisma.user.findUnique({
+        where: { clerkuserId: clerkUserId },
+      });
+
+      if (user) {
+        transactionData.name = user.firstName + " " + user.lastName;
+        transactionData.email = user.email;
+        transactionData.phone = user.phoneNumber;
+      }
+    }
+
+    const transaction = await prisma.transaction.create({
+      data: transactionData,
+    });
+
+    res.status(200).json({ order, transactionId: transaction.id });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
