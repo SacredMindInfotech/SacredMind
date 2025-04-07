@@ -8,6 +8,7 @@ import UpcomingCourses from "../components/ui/landingPage/upcomingCourses";
 import PopularCourses from "../components/ui/landingPage/popularCourses";
 import About from "../components/ui/landingPage/about";
 import { useNavigate } from "react-router-dom";
+import Reviews from "../components/ui/landingPage/reviews";
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Landing = () => {
                 <About></About>
                 <Services></Services>
                 <UpcomingCourses></UpcomingCourses>
+                <Reviews></Reviews>
                 <CareerContact ref={contactRef}></CareerContact>
 
                 <div className=" z-20 fixed flex flex-col gap-2 bottom-4 montserrat-700 right-4 bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-white p-2 sm:p-3 rounded-lg shadow-lg w-[280px] sm:w-[320px] md:w-[360px]">

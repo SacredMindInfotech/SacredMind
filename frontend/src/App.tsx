@@ -29,6 +29,7 @@ import UserDetails from './components/ui/dashboard/user/UserDetails'
 import Footer from './components/ui/footer'
 import Navbar from './components/ui/navbar'
 import ViewContent from './components/ui/viewContent'
+import AllReviews from './pages/allReviewsPage'
 function App() {
   const Router = createBrowserRouter([
 
@@ -160,6 +161,14 @@ function App() {
           <Purchases />
           <Footer />
         </ProtectedRoutes>
+      </>
+    },
+    {
+      path: "/all-reviews",
+      element: <>
+          <Navbar></Navbar>
+          <AllReviews />
+          <Footer />
       </>
     },
     {
