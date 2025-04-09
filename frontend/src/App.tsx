@@ -30,6 +30,7 @@ import Footer from './components/ui/footer'
 import Navbar from './components/ui/navbar'
 import ViewContent from './components/ui/viewContent'
 import AllReviews from './pages/allReviewsPage'
+import TeachWithUs from './pages/TeachWithUs'
 function App() {
   const Router = createBrowserRouter([
 
@@ -172,11 +173,19 @@ function App() {
       </>
     },
     {
-      path: "*",
+      path: "/teach-with-us",
       element: <>
-        <Navigate to="/" replace />
+        <Navbar></Navbar>
+        <TeachWithUs />
+        <Footer />
       </>
-    }
+    },
+    // {
+    //   path: "*",
+    //   element: <>
+    //     <Navigate to="/" replace />
+    //   </>
+    // }
   ])
   return (
     <div className='overflow-auto'>
