@@ -1,5 +1,5 @@
 import './App.css'
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Landing from './pages/LandingPage'
 import Contact from './pages/contact'
 import Category from './pages/category'
