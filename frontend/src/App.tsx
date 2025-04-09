@@ -30,7 +30,7 @@ import Footer from './components/ui/footer'
 import Navbar from './components/ui/navbar'
 import ViewContent from './components/ui/viewContent'
 import AllReviews from './pages/allReviewsPage'
-import TeachWithUs from './pages/TeachWithUs'
+// import TeachWithUs from './pages/TeachWithUs'
 function App() {
   const Router = createBrowserRouter([
 
@@ -172,14 +172,14 @@ function App() {
           <Footer />
       </>
     },
-    {
-      path: "/teach-with-us",
-      element: <>
-        <Navbar></Navbar>
-        <TeachWithUs />
-        <Footer />
-      </>
-    },
+    // {
+    //   path: "/teach-with-us",
+    //   element: <>
+    //     <Navbar></Navbar>
+    //     <TeachWithUs />
+    //     <Footer />
+    //   </>
+    // },
     // {
     //   path: "*",
     //   element: <>
