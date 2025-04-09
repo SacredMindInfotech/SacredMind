@@ -86,7 +86,7 @@ const OngoingOffers = () => {
         const fetchCoursesWithDiscounts = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`${backendUrl}api/v1/course/`);
+            const response = await axios.get(`${backendUrl}api/v1/course/`);
                 const allCourses = response.data as Course[];
                 
                 // Process each course to get its discount
@@ -100,8 +100,8 @@ const OngoingOffers = () => {
                             discountedPrice: discountAmount
                         };
                     } catch (error) {
-                        return {
-                            ...course,
+                            return {
+                                ...course,
                             discountedPrice: 0
                         };
                     }
@@ -117,7 +117,7 @@ const OngoingOffers = () => {
                 
                 setCourses(discountedCourses);
                 setLoading(false);
-            } catch (error) {
+                    } catch (error) {
                 console.error("Error fetching courses:", error);
                 setLoading(false);
             }
@@ -126,21 +126,79 @@ const OngoingOffers = () => {
         fetchCoursesWithDiscounts();
     }, [backendUrl]);
 
-    const OffersLoader = () => {
+    const ShimmerLoader = () => {
         return (
-            <div className="grid grid-flow-col auto-cols-[70%] sm:auto-cols-[45%] md:auto-cols-[30%] lg:auto-cols-[23%] gap-4 overflow-x-auto pb-4 pr-4">
-                {[1, 2, 3, 4, 5].map((item) => (
-                    <div key={item} className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden h-full">
-                        <div className="h-40 bg-gray-200 animate-pulse">
-                            <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 shimmer-effect"></div>
+            <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[60%] md:auto-cols-[45%] lg:auto-cols-[32%] gap-6 overflow-x-auto snap-x snap-mandatory pb-6 pr-4">
+                {[1, 2, 3, 4].map((item) => (
+                    <div key={item} className="flex flex-col bg-white border-2 border-gray-200 rounded-xl overflow-hidden h-full relative">
+                        {/* Image area with shimmer */}
+                        <div className="h-48 bg-gray-200 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer" 
+                                 style={{
+                                     backgroundSize: '200% 100%',
+                                     animation: 'shimmer 1.5s infinite'
+                                 }}>
+                            </div>
+                            {/* OFFER badge */}
+                            <div className="absolute top-3 right-3">
+                                <div className="w-16 h-5 rounded-full bg-gray-300 animate-pulse"></div>
+                            </div>
+                            {/* Image gradient overlay */}
+                            <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-300 to-transparent"></div>
                         </div>
-                        <div className="p-4 flex flex-col">
-                            <div className="h-6 w-3/4 bg-gray-200 rounded animate-pulse mb-2"></div>
-                            <div className="h-4 w-full bg-gray-200 rounded animate-pulse mb-1"></div>
-                            <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse mb-3"></div>
-                            <div className="mt-auto flex items-center justify-between">
-                                <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
-                                <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+                        
+                        {/* Content area */}
+                        <div className="p-5">
+                            {/* Title */}
+                            <div className="h-7 w-3/4 bg-gray-200 rounded-md mb-3 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer"
+                                     style={{
+                                         backgroundSize: '200% 100%',
+                                         animation: 'shimmer 1.5s infinite'
+                                     }}></div>
+                            </div>
+                            
+                            {/* Description lines */}
+                            <div className="h-4 w-full bg-gray-200 rounded-md mb-2 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer"
+                                     style={{
+                                         backgroundSize: '200% 100%',
+                                         animation: 'shimmer 1.5s infinite'
+                                     }}></div>
+                            </div>
+                            <div className="h-4 w-5/6 bg-gray-200 rounded-md mb-4 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer"
+                                     style={{
+                                         backgroundSize: '200% 100%',
+                                         animation: 'shimmer 1.5s infinite'
+                                     }}></div>
+                            </div>
+                            
+                            {/* Category and price */}
+                            <div className="flex justify-between items-center">
+                                <div className="h-5 w-16 bg-gray-200 rounded-md relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer"
+                                         style={{
+                                             backgroundSize: '200% 100%',
+                                             animation: 'shimmer 1.5s infinite'
+                                         }}></div>
+                                </div>
+                                <div className="flex space-x-2">
+                                    <div className="h-5 w-10 bg-gray-200 rounded-md relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer"
+                                             style={{
+                                                 backgroundSize: '200% 100%',
+                                                 animation: 'shimmer 1.5s infinite'
+                                             }}></div>
+                                    </div>
+                                    <div className="h-5 w-14 bg-gray-200 rounded-md relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer"
+                                             style={{
+                                                 backgroundSize: '200% 100%',
+                                                 animation: 'shimmer 1.5s infinite'
+                                             }}></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -192,7 +250,7 @@ const OngoingOffers = () => {
                 </div>
 
                 {loading ? (
-                    <OffersLoader />
+                    <ShimmerLoader />
                 ) : courses.length > 0 ? (
                     <div className="relative">
                         <motion.div 
@@ -202,49 +260,49 @@ const OngoingOffers = () => {
                             variants={containerVariants}
                             animate={controls}
                         >
-                            {courses.map((course) => (
+                    {courses.map((course) => (
                                 <motion.div
-                                    key={course.id}
+                            key={course.id}
                                     className="group bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer transform hover:-translate-y-1 snap-start"
                                     onClick={() => navigate(`/course/${course.id}`)}
                                     variants={itemVariants}
-                                >
+                        >
                                     <div className="h-48 bg-gray-200 relative overflow-hidden">
-                                        {course.imageUrl ? (
-                                            <img
-                                                src={course.imageUrl}
-                                                alt={course.title}
-                                                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-gray-300 text-gray-600">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                                </svg>
-                                            </div>
-                                        )}
+                                {course.imageUrl ? (
+                                    <img
+                                        src={course.imageUrl}
+                                        alt={course.title}
+                                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-gray-300 text-gray-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                    </div>
+                                )}
                                         <div className="absolute top-3 right-3">
                                             <span className="px-3 py-1 rounded-full text-xs font-bold bg-red-600 text-white shadow-md">
                                                 OFFER
                                             </span>
                                         </div>
-                                        <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                    </div>
-                                    <div className="p-5">
-                                        <div className="flex justify-between items-start mb-3">
+                                <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            </div>
+                            <div className="p-5">
+                                <div className="flex justify-between items-start mb-3">
                                             <h3 className="text-xl font-bold montserrat-700 line-clamp-2 group-hover:text-gray-900 transition-colors">{course.title}</h3>
-                                        </div>
-                                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
-                                        <div className="flex justify-between items-center">
+                                </div>
+                                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
+                                <div className="flex justify-between items-center">
                                             <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded-md text-gray-700">
-                                                {course.category.name}
-                                            </span>
+                                        {course.category.name}
+                                    </span>
                                             <div className="text-right">
                                                 <span className="text-sm line-through text-gray-500">₹{course.price}</span>
                                                 <span className="text-sm font-extrabold text-red-600 ml-2">₹{course.discountedPrice}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                        </div>
                                 </motion.div>
                             ))}
                         </motion.div>
@@ -271,7 +329,7 @@ const OngoingOffers = () => {
                                 </button>
                             </>
                         )}
-                    </div>
+                </div>
                 ) : (
                     <motion.div 
                         className="text-center py-16 bg-white rounded-xl shadow-sm"
