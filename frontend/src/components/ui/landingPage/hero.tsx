@@ -74,7 +74,7 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
 
                 <div className="hidden lg:flex lg:w-1/2 justify-center">
                     <img
-                        src="https://img.freepik.com/free-vector/online-tutorials-concept_52683-37480.jpg?t=st=1744194747~exp=1744198347~hmac=1d015f210c3ca90cb2ee3db24e113492e626b4e24214be10e1f7717fd1da391f&w=1380"
+                        src="/hero3.svg"
                         alt="Learning Illustration"
                         className="w-full max-w-lg h-[400px]"
                         loading="eager"
