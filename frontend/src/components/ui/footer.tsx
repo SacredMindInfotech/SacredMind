@@ -50,7 +50,7 @@ const Footer = () => {
 
                                 <h2 className="text-sm font-medium text-gray-900">Phone</h2>
                                 <p className="text-sm text-gray-500">Mon-Sat from 9am to 5pm.</p>
-                                <p className="text-sm text-yellow-600">+91 90567-23482</p>
+                                <p className="text-sm text-yellow-600">+91 90567-23484</p>
                             </div>
                         </div>
 
