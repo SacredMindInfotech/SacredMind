@@ -128,11 +128,11 @@ const OngoingOffers = () => {
 
     const ShimmerLoader = () => {
         return (
-            <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[60%] md:auto-cols-[45%] lg:auto-cols-[32%] gap-6 overflow-x-auto snap-x snap-mandatory pb-6 pr-4">
-                {[1, 2, 3, 4].map((item) => (
+            <div className="grid grid-flow-col auto-cols-[80%] sm:auto-cols-[55%] md:auto-cols-[40%] lg:auto-cols-[30%] gap-6 overflow-x-hidden snap-x snap-mandatory pb-6 pr-4">
+                {[1, 2, 3].map((item) => (
                     <div key={item} className="flex flex-col bg-white border-2 border-gray-200 rounded-xl overflow-hidden h-full relative">
                         {/* Image area with shimmer */}
-                        <div className="h-48 bg-gray-200 relative overflow-hidden">
+                        <div className="h-44 bg-gray-200 relative overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer" 
                                  style={{
                                      backgroundSize: '200% 100%',

@@ -77,6 +77,10 @@ const UpcomingCourses = () => {
         }
     };
 
+    if(upcomingCourses.length === 0 && loading === false && error === null){
+        return null;
+    }
+
     return (
         <div className="relative w-full h-full bg-gradient-to-r from-gray-200 via-gray-100 to-purple-100 ">
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
