@@ -4,8 +4,35 @@
 
 @import "tailwindcss";
 
+/* hide-scrollbar.css */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
 
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
 
+/* Custom scrollbar for category page - specifically for horizontal scrolling */
+.scrollbar-category::-webkit-scrollbar {
+  height: 6px; /* Height of the horizontal scroll bar */
+  width: auto;
+}
+
+.scrollbar-category::-webkit-scrollbar-track {
+  background: #f4f4f4;
+  border-radius: 10px;
+}
+
+.scrollbar-category::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.scrollbar-category::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
 
 .montserrat-300 {
   font-family: "Montserrat", sans-serif;

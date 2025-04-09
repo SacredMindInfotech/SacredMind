@@ -28,26 +28,29 @@ model User {
 }
 
 model Course {
-  id               Int           @id @default(autoincrement())
-  title            String        @unique
+  id               Int          @id @default(autoincrement())
+  title            String       @unique
   description      String
-  isActive         Boolean       @default(false)
-  showCourseNotice Boolean       @default(true)
+  isActive         Boolean      @default(false)
+  showCourseNotice Boolean      @default(true)
   price            Float
   courseNotice     String?
   imageUrl         String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  published        Boolean?      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  published        Boolean?     @default(true)
   users            UserCourse[]
   categoryId       Int
-  category         Category      @relation(fields: [categoryId], references: [id])
+  category         Category     @relation(fields: [categoryId], references: [id])
   overview         String[]
   learningOutcomes String[]
   requirements     String[]
   forwhom          String[]
-  language         String        @default("English")
+  language         String       @default("English")
   modules          Module[]
+  startDate        DateTime?
+  duration         Int          @default(0)
+  validityInDays   Int          @default(0)
 }
 
 model Module {
@@ -93,15 +96,17 @@ model Category {
   parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
   subcategories Category[] @relation("Subcategories")
   courses       Course[]
+  description   String?
 }
 
 model UserCourse {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   userId     Int
   courseId   Int
-  enrolledAt DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
-  course     Course   @relation(fields: [courseId], references: [id])
+  validUntil DateTime?
+  enrolledAt DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id])
+  course     Course    @relation(fields: [courseId], references: [id])
 
   @@unique([userId, courseId])
 }

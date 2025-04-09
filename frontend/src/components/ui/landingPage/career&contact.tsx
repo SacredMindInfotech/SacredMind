@@ -15,9 +15,9 @@ const CareerContact = (props: any) => {
 
                         {/* Left Section */}
                         <div className="flex flex-col justify-center px-4 md:px-[10%] py-16 bg-white">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">
+                            <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">
                                 Careers
-                            </h1>
+                            </div>
                             <p className="text-xl text-gray-600 mb-8 italic">
                                 Gain a heritage. Leave a legacy.
                             </p>
@@ -31,9 +31,9 @@ const CareerContact = (props: any) => {
 
                         {/* Right Section */}
                         <div className="flex flex-col justify-center px-4 md:px-[10%] py-16 bg-gray-100">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">
+                            <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 montserrat-700">
                                 Contact Us
-                            </h1>
+                            </div>
                             <p className="text-xl text-gray-600 mb-8 italic">
                                 What can we help you achieve.
                             </p>

@@ -78,14 +78,14 @@ const PopularCourses = () => {
     };
 
     return (
-        <div className=" mt-5 relative w-full h-full bg-gradient-to-r from-purple-100 via-gray-100 to-gray-200">
+        <div className=" relative w-full h-full bg-gradient-to-r from-purple-100 via-gray-100 to-gray-200">
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 mb-16">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold montserrat-700">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold montserrat-700">
                         Our most <span className="text-yellow-600">
                             Popular
                             </span> courses
-                    </h1>
+                    </h2>
                     <p className="text-xl text-gray-600 montserrat-400 lg:max-w-[50%]">
                         Join thousands of students who have already enhanced their skills with our top-rated courses. Discover why these courses are loved by our community.
                     </p>

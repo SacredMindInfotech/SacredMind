@@ -27,7 +27,7 @@ const Services = () => {
         <div className="relative w-full h-full">
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8 mb-16">
-                    <h1 className="text-4xl relative md:text-5xl lg:text-6xl font-bold montserrat-700">
+                    <div className="text-4xl relative md:text-5xl lg:text-6xl font-bold montserrat-700">
                         Our Services
                         <svg
                         className='absolute left-5 top-10 sm:top-12 lg:top-14 bottom-0 translate-y-1 w-[200px] sm:w-[300px]'
@@ -42,7 +42,7 @@ const Services = () => {
                              d="M0.949448 28.8373C347.022 4.27447 825.974 -16.0579 384.378 24.2907" stroke="#F4CC15" strokeWidth="5" />
                         </svg>
 
-                    </h1>
+                    </div>
                     <p className="text-xl text-gray-600 montserrat-400 lg:max-w-[50%]">
                         Get certified in the skills that are in most demand. We offer comprehensive training and placement support to help you succeed.
                     </p>

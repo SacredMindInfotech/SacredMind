@@ -46,7 +46,7 @@ const Partners = () => {
     return (
         <div className="w-full min-h-[500px] mt-20 py-8 sm:py-12 px-4 sm:px-6 lg:px-8" ref={ref}>
             <div className="max-w-7xl mx-auto">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl montserrat-500 font-bold mb-8 sm:mb-12 text-center">
+                <div className="text-2xl sm:text-3xl md:text-4xl montserrat-500 font-bold mb-8 sm:mb-12 text-center">
                     We collaborate with <span className="text-blue-600 relative">leading companies
                         <svg
 
@@ -62,7 +62,7 @@ const Partners = () => {
                         </svg>
 
                     </span>
-                </h2>
+                </div>
 
                 <motion.div
                     className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-8"

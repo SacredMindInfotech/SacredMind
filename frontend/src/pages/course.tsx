@@ -16,8 +16,8 @@ interface Course {
     isActive: boolean;
     showCourseNotice: boolean;
     imageUrl: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     published: boolean;
     categoryId: number;
     category: {
@@ -30,6 +30,8 @@ interface Course {
     language: string;
     modules: Module[];
     courseNotice: string | null;
+    duration: number;
+    validityInDays: number;
 }
 
 interface Module {
@@ -124,7 +126,7 @@ const Course = () => {
             enrolledClickedEvent();
 
             setShowCheckoutModal(true);
-            document.body.style.overflow="hidden";
+            document.body.style.overflow = "hidden";
         } catch (error) {
             console.log(error);
         }
@@ -150,6 +152,22 @@ const Course = () => {
                                 <span className="mr-2">🌐</span>
                                 {course.language}
                             </p>
+                            <p className="bg-white text-xs sm:text-sm m-2 sm:m-4 text-gray-800 px-4 sm:px-6 py-1 sm:py-2 rounded-full  hover:bg-gray-900 hover:text-white transition duration-200 montserrat-500">
+                                <span className="mr-2">⏰</span>
+                                Duration: {course.duration/30} months
+                            </p>
+                            <p className="bg-white text-xs sm:text-sm m-2 sm:m-4 text-gray-800 px-4 sm:px-6 py-1 sm:py-2 rounded-full  hover:bg-gray-900 hover:text-white transition duration-200 montserrat-500">
+                                <span className="mr-2">📅</span>
+                                {course.validityInDays > 0 ? (
+                                    <>
+                                        Validity: {course.validityInDays/30} months
+                                    </>
+                                ) : (
+                                    <>
+                                        Validity: Lifetime Access
+                                    </>
+                                )}
+                            </p>
                         </div>
 
                         <p className="text-base montserrat-500 text-gray-600">{course.description}</p>
@@ -172,7 +190,7 @@ const Course = () => {
                                         className="cursor-pointer px-8 sm:px-12 py-2 sm:py-3 rounded-md border border-white bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary">
                                         Enroll Now
                                     </button>
-                                ) 
+                                )
                             ) : (
                                 <button
                                     onClick={() => navigate("/contact")}
@@ -205,75 +223,82 @@ const Course = () => {
                                 <span className="text-xl sm:text-2xl montserrat-500">Course Content Preview</span>
                                 <span className="text-xl">📝</span>
                             </div>
-                            <div className="bg-gradient-to-br from-gray-300 to-white p-4 rounded-lg shadow-sm w-full">
-                                {course.modules?.map((module, moduleIndex) => (
-                                    <div key={moduleIndex} className="bg-gray-100 p-4 rounded-lg mb-4">
-                                        <div
-                                            className="flex justify-between items-center cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-200 rounded-lg p-2"
-                                            onClick={() => {
-                                                if (openedModule?.includes(moduleIndex)) {
-                                                    setOpenedModule(openedModule.filter(index => index !== moduleIndex))
-                                                } else {
-                                                    setOpenedModule([...(openedModule), moduleIndex])
-                                                }
-                                            }}
-                                        >
-                                            <h3 className="text-lg montserrat-700">
-                                                Module {moduleIndex + 1} - {module.title}
-                                            </h3>
-
-                                            <svg
-                                                className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedModule?.includes(moduleIndex) ? 'rotate-180' : ''}`}
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
+                            {course.modules.length > 0 ? (
+                                <div className="bg-gradient-to-br from-gray-300 to-white p-4 rounded-lg shadow-sm w-full">
+                                    {course.modules?.map((module, moduleIndex) => (
+                                        <div key={moduleIndex} className="bg-gray-100 p-4 rounded-lg mb-4">
+                                            <div
+                                                className="flex justify-between items-center cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-200 rounded-lg p-2"
+                                                onClick={() => {
+                                                    if (openedModule?.includes(moduleIndex)) {
+                                                        setOpenedModule(openedModule.filter(index => index !== moduleIndex))
+                                                    } else {
+                                                        setOpenedModule([...(openedModule), moduleIndex])
+                                                    }
+                                                }}
                                             >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </div>
-                                        {openedModule?.includes(moduleIndex) && (
-                                            <div className="space-y-3 pl-3">
-                                                {module.topics?.map((topic, topicIndex) => (
-                                                    <div key={`${moduleIndex}-${topicIndex}`} className="border-l-2 border-gray-500 pl-3">
-                                                        <div className="flex gap-2 items-center cursor-pointer" onClick={
-                                                            () => {
-                                                                const topicKey = `${moduleIndex}-${topicIndex}`;
-                                                                if (openedTopic?.includes(topicKey)) {
-                                                                    setOpenedTopic(openedTopic.filter(index => index !== topicKey))
-                                                                } else {
-                                                                    setOpenedTopic([...(openedTopic), topicKey])
-                                                                }
-                                                            }
-                                                        } >
-                                                            <h4 className="text-sm montserrat-500 font-medium mb-2">
-                                                                {topicIndex + 1}. {topic.title}
-                                                            </h4>
-                                                            <svg className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedTopic?.includes(`${moduleIndex}-${topicIndex}`) ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                            </svg>
-                                                        </div>
-                                                        {openedTopic?.includes(`${moduleIndex}-${topicIndex}`) && (
-                                                            <div className="flex flex-col gap-1">
-                                                                <p className="text-gray-600 text-sm mb-1">
-                                                                    {topic.description}
-                                                                </p>
-                                                                {topic.contents?.map((content, contentIndex) => (
-                                                                    <div key={contentIndex} className="p-2 max-w-xl bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
-                                                                        <div className="flex text-sm flex-col gap-1">
-                                                                            <span className="font-bold">{content.name}</span>
-                                                                            <span className="text-gray-600 text-xs">{content.type}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                <h3 className="text-lg montserrat-700">
+                                                    Module {moduleIndex + 1} - {module.title}
+                                                </h3>
+
+                                                <svg
+                                                    className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedModule?.includes(moduleIndex) ? 'rotate-180' : ''}`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                </svg>
                                             </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
+                                            {openedModule?.includes(moduleIndex) && (
+                                                <div className="space-y-3 pl-3">
+                                                    {module.topics?.map((topic, topicIndex) => (
+                                                        <div key={`${moduleIndex}-${topicIndex}`} className="border-l-2 border-gray-500 pl-3">
+                                                            <div className="flex gap-2 items-center cursor-pointer" onClick={
+                                                                () => {
+                                                                    const topicKey = `${moduleIndex}-${topicIndex}`;
+                                                                    if (openedTopic?.includes(topicKey)) {
+                                                                        setOpenedTopic(openedTopic.filter(index => index !== topicKey))
+                                                                    } else {
+                                                                        setOpenedTopic([...(openedTopic), topicKey])
+                                                                    }
+                                                                }
+                                                            } >
+                                                                <h4 className="text-sm montserrat-500 font-medium mb-2">
+                                                                    {topicIndex + 1}. {topic.title}
+                                                                </h4>
+                                                                <svg className={`w-5 h-5 transition-transform duration-300 ease-in-out ${openedTopic?.includes(`${moduleIndex}-${topicIndex}`) ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                                </svg>
+                                                            </div>
+                                                            {openedTopic?.includes(`${moduleIndex}-${topicIndex}`) && (
+                                                                <div className="flex flex-col gap-1">
+                                                                    <p className="text-gray-600 text-sm mb-1">
+                                                                        {topic.description}
+                                                                    </p>
+                                                                    {topic.contents?.map((content, contentIndex) => (
+                                                                        <div key={contentIndex} className="p-2 max-w-xl bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
+                                                                            <div className="flex text-sm flex-col gap-1">
+                                                                                <span className="font-bold">{content.name}</span>
+                                                                                <span className="text-gray-600 text-xs">{content.type}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center mt-10 text-gray-500">
+                                    Content will be updated soon
+                                </div>
+                            )}
+
                         </div>
                     </div>
 

@@ -9,7 +9,7 @@ import PopularCourses from "../components/ui/landingPage/popularCourses";
 import About from "../components/ui/landingPage/about";
 import { useNavigate } from "react-router-dom";
 import Reviews from "../components/ui/landingPage/reviews";
-
+import OngoingOffers from "../components/ui/landingPage/OngoingOffers";
 const Landing = () => {
     const navigate = useNavigate();
     const contactRef=useRef<HTMLDivElement>(null);
@@ -18,11 +18,12 @@ const Landing = () => {
     };
 
     return (
-        <div className="w-full ">
+        <div className="w-full  ">
 
-            <div className="flex flex-col  ">                
+            <div className="flex flex-col  bg-gradient-to-r from-purple-100 via-gray-100 to-gray-200  ">                
 
                 <Hero scrollToContact={scrollToContact} ></Hero>
+                <OngoingOffers/>
                 <PopularCourses/> 
                 <Partners></Partners>
                 <About></About>

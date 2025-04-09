@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" id="Teaching">
+  <rect width="40" height="38" x="4" y="6" fill="#723e97" class="color3e7197 svgShape"></rect>
+  <rect width="37" height="38" x="7" y="6" fill="#8e65ac" class="color658dac svgShape"></rect>
+  <polygon fill="#d8a1ff" points="11 27 7 27 7 9 41 9 41 27 21 27 11 27" class="colora1e1ff svgShape"></polygon>
+  <rect width="6" height="8" x="49" y="22" fill="#d0a1f2" rx="3" transform="rotate(180 52 26)" class="colorf2b9a1 svgShape"></rect>
+  <path fill="#bebdbe" d="M54,58h6a0,0,0,0,1,0,0v4a0,0,0,0,1,0,0H56a2,2,0,0,1-2-2V58A0,0,0,0,1,54,58Z" transform="rotate(180 57 60)" class="colorbdbdbe svgShape"></path>
+  <path fill="#bebdbe" d="M46,58h4a0,0,0,0,1,0,0v4a0,0,0,0,1,0,0H44a0,0,0,0,1,0,0V60A2,2,0,0,1,46,58Z" class="colorbdbdbe svgShape"></path>
+  <rect width="44" height="4" x="2" y="2" fill="#391f4c" class="color1f394c svgShape"></rect>
+  <path fill="#e2b9ff" d="M9,23.5a2,2,0,0,0,2,2H41V9H9Z" class="colorb9e8ff svgShape"></path>
+  <path d="M21,34,15,21,9,34a3,3,0,0,1,3,3H9v2h3.167L13,44h4l.833-5H21V37H18A3,3,0,0,1,21,34Z" opacity=".2" fill="#000000" class="color000000 svgShape"></path>
+  <rect width="44" height="4" x="2" y="44" fill="#391f4c" class="color1f394c svgShape"></rect>
+  <path fill="#e5e5e5" d="M13,38V37a3,3,0,0,0-3-3h0l6-13,6,13h0a3,3,0,0,0-3,3v1Z" class="colore5e5e5 svgShape"></path>
+  <path fill="#f2f2f2" d="M22,34,16,21V38h3V37A3,3,0,0,1,22,34Z" class="colorf2f2f2 svgShape"></path>
+  <rect width="2" height="12.728" x="31.5" y="22.136" fill="#e5e5e5" transform="rotate(-45 32.5 28.5)" class="colore5e5e5 svgShape"></rect>
+  <path fill="#7b1bc1" d="M58,44H46V37l-4,4-7-7,3-3,4,4,3-3H58a4,4,0,0,1,4,4v6a4,4,0,0,1-4,4h0Z" class="colorc11b24 svgShape"></path>
+  <path fill="#6f1aad" d="M58,33.272H45.414a1,1,0,0,0-.707.293l-2,2a1,1,0,0,1-1.414,0l-2.586-2.586a1,1,0,0,0-1.414,0l-1.657,1.657L42,41l4-4v7H58v2a4,4,0,0,0,4-4V37.272A4,4,0,0,0,58,33.272Z" class="colorad1a29 svgShape"></path>
+  <circle cx="16" cy="32" r="2" fill="#9d9c9e" class="color9c9d9e svgShape"></circle>
+  <polygon fill="#ac39ff" points="19 38 18 44 14 44 13 38 19 38" class="colorffc239 svgShape"></polygon>
+  <circle cx="24" cy="20" r="4" fill="#8935c6" class="colorc64635 svgShape"></circle>
+  <rect width="8" height="8" x="24" y="12" fill="#7f29bd" class="color2981bd svgShape"></rect>
+  <rect width="44" height="2" x="2" y="2" fill="#5d2784" class="color2f5571 svgShape"></rect>
+  <rect width="44" height="2" x="2" y="44" fill="#5d2784" class="color2f5571 svgShape"></rect>
+  <polygon fill="#c678ff" points="14 38 15 44 18 44 19 38 14 38" class="colorffe078 svgShape"></polygon>
+  <rect width="12" height="2" x="10" y="37" fill="#bebdbe" class="colorbdbdbe svgShape"></rect>
+  <polygon fill="#9d9c9e" points="15 31 17 31 17 23.167 16 21 15 23.167 15 31" class="color9c9d9e svgShape"></polygon>
+  <polygon fill="#e5e5e5" points="58 44 58 58 54 58 54 48 50 48 50 58 46 58 46 44 58 44" class="colore5e5e5 svgShape"></polygon>
+  <rect width="2" height="7" x="57" y="37" fill="#6f1aad" class="colorad1a29 svgShape"></rect>
+  <path fill="#e6cafb" d="M58,44v2a4,4,0,0,0,4-4H58Z" class="colorfbe1ca svgShape"></path>
+  <path fill="#9649cd" d="M49,32a3,3,0,0,0,6,0Z" class="colorcd4950 svgShape"></path>
+  <path fill="#e6cafb" d="M52,22a2.976,2.976,0,0,0-1.954.74,2.976,2.976,0,0,0-.74,1.954v2a2.986,2.986,0,0,0,4.954,2.26A2.976,2.976,0,0,0,55,27V25A3,3,0,0,0,52,22Z" class="colorfbe1ca svgShape"></path>
+  <polygon fill="#f2f2f2" points="47 44 47 58 50 58 50 48 51 48 54 48 55 48 55 58 58 58 58 44 47 44" class="colorf2f2f2 svgShape"></polygon>
+  <rect width="6" height="2" x="16" y="37" fill="#d8d7d8" class="colord7d7d8 svgShape"></rect>
+</svg>

@@ -26,6 +26,7 @@ interface Course {
   published: boolean;
   enrolledAt: string;
   isActive: boolean;
+  validityInDays: number;
 }
 
 interface UserCourse {

@@ -11,6 +11,9 @@ export const getParentCategoriesController = async (
       where: {
         parentId: null,
       },
+      orderBy: {
+        id: 'asc',
+      },
     });
     if (!categories) {
       res.status(400).json({ error: "Failed to get categories" });
@@ -38,7 +41,11 @@ export const getCategoryByIdController = async (
     const category = await prisma.category.findUnique({
       where: { name: categoryName },
       include: {
-        subcategories: true,
+        subcategories: {
+          orderBy: {
+            id: 'asc',
+          },
+        },
       },
     });
     if (!category) {

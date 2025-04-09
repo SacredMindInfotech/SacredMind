@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { holiOfferBannerClickedEvent } from "../../lib/pixel-event";
-// import AddPhoneNumberModal from "./AddPhoneNumberModal";
+import MobileSidebar from "./MobileSidebar";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -15,20 +15,19 @@ const Navbar = () => {
 
     const [showSignIn, setShowSignIn] = useState(false);
     const [search, setSearch] = useSearchParams();
+    //@ts-ignore
     const [visible, setVisible] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
     const [categories, setCategories] = useState<any[]>([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isExploreOpen, setIsExploreOpen] = useState(false);
-    const [isMobileExploreOpen, setIsMobileExploreOpen] = useState(false);
-    // const [showPhoneNumberModal,setShowPhoneNumberModal]=useState(false);
+    // const [subcategories, setSubcategories] = useState<any[]>([]);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const fetchAdminStatus = async () => {
-            if (!isLoaded || !user?.id) return; 
+            if (!isLoaded || !user?.id) return;
             try {
                 const token = await getToken();
                 const response = (await axios.get(`${backendUrl}api/v1/user/${user.id}`, {
@@ -36,15 +35,9 @@ const Navbar = () => {
                         Authorization: `Bearer ${token}`
                     }
                 }));
-                console.log(response.data);
-                // console.log(response);
                 //@ts-ignore
                 setIsAdmin(response.data.role === "ADMIN");
-                //@ts-ignore
-                // if(!response.data.phoneNumber){
-                //     setShowPhoneNumberModal(true);
-                //     document.body.style.overflow="hidden";
-                // }
+
             } catch (error) {
                 console.error("Error fetching admin status:", error);
             }
@@ -63,26 +56,6 @@ const Navbar = () => {
     }, []);
 
     useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > lastScrollY) {
-                // Scrolling down
-                setVisible(false);
-            } else {
-                // Scrolling up
-                setVisible(true);
-            }
-
-            setLastScrollY(currentScrollY);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-
-    }, [lastScrollY]);
-
-    useEffect(() => {
         if (search.get("sign-in")) {
             setShowSignIn(true);
             document.body.style.overflow = "hidden";
@@ -95,10 +68,16 @@ const Navbar = () => {
                 setIsExploreOpen(false);
             }
         };
+        const handleScroll = () => {
+            setIsExploreOpen(false);
+        };
 
         document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("scroll", handleScroll);
+
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("scroll", handleScroll);
         };
     }, [exploreRef]);
 
@@ -110,16 +89,34 @@ const Navbar = () => {
         }
     }
 
+    // const fetchSubcategories = async (categoryName: string) => {
+    //     try {
+    //         const res = await axios.get(`${backendUrl}api/v1/category/${categoryName}`);
+    //         //@ts-ignore
+    //         setSubcategories(res.data.subcategories || []);
+    //     } catch (error) {
+    //         console.error("Failed to fetch subcategories", error);
+    //     }
+    // };
+
+    // const handleCategoryClick = (categoryName: string) => {
+    //     fetchSubcategories(categoryName);
+    // };
+
+    // const handleBack = () => {
+    //     setSubcategories([]);
+    // };
+
     return (
         <div className="w-full flex flex-col">
 
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
                 navigate("/course/20")
-            }} 
-            className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-2 cursor-pointer">
-                <div className="flex flex-col justify-center items-center">
-                    <p className="montserrat-700 text-sm  animate-pulse">🎉 Special Vaisakhi Offer is Live!</p>
+            }}
+                className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-2 cursor-pointer">
+                <div className="flex flex-col lg:flex-row justify-center items-center">
+                    <p className="montserrat-500 text-sm  animate-pulse">🎉 Special Vaisakhi Offer is Live!</p>
                     <p className="montserrat-400 text-sm text-white ml-4">HR Payroll Mastercourse worth ₹20,000 at just ₹999 + GST. Offer valid till 13th April.</p>
                 </div>
             </div>
@@ -132,15 +129,15 @@ const Navbar = () => {
                 }}
                 exit={{ y: -100, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="flex justify-between items-center min-h-[8vh] px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-2 border-b border-gray-100 bg-white text-gray-900 sticky top-0 z-40 shadow-md"
+                className="flex justify-between items-center min-h-[8vh] px-2 md:px-[3%] lg:px-[5%] xl:px-[8%] py-2 border-b border-gray-100 bg-white text-gray-900  top-0 z-40 shadow-md sticky"
             >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
                     {/* Hamburger Menu for Mobile */}
                     <button
-                        className="md:hidden text-gray-600 p-2"
+                        className="lg:hidden mr-3 text-gray-600 p-1"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             {isMenuOpen ? (
                                 <path d="M18 6L6 18M6 6l12 12" />
                             ) : (
@@ -149,126 +146,66 @@ const Navbar = () => {
                         </svg>
                     </button>
 
-                    <div className="flex items-center gap-8">
-                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-                            <img src="/logo.svg" alt="logo" className="w-8 h-8 md:w-10 md:h-10" />
-                            <span className="montserrat-700 font-bold text-sm md:text-base lg:text-lg hover:text-gray-600 transition-colors">SACRED MIND</span>
+                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1 cursor-pointer" onClick={() => navigate("/")}>
+                            <img src="/logo.svg" alt="logo" className="w-7 h-7 md:w-8 md:h-8" />
+                            <span className="montserrat-700 font-bold text-sm md:text-base hover:text-gray-600 transition-colors">SACRED MIND</span>
                         </div>
 
                         {/* Desktop Explore Menu */}
-                        <div className="hidden md:block relative" ref={exploreRef}>
+                        <div className="hidden lg:block relative" ref={exploreRef}>
                             {categories.length > 0 && (
                                 <button
+                                    onMouseEnter={() => setIsExploreOpen(true)}
+                                    onMouseLeave={() => setIsExploreOpen(false)}
                                     onClick={() => setIsExploreOpen(!isExploreOpen)}
-                                    className="text-sm lg:text-base text-gray-900 font-semibold transition-colors flex items-center gap-2 hover:border-gray-200 hover:bg-gray-50 hover:rounded-sm px-4 py-1.5 cursor-pointer"
+                                    className="text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
                                 >
-                                    Explore Courses
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className={`transition-transform ${isExploreOpen ? 'rotate-180' : ''}`}
-                                    >
-                                        <path d="m6 9 6 6 6-6" />
-                                    </svg>
+                                    <p className="montserrat-500">Explore Courses</p>
                                 </button>
                             )}
 
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={isExploreOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-                                transition={{ duration: 0.3 }}
-                                className={`absolute left-0 mt-2 w-56 rounded-md shadow-2xl shadow-gray-300 bg-white ring-1 ring-black ring-opacity-5 transition-all ${isExploreOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}
-                            >
-                                <div className="py-2" role="menu">
-                                    {categories?.map((category) => (
-                                        <button
+                            {isExploreOpen && (
+                                <div
+                                    onMouseEnter={() => setIsExploreOpen(true)}
+                                    onMouseLeave={() => setIsExploreOpen(false)}
+                                    className="absolute top-full left-0  bg-white min-w-60  shadow-md rounded-md">
+                                    {categories.map((category) => (
+                                        <div
+                                            onClick={() => {
+                                                setIsExploreOpen(false);
+                                                navigate(`/category/${category.name}`);
+                                            }}
                                             key={category.id}
-                                            onClick={() => window.location.href = `/category/${category.name}`}
-                                            className="w-full text-left px-6 py-3 text-sm lg:text-base text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer"
-                                            role="menuitem"
+                                            className="relative group px-4 py-2 montserrat-500 text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 cursor-pointer rounded-md flex justify-between"
                                         >
-                                            <p className="montserrat-500">{category.name}</p>
+                                            <p className="w-full text-gray-900 cursor-pointer">{category.name}</p>
                                             <span className="text-gray-600">&#8594;</span>
-                                        </button>
+                                        </div>
+
                                     ))}
                                 </div>
-                            </motion.div>
+                            )}
+
+
                         </div>
 
+                        <div className="hidden md:block">
+                            <button
+                                onClick={() => navigate('/teach-with-us')}
+                                className="text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                                role="menuitem"
+                            >
+                                <p className="montserrat-500">Teach With Us</p>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
-                {isMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="absolute top-full left-0 right-0 bg-white border-b border-gray-100 md:hidden"
-                    >
-                        <div className="flex flex-col py-4">
-                            <div className="px-4 py-2">
-                                <div className="relative group">
-                                    <button 
-                                        className="text-gray-900 font-semibold w-full text-left"
-                                        onClick={() => setIsMobileExploreOpen(!isMobileExploreOpen)}
-                                    >
-                                        Explore Courses
-                                    </button>
-                                    {isMobileExploreOpen && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: "auto", opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="pl-4 mt-2 max-h-[40vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
-                                        >
-                                            {categories?.map((category) => (
-                                                <button
-                                                    key={category.id}
-                                                    onClick={() => {
-                                                        setIsMenuOpen(false);
-                                                        window.location.href = `/category/${category.name}`;
-                                                    }}
-                                                    className="block w-full py-2 text-left text-gray-600 hover:bg-gray-50"
-                                                >
-                                                    {category.name}
-                                                </button>
-                                            ))}
-                                        </motion.div>
-                                    )}
-                                </div>
-                            </div>
-                            <div>
-                                <button
-                                    onClick={() => {
-                                        setIsMenuOpen(false);
-                                        navigate("/purchases");
-                                    }}
-                                    className="px-4 py-2 text-gray-900 font-semibold hover:bg-gray-50 w-full text-left"
-                                >
-                                    My Purchases
-                                </button>
-                            </div>
 
-                            {isAdmin && (
-                                <button
-                                    onClick={() => navigate("/admin")}
-                                    className="px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
-                                >
-                                    Dashboard
-                                </button>
-                            )}
-                        </div>
-                    </motion.div>
+
+                {isMenuOpen && (
+                    <MobileSidebar categories={categories} setIsMenuOpen={setIsMenuOpen} />
                 )}
 
                 {/* Desktop Navigation */}
@@ -283,20 +220,26 @@ const Navbar = () => {
                         </button>
                     </SignedOut>
                     <SignedIn>
-                        {isAdmin && (
+                        {isAdmin && <div className="hidden md:block">
                             <button
-                                onClick={() => navigate("/admin")}
-                                className="hidden sm:block px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                                onClick={() => navigate('/admin')}
+                                className="text-left px-4 py-2 text-sm bg-gray-200 text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                                role="menuitem"
                             >
-                                Dashboard
+                                <p className="montserrat-500">Dashboard</p>
                             </button>
-                        )}
-                        <button
-                            onClick={() => navigate("/purchases")}
-                            className="hidden sm:block px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
-                        >
-                            My Purchases
-                        </button>
+                        </div>}
+
+
+                        <div className="hidden md:block">
+                            <button
+                                onClick={() => navigate('/purchases')}
+                                className="text-left px-4 py-2 text-sm bg-gray-200 text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                                role="menuitem"
+                            >
+                                <p className="montserrat-500">My Purchases</p>
+                            </button>
+                        </div>
                         <UserButton
                             appearance={{
                                 elements: { avatarBox: "w-8 h-8" }, layout: {
@@ -309,14 +252,10 @@ const Navbar = () => {
 
                 {showSignIn && (
                     <div onClick={handleOverlayClick} className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600/60 backdrop-blur-lg">
-                        <SignIn fallbackRedirectUrl={currentPath}   signUpFallbackRedirectUrl={currentPath} />
+                        <SignIn fallbackRedirectUrl={currentPath} signUpFallbackRedirectUrl={currentPath} />
                     </div>
                 )}
-                {/* {showPhoneNumberModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/5 backdrop-blur-lg" >
-                        <AddPhoneNumberModal setShowPhoneNumberModal={setShowPhoneNumberModal} id={user!.id} />
-                    </div>
-                )} */}
+
             </motion.div>
 
         </div>
