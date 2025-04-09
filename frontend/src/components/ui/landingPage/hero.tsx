@@ -34,10 +34,10 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
                     className="flex flex-col gap-5 items-start text-left w-full lg:w-1/2"
                     variants={itemVariants}
                 >
-                    <h1 className="montserrat-700 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black">Beyond
+                    <div className="montserrat-700 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black">Beyond
                         <span className="montserrat-400 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">Limits,</span> Beyond 
                         <span className="montserrat-400 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">Learning</span>
-                    </h1>
+                    </div>
                     <p className="text-xl md:text-4xl montserrat-400 mt-3 text-gray-700">
                         A platform that helps you grow in your career
                     </p>
@@ -74,9 +74,10 @@ const Hero = ({ scrollToContact }: { scrollToContact: () => void }) => {
 
                 <div className="hidden lg:flex lg:w-1/2 justify-center">
                     <img
-                        src="/hero.svg"
+                        src="/hero1.svg"
                         alt="Learning Illustration"
                         className="w-full max-w-lg h-[400px]"
+                        loading="eager"
                     />
                 </div>
             </motion.div>

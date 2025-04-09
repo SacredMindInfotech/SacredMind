@@ -22,6 +22,12 @@ const About = () => {
         }
     ];
 
+    const getOptimizedImage = (url: string, width: number) => {
+        const separator = url.includes("?") ? "&" : "?";
+        return `${url}${separator}w=${width}&auto=format&fit=crop`;
+      };
+      
+
     return (
         <div className="relative w-full h-full" >
             <div className="mx-auto px-4 md:px-[5%] lg:px-[10%] xl:px-[15%] py-16">
@@ -55,10 +61,18 @@ const About = () => {
                         {aboutItems.map((item, index) => (
                             <div key={index} className="group relative overflow-hidden rounded-lg aspect-square snap-start">
                                 <img
-                                    src={item.imgUrl}
-                                    alt={item.name}
-                                    className="w-full h-full object-cover brightness-50 group-hover:scale-110 transition-transform duration-500"
-                                />
+  src={getOptimizedImage(item.imgUrl, 480)}
+  srcSet={`
+    ${getOptimizedImage(item.imgUrl, 320)} 320w,
+    ${getOptimizedImage(item.imgUrl, 480)} 480w,
+    ${getOptimizedImage(item.imgUrl, 768)} 768w,
+    ${getOptimizedImage(item.imgUrl, 1024)} 1024w
+  `}
+  sizes="(max-width: 640px) 70vw, (max-width: 1024px) 30vw, 25vw"
+  alt={item.name}
+  className="w-full h-full object-cover brightness-50 group-hover:scale-110 transition-transform duration-500"
+/>
+
                                 <div className="absolute bottom-0 left-0 p-4 w-full">
                                     <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white montserrat-500">
                                         {item.name}

@@ -187,7 +187,7 @@ const OngoingOffers = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                        Don't miss out on these limited-time discounts on our most popular courses. Upgrade your skills at unbeatable prices.
+                        Don't miss out on these. Upgrade at unbeatable prices.
                     </motion.p>
                 </div>
 

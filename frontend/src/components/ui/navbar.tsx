@@ -109,15 +109,14 @@ const Navbar = () => {
 
     return (
         <div className="w-full flex flex-col">
-
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
                 navigate("/course/20")
             }}
-                className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-2 cursor-pointer">
+                className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-1 sm:py-1.5 md:py-2 cursor-pointer">
                 <div className="flex flex-col lg:flex-row justify-center items-center">
-                    <p className="montserrat-500 text-sm  animate-pulse">🎉 Special Vaisakhi Offer is Live!</p>
-                    <p className="montserrat-400 text-sm text-white ml-4">HR Payroll Mastercourse worth ₹20,000 at just ₹999 + GST. Offer valid till 13th April.</p>
+                    <p className="montserrat-500 text-xs sm:text-sm animate-pulse">🎉 Special Vaisakhi Offer is Live!</p>
+                    <p className="montserrat-400 text-xs sm:text-sm text-white ml-2 md:ml-4">HR Payroll Mastercourse worth ₹20,000 at just ₹999 + GST. Offer valid till 13th April.</p>
                 </div>
             </div>
 
@@ -129,15 +128,15 @@ const Navbar = () => {
                 }}
                 exit={{ y: -100, opacity: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="flex justify-between items-center min-h-[8vh] px-2 md:px-[3%] lg:px-[5%] xl:px-[8%] py-2 border-b border-gray-100 bg-white text-gray-900  top-0 z-40 shadow-md sticky"
+                className="flex justify-between items-center h-14 sm:h-16 md:h-[4.5rem] px-2 sm:px-4 md:px-[3%] lg:px-[5%] xl:px-[8%] py-1 sm:py-1.5 md:py-2 border-b border-gray-100 bg-white text-gray-900 top-0 z-40 shadow-md sticky"
             >
                 <div className="flex items-center gap-2">
                     {/* Hamburger Menu for Mobile */}
                     <button
-                        className="lg:hidden mr-3 text-gray-600 p-1"
+                        className="lg:hidden mr-1 sm:mr-2 md:mr-3 text-gray-600 p-1"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             {isMenuOpen ? (
                                 <path d="M18 6L6 18M6 6l12 12" />
                             ) : (
@@ -146,10 +145,10 @@ const Navbar = () => {
                         </svg>
                     </button>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                         <div className="flex items-center gap-1 cursor-pointer" onClick={() => navigate("/")}>
-                            <img src="/logo.svg" alt="logo" className="w-7 h-7 md:w-8 md:h-8" />
-                            <span className="montserrat-700 font-bold text-sm md:text-base hover:text-gray-600 transition-colors">SACRED MIND</span>
+                            <img src="/logo.svg" alt="logo" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
+                            <span className="montserrat-700 font-bold text-xs sm:text-sm md:text-base hover:text-gray-600 transition-colors">SACRED MIND</span>
                         </div>
 
                         {/* Desktop Explore Menu */}
@@ -159,7 +158,7 @@ const Navbar = () => {
                                     onMouseEnter={() => setIsExploreOpen(true)}
                                     onMouseLeave={() => setIsExploreOpen(false)}
                                     onClick={() => setIsExploreOpen(!isExploreOpen)}
-                                    className="text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                                    className="text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
                                 >
                                     <p className="montserrat-500">Explore Courses</p>
                                 </button>
@@ -182,18 +181,15 @@ const Navbar = () => {
                                             <p className="w-full text-gray-900 cursor-pointer">{category.name}</p>
                                             <span className="text-gray-600">&#8594;</span>
                                         </div>
-
                                     ))}
                                 </div>
                             )}
-
-
                         </div>
 
                         <div className="hidden md:block">
                             <button
                                 onClick={() => navigate('/teach-with-us')}
-                                className="text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                                className="text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
                                 role="menuitem"
                             >
                                 <p className="montserrat-500">Teach With Us</p>
@@ -202,19 +198,16 @@ const Navbar = () => {
                     </div>
                 </div>
 
-
-
                 {isMenuOpen && (
                     <MobileSidebar categories={categories} setIsMenuOpen={setIsMenuOpen} />
                 )}
 
                 {/* Desktop Navigation */}
-                <div className="flex justify-end items-center gap-8">
-
+                <div className="flex justify-end items-center gap-3 sm:gap-5 md:gap-8">
                     <SignedOut>
                         <button
                             onClick={() => navigate("?sign-in=true")}
-                            className=" px-4 md:px-6 lg:px-8 text-sm py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
+                            className="px-3 sm:px-4 md:px-6 lg:px-8 text-xs sm:text-sm py-1.5 sm:py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                         >
                             Join
                         </button>
@@ -223,18 +216,17 @@ const Navbar = () => {
                         {isAdmin && <div className="hidden md:block">
                             <button
                                 onClick={() => navigate('/admin')}
-                                className="text-left px-4 py-2 text-sm bg-gray-200 text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                                className="text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-200 text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
                                 role="menuitem"
                             >
                                 <p className="montserrat-500">Dashboard</p>
                             </button>
                         </div>}
 
-
                         <div className="hidden md:block">
                             <button
                                 onClick={() => navigate('/purchases')}
-                                className="text-left px-4 py-2 text-sm bg-gray-200 text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                                className="text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-gray-200 text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
                                 role="menuitem"
                             >
                                 <p className="montserrat-500">My Purchases</p>
@@ -242,7 +234,7 @@ const Navbar = () => {
                         </div>
                         <UserButton
                             appearance={{
-                                elements: { avatarBox: "w-8 h-8" }, layout: {
+                                elements: { avatarBox: "w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" }, layout: {
                                     termsPageUrl: 'https://clerk.com/terms'
                                 }
                             }}
@@ -255,11 +247,8 @@ const Navbar = () => {
                         <SignIn fallbackRedirectUrl={currentPath} signUpFallbackRedirectUrl={currentPath} />
                     </div>
                 )}
-
             </motion.div>
-
         </div>
-
     );
 };
 
