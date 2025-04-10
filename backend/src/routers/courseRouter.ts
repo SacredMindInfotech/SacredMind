@@ -1,5 +1,6 @@
 import express from "express";
-import { getAllCoursesController, getCourseByIdController, getCoursesByStringOfCategoryIdsController, getCoursesDiscountsByStringOfCourseIdsController, getDiscountPriceByCourseIdController, getDiscountTokenByCourseIdController, getModulesByCourseIdController, getPopularCoursesController } from "../controllers/course/courseController";
+import { getCourseByIdController } from "../controllers/course/courseController";
+import { getAllCoursesController, getCourseByTitleController, getCoursesByStringOfCategoryIdsController, getCoursesDiscountsByStringOfCourseIdsController,  getDiscountTokenByCourseIdController, getModulesByCourseIdController, getPopularCoursesController } from "../controllers/course/courseController";
 
 const courseRouter = express.Router();
 
@@ -8,26 +9,30 @@ const courseRouter = express.Router();
 // api/v1/course/
 courseRouter.get("/", getAllCoursesController);
 
-//route to get popular courses  - by number of users enrolled
+//route to get popular courses  - by number of users enrolled in the course
 // api/v1/course/popular
 courseRouter.get("/popular", getPopularCoursesController);
 
+//route to get multiple courses by their category ids
+// api/v1/course/byCategories
 courseRouter.get("/byCategories",getCoursesByStringOfCategoryIdsController);
 
+//route to get multiple courses's discounted prices by their course ids - this returns map of course id and discounted price
+// api/v1/course/batchDiscounts
 courseRouter.get("/batchDiscounts",getCoursesDiscountsByStringOfCourseIdsController);
 
-//route to get course by courseID of the course
+//route to get course by its id
 // api/v1/course/:courseId
-courseRouter.get("/:courseId", getCourseByIdController);
+courseRouter.get("/id/:courseId", getCourseByIdController);
+
+//route to get course by course's title 
+// api/v1/course/:courseTitle
+courseRouter.get("/title/:courseTitle", getCourseByTitleController);
 
 
-// Get all modules for a course
+// Get all modules for a course by course's id
 // api/v1/course/:courseId/modules
 courseRouter.get("/:courseId/modules", getModulesByCourseIdController);
-
-// get if any discount is applied on the course
-// api/v1/course/:courseId/discount
-courseRouter.get("/:courseId/discountAmount", getDiscountPriceByCourseIdController);
 
 //get discount token by course id if any
 // api/v1/course/:courseId/discountToken

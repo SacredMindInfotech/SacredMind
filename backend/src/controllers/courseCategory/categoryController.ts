@@ -32,14 +32,15 @@ export const getParentCategoriesController = async (
 };
 
 //this will return all categories including subcategories
-export const getCategoryByIdController = async (
+export const getCategoryByNameController = async (
   req: Request,
   res: Response
 ) => {
   try {
     const { categoryName } = req.params;
+    const upperCaseCategoryName = categoryName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     const category = await prisma.category.findUnique({
-      where: { name: categoryName },
+      where: { name: upperCaseCategoryName },
       include: {
         subcategories: {
           orderBy: {

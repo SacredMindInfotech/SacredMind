@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LoadingScreen } from "./loadingScreen";
 import { enrolledSuccessEvent } from "../../lib/pixel-event";
-
+import { motion } from "framer-motion";
 
 interface DiscountToken {
     id: number;
@@ -16,15 +16,28 @@ interface DiscountToken {
     token: string;
 }
 
-
-const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheckoutModal, setPaymentSuccess }: { id: string, price: number, clerkUserId: string, courseName: string, setShowCheckoutModal: (value: boolean) => void, setPaymentSuccess: (value: boolean) => void }) => {
+const PaymentCheckOutModal = ({ 
+    id, 
+    price, 
+    clerkUserId, 
+    courseName, 
+    setShowCheckoutModal, 
+    setPaymentSuccess 
+}: { 
+    id: number, 
+    price: number, 
+    clerkUserId: string, 
+    courseName: string, 
+    setShowCheckoutModal: (value: boolean) => void, 
+    setPaymentSuccess: (value: boolean) => void 
+}) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const navigate = useNavigate();
     const { getToken } = useAuth();
     const { isSignedIn } = useUser();
 
     const [discountedPrice, setDiscountedPrice] = useState<number>(price);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const [discountToken, setDiscountToken] = useState<string | null>(null);
     const [formData, setFormData] = useState({
         name: '',
@@ -39,7 +52,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
         });
     };
 
-    //razorpay script
+    // Razorpay script
     const loadScript = (src: string) => {
         return new Promise((resolve) => {
             const script = document.createElement('script');
@@ -60,38 +73,46 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
             try {
                 setLoading(true);
                 const isTokenPresent = await axios.get(`${backendUrl}api/v1/course/${id}/discountToken`);
+                
+                // Set default discounted price first to prevent late updates
+                setDiscountedPrice(price);
+                
                 //@ts-ignore
-                if (!isTokenPresent.data.token) return;
+                if (!isTokenPresent.data.token) {
+                    setLoading(false);
+                    return;
+                }
+                
                 //@ts-ignore
-                const discountToken = isTokenPresent.data.token;
-                setDiscountToken(discountToken);
+                const token = isTokenPresent.data.token;
+                setDiscountToken(token);
 
-                //we get discount token data from backend, if its valid and not expired
-                const res = await axios.get(`${backendUrl}api/v1/discountToken/${discountToken}`);
+                // We get discount token data from backend, if it's valid and not expired
+                const res = await axios.get(`${backendUrl}api/v1/discountToken/${token}`);
                 const discountTokenData = res.data as DiscountToken;
 
                 if (res.status === 200) {
-                    let discountPrice = price;
                     if (discountTokenData.courseIds.includes(Number(id)) &&
                         new Date(discountTokenData.expiresAt) > new Date() &&
                         discountTokenData.isActive) {
-                        discountPrice = Math.round((1 - discountTokenData.discountPercentage / 100) * price)
+                        const calculatedPrice = Math.round((1 - discountTokenData.discountPercentage / 100) * price);
+                        setDiscountedPrice(calculatedPrice);
                     }
-                    setDiscountedPrice(discountPrice);
                 }
             } catch (error) {
                 console.error("Error validating discount token:", error);
+            } finally {
+                setLoading(false);
             }
         }
+        
         validateDiscountToken();
-        setLoading(false);
-    }, [id, price, backendUrl])
+    }, [id, price, backendUrl]);
 
     function closeModal() {
         setShowCheckoutModal(false);
         document.body.style.overflow = "visible";
     }
-
 
     const coursePayment = async () => {
         try {
@@ -119,11 +140,9 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                 currency: orderDetails.currency,
                 name: "SacredMind Infotech",
                 handler: async (response: any) => {
-
                     const razorpay_order_id = response.razorpay_order_id;
                     const razorpay_payment_id = response.razorpay_payment_id;
                     const razorpay_signature = response.razorpay_signature;
-
 
                     const res = await axios.post(`${backendUrl}api/v1/verifyPayment/`, {
                         razorpay_order_id,
@@ -136,7 +155,8 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                         name: formData.name,
                         email: formData.email,
                         phone: formData.phone   
-                    })
+                    });
+                    
                     if (res.status === 200) {
                         setPaymentSuccess(true);
                         enrolledSuccessEvent();
@@ -144,15 +164,13 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                         localStorage.removeItem(`pendingPayment_${id}`);
                         localStorage.removeItem(`${courseName}`);
                         window.location.reload();
-                    }
-                    else {
+                    } else {
                         alert("Payment Failed");
                     }
                 }
-            })
+            });
 
             paymentObject.open();
-
         } catch (error) {
             console.log(error);
             localStorage.removeItem(`pendingPayment_${id}`);
@@ -165,93 +183,122 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
         coursePayment();
     }
 
-    if (loading) return <LoadingScreen />
+    // Calculate the total amount including tax
+    const totalAmount = discountedPrice + (discountedPrice * 0.18);
+    const discount = price - discountedPrice;
+
+    if (loading) return <LoadingScreen />;
 
     return (
-        <div className="fixed inset-0 overflow-y-auto bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-gradient-to-r from-gray-100 via-gray-400 to-yellow-200
-                w-full max-w-6xl mx-auto rounded-md shadow-lg relative
-                max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100
-                p-4 sm:p-6 md:p-8">
-                
-                {/* <button
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 overflow-y-auto bg-gray-600/60 backdrop-blur-lg flex items-center justify-center p-4 z-50"
+        >
+            <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.4 }}
+                className={`bg-white mx-auto rounded-xl shadow-xl relative
+                max-h-[90vh] overflow-y-auto
+                p-4 sm:p-6 md:p-8 border-2 border-gray-200 ${isSignedIn ? 'w-full max-w-md' : 'w-full max-w-6xl'}`}
+            >
+                <button
                     onClick={closeModal}
-                    className="sticky top-4 float-right text-gray-500 hover:text-gray-800 transition-colors z-10"
+                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors z-10"
                     aria-label="Close modal"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                </button> */}
+                </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    {/* Left Side - Payment Details */}
-                    <div className="flex flex-col min-w-[280px]">
-                        <div className="mt-4 sm:mt-6 ml-2 sm:ml-4 flex items-center gap-2 sm:gap-3">
-                            <img src="/logo.svg" alt="logo" className="w-6 h-6 sm:w-8 sm:h-8" />
-                            <div className="text-xs sm:text-sm montserrat-500 font-bold">SacredMind Infotech</div>
+                <div className={isSignedIn ? "" : "grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"}>
+                    {/* Payment Details - Always shown */}
+                    <motion.div 
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.2, duration: 0.4 }}
+                        className="flex flex-col"
+                    >
+                        <div className="mb-6 flex items-center gap-3">
+                            <img src="/logo.svg" alt="logo" className="w-8 h-8" />
+                            <div className="text-sm montserrat-700 font-bold">SacredMind Infotech</div>
                         </div>
 
-                        <div className="flex flex-col">
-                            <div className="text-xs p-3 sm:p-6 font-serif montserrat-secondary">
-                                Payment for <br />
-                                <span className="font-bold text-base sm:text-lg md:text-xl break-words">
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 montserrat-700">Payment Details</h2>
+
+                        <div className="bg-gradient-to-br from-purple-100 to-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                            <div className="flex flex-col">
+                                <h3 className="text-lg font-semibold montserrat-600 mb-2">Course:</h3>
+                                <p className="text-gray-800 montserrat-500 mb-4 text-base sm:text-lg break-words">
                                     {courseName}
-                                </span>
-                            </div>
-
-                            <div className="p-3 sm:p-6 bg-gray-50 rounded-lg mx-2">
-                                <div className="flex flex-col gap-2 sm:gap-3 text-sm">
-                                    {/* Price details - made more compact on mobile */}
-                                    <div className="flex justify-between text-gray-700">
-                                        <div className="font-bold">Original Price</div>
-                                        <div>₹{price}</div>
+                                </p>
+                                
+                                <div className="space-y-3 divide-y divide-gray-200">
+                                    <div className="flex justify-between text-gray-700 py-2">
+                                        <div className="font-medium">Original Price</div>
+                                        <div className="font-bold">₹{price.toFixed(2)}</div>
                                     </div>
-                                    <div className="flex justify-between text-green-600">
-                                        <div className="font-bold">Discount</div>
-                                        <div>-₹{price - discountedPrice}</div>
+                                    
+                                    <div className="flex justify-between text-green-600 py-2">
+                                        <div className="font-medium">Discount</div>
+                                        <div className="font-bold">-₹{discount.toFixed(2)}</div>
                                     </div>
-                                    <div className="flex justify-between text-gray-700">
-                                        <div className="font-bold">After Discount</div>
-                                        <div>₹{discountedPrice}</div>
+                                    
+                                    <div className="flex justify-between text-gray-700 py-2">
+                                        <div className="font-medium">After Discount</div>
+                                        <div className="font-bold">₹{discountedPrice.toFixed(2)}</div>
                                     </div>
-                                    <div className="flex justify-between text-gray-700">
-                                        <div className="font-bold">GST</div>
-                                        <div>₹{(discountedPrice * 0.18).toFixed(2)}</div>
+                                    
+                                    <div className="flex justify-between text-gray-700 py-2">
+                                        <div className="font-medium">GST (18%)</div>
+                                        <div className="font-bold">₹{(discountedPrice * 0.18).toFixed(2)}</div>
                                     </div>
-                                    <hr className="my-2 sm:my-3 border-gray-300" />
-                                    <div className="flex justify-between font-bold text-sm sm:text-base">
-                                        <div>Total</div>
-                                        <div>₹{(discountedPrice + (discountedPrice * 0.18))}</div>
+                                    
+                                    <div className="flex justify-between py-3 font-bold text-lg">
+                                        <div>Total Amount</div>
+                                        <div className="text-violet-700">₹{totalAmount.toFixed(2)}</div>
                                     </div>
                                 </div>
                             </div>
-
-                            {isSignedIn && (
-                                <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 sm:gap-3 px-2">
-                                    <button
-                                        onClick={closeModal}
-                                        className="w-full sm:w-auto px-3 py-2 text-sm rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition duration-200 montserrat-secondary"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        onClick={coursePayment}
-                                        className="w-full sm:w-auto px-4 py-2 text-sm rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary font-bold"
-                                    >
-                                        Pay ₹{(discountedPrice + (discountedPrice * 0.18))}
-                                    </button>
-                                </div>
-                            )}
                         </div>
-                    </div>
 
-                    {/* Right Side - User Details Form */}
+                        {isSignedIn && (
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <motion.button
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={closeModal}
+                                    className="w-full sm:w-auto px-5 py-3 text-sm font-medium rounded-md border-2 border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 montserrat-500"
+                                >
+                                    Cancel
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.03, boxShadow: "4px 4px 0px 0px rgba(0,0,0)" }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={coursePayment}
+                                    className="w-full sm:w-auto px-5 py-3 text-sm font-bold rounded-md border-2 border-gray-900 bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
+                                >
+                                    Pay ₹{totalAmount.toFixed(2)}
+                                </motion.button>
+                            </div>
+                        )}
+                    </motion.div>
+
+                    {/* User Details Form - Only shown if not signed in */}
                     {!isSignedIn && (
-                        <div className="flex flex-col justify-center p-3 sm:p-6">
-                            <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
-                                <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 montserrat-700">Contact Information</h3>
-                                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+                        <motion.div 
+                            initial={{ x: 20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.3, duration: 0.4 }}
+                            className="flex flex-col"
+                        >
+                            <h2 className="text-xl sm:text-2xl font-bold mb-6 montserrat-700">Contact Information</h2>
+                            
+                            <div className="bg-gradient-to-br from-purple-100 to-white p-6 rounded-xl shadow-sm border border-gray-200">
+                                <form onSubmit={handleSubmit} className="space-y-4">
                                     <div>
                                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1 montserrat-500">
                                             Full Name *
@@ -263,7 +310,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                                             value={formData.name}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 focus:border-transparent montserrat-400"
+                                            className="w-full px-4 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent montserrat-400"
                                             placeholder="Enter your full name"
                                         />
                                     </div>
@@ -278,7 +325,7 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 focus:border-transparent montserrat-400"
+                                            className="w-full px-4 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent montserrat-400"
                                             placeholder="Enter your email"
                                         />
                                     </div>
@@ -293,32 +340,36 @@ const PaymentCheckOutModal = ({ id, price, clerkUserId, courseName, setShowCheck
                                             value={formData.phone}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-400 focus:border-transparent montserrat-400"
+                                            className="w-full px-4 py-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent montserrat-400"
                                             placeholder="Enter your phone number"
                                         />
                                     </div>
-                                    <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 sm:gap-3">
-                                        <button
+                                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                                        <motion.button
+                                            whileHover={{ scale: 1.03 }}
+                                            whileTap={{ scale: 0.98 }}
                                             type="button"
                                             onClick={closeModal}
-                                            className="w-full sm:w-auto px-3 py-2 text-sm rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition duration-200 montserrat-secondary"
+                                            className="w-full sm:w-auto px-5 py-3 text-sm font-medium rounded-md border-2 border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 montserrat-500"
                                         >
                                             Cancel
-                                        </button>
-                                        <button
+                                        </motion.button>
+                                        <motion.button
+                                            whileHover={{ scale: 1.03, boxShadow: "4px 4px 0px 0px rgba(0,0,0)" }}
+                                            whileTap={{ scale: 0.98 }}
                                             type="submit"
-                                            className="w-full sm:w-auto px-4 py-2 text-sm rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary font-bold"
+                                            className="w-full sm:w-auto px-5 py-3 text-sm font-bold rounded-md border-2 border-gray-900 bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
                                         >
-                                            Pay ₹{(discountedPrice + (discountedPrice * 0.18))}
-                                        </button>
+                                            Pay ₹{totalAmount.toFixed(2)}
+                                        </motion.button>
                                     </div>
                                 </form>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
 

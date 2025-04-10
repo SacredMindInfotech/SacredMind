@@ -104,7 +104,12 @@ const PopularCourses = () => {
                                 <div
                                     key={course.id}
                                     className="group bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer transform hover:-translate-y-1 snap-start"
-                                    onClick={() => navigate(`/course/${course.id}`)}
+                                    onClick={() => {
+                                        const encodedTitle = course.title
+                                            .replace(/-/g, "_") // Temporarily replace existing hyphens
+                                            .replace(/\s+/g, '-');         // Replace spaces with hyphens
+                                        navigate(`/course/${encodedTitle}`);
+                                    }}
                                 >
                                     <div className="h-48 bg-gray-200 relative overflow-hidden">
                                         <img

@@ -32,6 +32,7 @@ import ViewContent from './components/ui/viewContent'
 import AllReviews from './pages/allReviewsPage'
 import NotFound from './pages/NotFound'
 import TeachWithUs from './pages/TeachWithUs'
+import AboutUs from './pages/AboutUs'
 function App() {
   const Router = createBrowserRouter([
 
@@ -40,6 +41,13 @@ function App() {
       element: <>
         <Navbar></Navbar>
         <Landing></Landing>
+        <Footer />
+      </>
+    },{
+      path:"/about-us",
+      element: <>
+        <Navbar></Navbar>
+        <AboutUs />
         <Footer />
       </>
     },
@@ -52,7 +60,7 @@ function App() {
       </>
     },
     {
-      path: "/course/:id",
+      path: "/course/:courseTitle",
       element: <>
         <Navbar></Navbar>
         <Course></Course>
@@ -92,7 +100,7 @@ function App() {
         { path: "users", element: <UserManagement /> },
         { path: "user/:clerkUserId", element: <UserDetails /> },
         { path: "courses", element: <CourseManagement /> },
-        { path: "course/:id", element: <EditCourse /> },
+        { path: "course/:courseTitle", element: <EditCourse /> },
         { path: "course/add", element: <AddCourse /> },
         { path: "categories", element: <CategoryManagement /> },
         { path: "orders", element: <OrderManagement /> },

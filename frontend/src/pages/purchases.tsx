@@ -70,10 +70,11 @@ const Purchases = () => {
             if (purchases.length === 0) return;
 
             const coursePromises = purchases.map(async (purchase) => {
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/v1/course/${purchase.courseId}`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/v1/course/id/${purchase.courseId}`);
                 return response.data;
             });
             const resolvedCourses = await Promise.all(coursePromises);
+            console.log(resolvedCourses);
             setCourses(resolvedCourses as Course[]);
         };
         fetchCourses();
@@ -190,7 +191,7 @@ const Purchases = () => {
                                     transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
                                     whileHover={{ y: -8, transition: { duration: 0.3 } }}
                                     className="group bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer"
-                                    onClick={() => window.location.href = `/course/${course.id}`}
+                                    onClick={() => window.location.href = `/course/${course.title}`}
                                 >
                                     <div className="h-48 bg-gray-200 relative overflow-hidden">
                                         <img

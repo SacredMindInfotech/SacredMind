@@ -53,7 +53,7 @@ export const getPurchasesByUserIdController = async (
 
 export const isPurchaseController = async (req: Request, res: Response) => {
   try {
-    const { courseId } = req.params;
+    const { courseTitle } = req.params;
     const clerkUserId = req.headers.clerkuserid as string;
 
     if (!clerkUserId) {
@@ -70,11 +70,20 @@ export const isPurchaseController = async (req: Request, res: Response) => {
       return;
     }
 
+    const course = await prisma.course.findUnique({
+      where: { title: courseTitle },
+    });
+
+    if (!course) {
+      res.status(404).json({ error: "Course not found" });
+      return;
+    }
+
     const purchase = await prisma.userCourse.findUnique({
       where: {
         userId_courseId: {
           userId: user.id,
-          courseId: Number(courseId),
+          courseId: course.id,
         },
       },
     });

@@ -164,6 +164,18 @@ const MobileSidebar = ({
                                         </svg>
                                         Teach With Us
                                     </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsMenuOpen(false);
+                                            navigate("/about-us");
+                                        }}
+                                        className="w-full text-left py-3 px-4 text-gray-900 font-medium hover:bg-gray-100 rounded-lg flex items-center transition-colors"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                        About Us
+                                    </button>
                                 </div>
 
                                 <div className="mt-6 mb-2 px-4">

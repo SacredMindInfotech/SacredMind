@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getCategoryByIdController,
+  getCategoryByNameController,
   getCoursesByCategoryIdController,
   getOnlySubcategoriesController,
   getParentCategoriesController,
@@ -15,7 +15,7 @@ categoryRouter.get("/", getParentCategoriesController);
 categoryRouter.get("/onlySubcategories", getOnlySubcategoriesController);
 
 //route to get category by name of the category
-categoryRouter.get("/:categoryName", getCategoryByIdController);
+categoryRouter.get("/:categoryName", getCategoryByNameController);
 
 //route to get courses of a sub-category
 categoryRouter.get("/:categoryId/courses", getCoursesByCategoryIdController);

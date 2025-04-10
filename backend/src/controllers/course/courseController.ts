@@ -60,11 +60,11 @@ export const getPopularCoursesController = async (
   }
 };
 
-export const getCourseByIdController = async (req: Request, res: Response) => {
+export const getCourseByTitleController = async (req: Request, res: Response) => {
   try {
-    const { courseId } = req.params;
+    const { courseTitle } = req.params;
     const course = await prisma.course.findUnique({
-      where: { id: Number(courseId) },
+      where: { title: courseTitle },
       include: {
         category: true,
         modules: {
@@ -112,37 +112,6 @@ export const getModulesByCourseIdController = async (
     res.status(200).json(modules);
     return;
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-    return;
-  }
-};
-
-export const getDiscountPriceByCourseIdController = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const { courseId } = req.params;
-    const course = await prisma.course.findUnique({
-      where: { id: Number(courseId) },
-    });
-    if (!course) {
-      res.status(204).json({ message: "Course not found" });
-      return;
-    }
-    const discountTokens = await prisma.discountToken.findMany({
-      where: { courseIds: { has: Number(courseId) } },
-    });
-    if (discountTokens.length === 0) {
-      res.status(200).json(0);
-      return;
-    }
-    //there will be only one discount token for a course
-    const discoutPercentage = discountTokens[0].discountPercentage;
-    const discountedPrice = course.price * (1 - discoutPercentage / 100);
-    res.status(200).json(Math.round(discountedPrice));
-  } catch (error) {
-    console.log(error);
     res.status(500).json({ error: "Internal server error" });
     return;
   }
@@ -203,6 +172,29 @@ export const getCoursesByStringOfCategoryIdsController = async (
   }
 };
 
+
+export const getCourseByIdController = async (req: Request, res: Response) => {
+  try{
+    const {courseId} = req.params;
+    const course = await prisma.course.findUnique({
+      where: { id: Number(courseId) },
+      include: {
+        category: true,
+      },
+    });
+    if(!course){
+      res.status(204).json({ message: "Course not found" });
+      return;
+    }
+    res.status(200).json(course);
+    return;
+  }
+  catch(error){
+    console.error("Error fetching course by id:", error);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+}
 
 export const getCoursesDiscountsByStringOfCourseIdsController = async (
   req: Request,

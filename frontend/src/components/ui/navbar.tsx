@@ -173,7 +173,7 @@ const Navbar = () => {
                                         <div
                                             onClick={() => {
                                                 setIsExploreOpen(false);
-                                                navigate(`/category/${category.name}`);
+                                                navigate(`/category/${category.name.toLowerCase()}`);
                                             }}
                                             key={category.id}
                                             className="relative group px-4 py-2 montserrat-500 text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 cursor-pointer rounded-md flex justify-between"
@@ -195,6 +195,15 @@ const Navbar = () => {
                                 <p className="montserrat-500">Teach With Us</p>
                             </button>
                         </div>
+                        <div className="hidden md:block">
+                            <button
+                                onClick={() => navigate('/about-us')}
+                                className="text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
+                            >   
+                                <p className="montserrat-500">About Us</p>
+                            </button>
+                        </div>
+                        
                     </div>
                 </div>
 

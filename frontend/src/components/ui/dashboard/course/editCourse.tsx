@@ -66,12 +66,12 @@ const EditCourse = () => {
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState<'details' | 'module' | 'users'>('details');
-    const { id } = useParams();
+    const { courseTitle } = useParams();
 
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const res = await axios.get(`${backendUrl}api/v1/course/${id}`);
+                const res = await axios.get(`${backendUrl}api/v1/course/${courseTitle}`);
                 setCourse(res.data as Course);
             } catch (error) {
                 console.error("Error fetching course:", error);
@@ -80,7 +80,7 @@ const EditCourse = () => {
             }
         }
         fetchCourse();
-    }, [id]);
+    }, [courseTitle]);
 
     if (loading) {
         return <LoadingScreen />;

@@ -145,13 +145,15 @@ const Category = () => {
         return acc;
     }, {} as Record<number, { subcategory: Categories, courses: Course[] }>);
 
+    const upperCaseCategoryName = categoryName?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
     return (
         <div>
             {subcategories.length > 0 && (
                 <div className="hidden lg:block">
                     <div className="border-b flex montserrat-500 shadow-md border-gray-200">
                         <p className="px-4 flex gap-2 py-3 font-semibold transition-colors duration-200 mr-1 mb-1 text-gray-900">
-                            {categoryName}
+                            {upperCaseCategoryName}
                             <span className="text-gray-500">|</span>
                         </p>
                         <div className="flex overflow-x-auto whitespace-nowrap hide-scrollbar">
@@ -177,7 +179,7 @@ const Category = () => {
                 {categoryDescription && subcategories.length === 0 && (
                     <div className="mb-8">
                         <h2 className="text-xl sm:text-2xl font-semibold montserrat-700">
-                            {categoryName}
+                            {upperCaseCategoryName}
                         </h2>
                         <p className="text-gray-600 text-sm montserrat-400">
                             {categoryDescription}
@@ -190,7 +192,7 @@ const Category = () => {
                         {subcategories.length > 0 ? (
                             subcategories.find(s => s.id === selectedSubcategoryId)?.name + " Courses"
                         ) : (
-                            categoryName + " Courses"
+                            upperCaseCategoryName + " Courses"
                         )}
                     </h2>
                     <p className="text-gray-600 text-sm montserrat-400">
@@ -208,7 +210,7 @@ const Category = () => {
                             <div
                                 key={course.id}
                                 className="group max-w-72 bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
-                                onClick={() => navigate(`/course/${course.id}`)}
+                                onClick={() => navigate(`/course/${course.title}`)}
                             >
                                 <div className="h-38 bg-gray-200 relative overflow-hidden">
                                     {course.imageUrl ? (
@@ -248,7 +250,7 @@ const Category = () => {
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                navigate(`/course/${course.id}`);
+                                                navigate(`/course/${course.title}`);
                                             }}
                                             className="px-2 py-1 text-sm rounded-md border-2 border-gray-900 bg-gray-900 text-white font-bold hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
                                         >
@@ -270,14 +272,14 @@ const Category = () => {
                     <div className="mt-16">
                         <div className="mb-8 border-t pt-8">
                             <h2 className="text-xl sm:text-2xl font-semibold montserrat-700">
-                                All {categoryName} Courses
+                                All {upperCaseCategoryName} Courses
                             </h2>
                             <p className="text-gray-600 montserrat-400 mt-2">
-                                Browse all courses across different {categoryName} categories
+                                Browse all courses across different {upperCaseCategoryName} categories
                             </p>
                         </div>
 
-                        {/* Render courses by subcategory using our pre-computed dictionary */}
+                        {/* Render courses by subcategory using  pre-computed dictionary */}
                         {Object.values(coursesBySubcategory).map(({ subcategory, courses }) => (
                             <div key={subcategory.id} className="mb-10">
                                 <h3 className="text-lg font-semibold montserrat-600 mb-4 text-gray-800 border-l-4 border-violet-600 pl-3">
@@ -288,7 +290,7 @@ const Category = () => {
                                         <div
                                             key={course.id}
                                             className="group max-w-72 bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
-                                            onClick={() => navigate(`/course/${course.id}`)}
+                                            onClick={() => navigate(`/course/${course.title}`)}
                                         >
                                             <div className="h-38 bg-gray-200 relative overflow-hidden">
                                                 {course.imageUrl ? (
@@ -328,7 +330,7 @@ const Category = () => {
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            navigate(`/course/${course.id}`);
+                                                            navigate(`/course/${course.title}`);
                                                         }}
                                                         className="px-2 py-1 text-sm rounded-md border-2 border-gray-900 bg-gray-900 text-white font-bold hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
                                                     >

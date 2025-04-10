@@ -398,7 +398,7 @@ const CourseManagement = () => {
                 </div>
 
                 <button
-                    onClick={() => navigate(`/admin/course/${data.id}`)}
+                    onClick={() => navigate(`/admin/course/${data.title}`)}
                     className="px-6 py-3 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                 >
                     View Course

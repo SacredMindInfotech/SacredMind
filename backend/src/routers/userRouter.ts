@@ -12,8 +12,8 @@ userRouter.get("/:clerkUserId", getUserbyIdController);
 userRouter.get("/:clerkUserId/purchases/", getPurchasesByUserIdController);
 
 //router to check if user has purchased a course
-// api/v1/user/isPurchase/:courseId
-userRouter.get("/isPurchase/:courseId", isPurchaseController);
+// api/v1/user/isPurchase/:courseTitle
+userRouter.get("/isPurchase/:courseTitle", isPurchaseController);
 
 //router to update phone number
 // api/v1/user/:userId/updatePhoneNumber
