@@ -70,9 +70,8 @@ export const isPurchaseController = async (req: Request, res: Response) => {
       return;
     }
 
-    const course = await prisma.course.findFirst({
-      where: { title: { startsWith: courseTitle } },
-    });
+    const allCourses = await prisma.course.findMany();
+    const course = allCourses.find((course) => course.title.toLowerCase().startsWith(courseTitle.toLowerCase()));
 
     if (!course) {
       res.status(404).json({ error: "Course not found" });

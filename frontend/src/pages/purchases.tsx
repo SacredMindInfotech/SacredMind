@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 interface Purchases {
     id: number;
     userId: number;
@@ -33,10 +33,11 @@ interface Course {
 }
 
 const Purchases = () => {
-    const [purchases, setPurchases] = useState<Purchases[]>([]);
-    const [loading, setLoading] = useState(true);
     const { user } = useUser()
     const { getToken } = useAuth()
+    const navigate = useNavigate();
+    const [purchases, setPurchases] = useState<Purchases[]>([]);
+    const [loading, setLoading] = useState(true);
     const [courses, setCourses] = useState<Course[]>([]);
 
     useEffect(() => {
@@ -74,7 +75,6 @@ const Purchases = () => {
                 return response.data;
             });
             const resolvedCourses = await Promise.all(coursePromises);
-            console.log(resolvedCourses);
             setCourses(resolvedCourses as Course[]);
         };
         fetchCourses();
@@ -191,7 +191,14 @@ const Purchases = () => {
                                     transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
                                     whileHover={{ y: -8, transition: { duration: 0.3 } }}
                                     className="group bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer"
-                                    onClick={() => window.location.href = `/course/${course.title}`}
+                                    onClick={() => {
+                                        const firstTwoWords = course.title.toLowerCase().split(' ').slice(0, 3).join(' ');
+                                        const encodedTitle = firstTwoWords
+                                            .replace(/-/g, "_") // Temporarily replace existing hyphens
+                                            .replace(/\s+/g, '-');         // Replace spaces with hyphens
+                                        navigate(`/course/${encodedTitle}`);
+                                    }
+                                }
                                 >
                                     <div className="h-48 bg-gray-200 relative overflow-hidden">
                                         <img
