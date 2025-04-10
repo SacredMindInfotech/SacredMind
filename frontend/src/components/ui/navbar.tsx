@@ -111,7 +111,8 @@ const Navbar = () => {
         <div className="w-full flex flex-col">
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
-                navigate("/course/20")
+                
+                navigate("/course/-HR-Payroll-Course-–-Master-Payroll-Management-&-Compliance")
             }}
                 className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-1 sm:py-1.5 md:py-2 cursor-pointer">
                 <div className="flex flex-col lg:flex-row justify-center items-center">
