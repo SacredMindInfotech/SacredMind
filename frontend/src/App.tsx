@@ -33,6 +33,7 @@ import AllReviews from './pages/allReviewsPage'
 import NotFound from './pages/NotFound'
 import TeachWithUs from './pages/TeachWithUs'
 import AboutUs from './pages/AboutUs'
+import OurServices from './pages/OurServices'
 function App() {
   const Router = createBrowserRouter([
 
@@ -48,6 +49,14 @@ function App() {
       element: <>
         <Navbar></Navbar>
         <AboutUs />
+        <Footer />
+      </>
+    },
+    {
+      path: "/services",
+      element: <>
+        <Navbar></Navbar>
+        <OurServices />
         <Footer />
       </>
     },

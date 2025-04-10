@@ -93,10 +93,9 @@ const Course = () => {
     // Fetching the course details by title from the URL
     const fetchCourse = async () => {
         try {
-            const res = await axios.get(`${backendUrl}api/v1/course/title/${decodedCourseTitle}`);
+            const res = await axios.get(`${backendUrl}api/v1/course/titlefirsttwo/${decodedCourseTitle}`);
             setCourse(res.data as Course);
             setLoading(false);
-            console.log(res.data);
         } catch (error) {
             console.log("Error fetching course details:", error);
             // navigate("/");
@@ -120,7 +119,7 @@ const Course = () => {
         setIsPurchased(res.data.purchased);
         } catch (error) {
             console.log("Error fetching is purchased:", error);
-            // navigate("/");
+            navigate("/");
         }
     }
     

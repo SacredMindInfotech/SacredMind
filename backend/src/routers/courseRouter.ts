@@ -1,5 +1,5 @@
 import express from "express";
-import { getCourseByIdController } from "../controllers/course/courseController";
+import { getCourseByIdController, getCourseByTitleFirstThreeLettersController } from "../controllers/course/courseController";
 import { getAllCoursesController, getCourseByTitleController, getCoursesByStringOfCategoryIdsController, getCoursesDiscountsByStringOfCourseIdsController,  getDiscountTokenByCourseIdController, getModulesByCourseIdController, getPopularCoursesController } from "../controllers/course/courseController";
 
 const courseRouter = express.Router();
@@ -28,6 +28,8 @@ courseRouter.get("/id/:courseId", getCourseByIdController);
 //route to get course by course's title 
 // api/v1/course/:courseTitle
 courseRouter.get("/title/:courseTitle", getCourseByTitleController);
+
+courseRouter.get("/titlefirsttwo/:courseTitle", getCourseByTitleFirstThreeLettersController);
 
 
 // Get all modules for a course by course's id

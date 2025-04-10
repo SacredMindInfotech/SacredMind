@@ -49,7 +49,11 @@ const About = () => {
                         </svg>
                     </div>
                     <p className="text-xl text-gray-600 montserrat-400 lg:max-w-[50%]">
-                        SacredMind Pvt Ltd is a multi-product-based coaching institute providing quality education through online and offline courses.
+                        SacredMind Pvt Ltd is a multi-product-based coaching institute providing quality education through online and offline courses. <span  onClick={
+                            () => {
+                                navigate("/about-us");
+                            }
+                        } className='montserrat-700 text-base text-black cursor-pointer text underline'>Read More</span>
                     </p>
                 </div>
 

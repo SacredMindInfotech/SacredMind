@@ -18,7 +18,7 @@ export const getUserbyIdController = async (req: Request, res: Response) => {
       where: { clerkuserId },
       include: {
         courses: true,
-      }
+      },
     });
     if (!user) {
       res.status(404).json({ error: "User not found" });
@@ -70,8 +70,8 @@ export const isPurchaseController = async (req: Request, res: Response) => {
       return;
     }
 
-    const course = await prisma.course.findUnique({
-      where: { title: courseTitle },
+    const course = await prisma.course.findFirst({
+      where: { title: { startsWith: courseTitle } },
     });
 
     if (!course) {
@@ -87,7 +87,7 @@ export const isPurchaseController = async (req: Request, res: Response) => {
         },
       },
     });
-    const isAdmin = user.role === 'ADMIN';
+    const isAdmin = user.role === "ADMIN";
     res.status(200).json({ purchased: !!purchase || isAdmin });
     return;
   } catch (e) {
@@ -97,8 +97,10 @@ export const isPurchaseController = async (req: Request, res: Response) => {
   }
 };
 
-
-export const updatePhoneNumberController = async (req: Request, res: Response) => {
+export const updatePhoneNumberController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { userId } = req.params;
     const { phoneNumber } = req.body;
@@ -124,4 +126,4 @@ export const updatePhoneNumberController = async (req: Request, res: Response) =
     res.status(500).json({ error: "Internal server error" });
     return;
   }
-}
+};

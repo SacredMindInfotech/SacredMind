@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { reviews } from "./reviews";
 import { useNavigate } from "react-router-dom";
+import CountUp from 'react-countup';
 interface Review {
     name: string;
     designation: string;
@@ -134,7 +135,7 @@ const AllReviewsPage = () => {
                             className="text-center"
                         >
                             <span className="block text-2xl sm:text-3xl md:text-4xl font-bold montserrat-700 mb-1">
-                                151
+                            <CountUp duration={5} end={151} />
                             </span>
                             <span className="text-sm sm:text-base text-gray-600 montserrat-500">
                                 Total Reviews
@@ -146,7 +147,7 @@ const AllReviewsPage = () => {
                             className="text-center"
                         >
                             <span className="block text-2xl sm:text-3xl md:text-4xl font-bold montserrat-700 mb-1">
-                                4.8
+                                <CountUp duration={5} end={4.8} />
                             </span>
                             <span className="text-sm sm:text-base text-gray-600 montserrat-500">
                                 Average Rating
@@ -158,7 +159,7 @@ const AllReviewsPage = () => {
                             className="text-center"
                         >
                             <span className="block text-2xl sm:text-3xl md:text-4xl font-bold montserrat-700 mb-1">
-                                92%
+                                <CountUp duration={5} end={92} />%
                             </span>
                             <span className="text-sm sm:text-base text-gray-600 montserrat-500">
                                 Recommend Us

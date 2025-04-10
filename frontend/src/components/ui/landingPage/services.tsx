@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Services = () => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
     
     const serviceItems = [
         {
@@ -44,7 +45,9 @@ const Services = () => {
 
                     </div>
                     <p className="text-xl text-gray-600 montserrat-400 lg:max-w-[50%]">
-                        Get certified in the skills that are in most demand. We offer comprehensive training and placement support to help you succeed.
+                        Get certified in the skills that are in most demand. We offer comprehensive training and placement support to help you succeed. <span onClick={() => {
+                            navigate("/services");
+                        }} className='montserrat-700 text-base text-black cursor-pointer text underline'>Read More</span>
                     </p>
                 </div>
 

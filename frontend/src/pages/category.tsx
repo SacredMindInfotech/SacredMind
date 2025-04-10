@@ -69,31 +69,31 @@ const Category = () => {
                 }
 
                 // fetch all courses for ALL subcategories in a single call - sending the string of category ids by comma separated
-                const subcategoryIds = subCats.length > 0 
+                const subcategoryIds = subCats.length > 0
                     ? subCats.map(sub => sub.id).join(',')
                     : categoryData.id;
-                
+
                 const allCoursesRes = await axios.get(`${backendUrl}api/v1/course/byCategories?categoryIds=${subcategoryIds}&published=true`);
                 const allCoursesData = allCoursesRes.data as Course[];
-                
+
                 // get discount prices in a single call for all courses - sending the string of course ids by comma separated
                 if (allCoursesData.length > 0) {
                     const courseIds = allCoursesData.map(course => course.id).join(',');
                     const discountsRes = await axios.get(`${backendUrl}api/v1/course/batchDiscounts?courseIds=${courseIds}`);
                     const discountsData = discountsRes.data;
-                    
+
                     // Apply discounts to courses
                     const coursesWithDiscounts = allCoursesData.map(course => ({
                         ...course,
                         //@ts-ignore
                         discountedPrice: discountsData[course.id] || 0
                     }));
-                    
+
                     // filter by published
                     const publishedCourses = coursesWithDiscounts.filter(course => course.published);
-                    
+
                     setAllCategoryCourses(publishedCourses);
-                    
+
                     if (selectedSubcategoryId) {
                         const filteredCourses = publishedCourses.filter(
                             course => course.categoryId === selectedSubcategoryId
@@ -101,7 +101,7 @@ const Category = () => {
                         setCourses(filteredCourses);
                     }
                 }
-                
+
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching category data:", error);
@@ -131,11 +131,11 @@ const Category = () => {
     const coursesBySubcategory = subcategories.reduce((acc, subcategory) => {
         // Don't include courses from currently selected subcategory (they're shown above)
         if (subcategory.id === selectedSubcategoryId) return acc;
-        
+
         const subcategoryCourses = allCategoryCourses.filter(
             course => course.categoryId === subcategory.id
         );
-        
+
         if (subcategoryCourses.length > 0) {
             acc[subcategory.id] = {
                 subcategory,
@@ -210,7 +210,13 @@ const Category = () => {
                             <div
                                 key={course.id}
                                 className="group max-w-72 bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
-                                onClick={() => navigate(`/course/${course.title}`)}
+                                onClick={() => {
+                                    const encodedTitle = course.title
+                                        .replace(/-/g, "_") // Temporarily replace existing hyphens
+                                        .replace(/\s+/g, '-');         // Replace spaces with hyphens
+                                    navigate(`/course/${encodedTitle}`);
+                                }
+                                }
                             >
                                 <div className="h-38 bg-gray-200 relative overflow-hidden">
                                     {course.imageUrl ? (
@@ -250,7 +256,10 @@ const Category = () => {
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                navigate(`/course/${course.title}`);
+                                                const encodedTitle = course.title
+                                                    .replace(/-/g, "_") // Temporarily replace existing hyphens
+                                                    .replace(/\s+/g, '-');         // Replace spaces with hyphens
+                                                navigate(`/course/${encodedTitle}`);
                                             }}
                                             className="px-2 py-1 text-sm rounded-md border-2 border-gray-900 bg-gray-900 text-white font-bold hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
                                         >
@@ -290,7 +299,12 @@ const Category = () => {
                                         <div
                                             key={course.id}
                                             className="group max-w-72 bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
-                                            onClick={() => navigate(`/course/${course.title}`)}
+                                            onClick={() => {
+                                                const encodedTitle = course.title
+                                                    .replace(/-/g, "_") // Temporarily replace existing hyphens
+                                                    .replace(/\s+/g, '-');         // Replace spaces with hyphens
+                                                navigate(`/course/${encodedTitle}`);
+                                            }}
                                         >
                                             <div className="h-38 bg-gray-200 relative overflow-hidden">
                                                 {course.imageUrl ? (
@@ -330,7 +344,10 @@ const Category = () => {
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            navigate(`/course/${course.title}`);
+                                                            const encodedTitle = course.title
+                                                                .replace(/-/g, "_") // Temporarily replace existing hyphens
+                                                                .replace(/\s+/g, '-');         // Replace spaces with hyphens
+                                                            navigate(`/course/${encodedTitle}`);
                                                         }}
                                                         className="px-2 py-1 text-sm rounded-md border-2 border-gray-900 bg-gray-900 text-white font-bold hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
                                                     >

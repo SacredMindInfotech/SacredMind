@@ -252,8 +252,9 @@ const OngoingOffers = () => {
                             key={course.id}
                                     className="group bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-gray-900 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer transform hover:-translate-y-1 snap-start"
                                     onClick={() => {
-                                        // Replace spaces with hyphens, but first encode any existing hyphens with a special marker
-                                        const encodedTitle = course.title
+                                        // Use only the first two words from the name
+                                        const firstTwoWords = course.title.split(' ').slice(0, 3).join(' ');
+                                        const encodedTitle = firstTwoWords
                                             .replace(/-/g, "_") // Temporarily replace existing hyphens
                                             .replace(/\s+/g, '-');         // Replace spaces with hyphens
                                         navigate(`/course/${encodedTitle}`);

@@ -85,10 +85,49 @@ export const getCourseByTitleController = async (req: Request, res: Response) =>
       return;
     }
     res.status(200).json(course);
+    return;
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+    return;
   }
 };
+
+export const getCourseByTitleFirstThreeLettersController = async (req: Request, res: Response) => {
+  try {
+    const { courseTitle } = req.params;
+    const course = await prisma.course.findFirst({
+      where: {
+        title: {
+          startsWith: courseTitle,
+        },
+      },
+      include: {
+        category: true,
+        modules: {
+          orderBy: { serialNumber: "asc" },
+          include: {
+            topics: {
+              orderBy: { serialNumber: "asc" },
+              include: {
+                contents: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!course) {
+      res.status(204).json({ message: "Course not found" });
+      return;
+    }
+    res.status(200).json(course);
+    return;
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
 
 export const getModulesByCourseIdController = async (
   req: Request,
