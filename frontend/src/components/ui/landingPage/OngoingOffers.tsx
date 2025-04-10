@@ -82,35 +82,22 @@ const OngoingOffers = () => {
     };
 
     useEffect(() => {
-        // Fetch all courses first
         const fetchCoursesWithDiscounts = async () => {
             try {
                 setLoading(true);
             const response = await axios.get(`${backendUrl}api/v1/course/`);
                 const allCourses = response.data as Course[];
                 
-                // Process each course to get its discount
-                const coursesWithDiscountPromises = allCourses.map(async (course) => {
-                    try {
-                        const discountRes = await axios.get(`${backendUrl}api/v1/course/${course.id}/discountAmount`);
-                        const discountAmount = discountRes.data as number;
-                        
-                        return {
-                            ...course,
-                            discountedPrice: discountAmount
-                        };
-                    } catch (error) {
-                            return {
-                                ...course,
-                            discountedPrice: 0
-                        };
-                    }
-                });
+
+                const courseIds = allCourses.map(course => course.id).join(',');
+                const discountsRes = await axios.get(`${backendUrl}api/v1/course/batchDiscounts?courseIds=${courseIds}`);
+                const discountsData = discountsRes.data;
+                const coursesWithDiscounts = allCourses.map(course => ({
+                    ...course,
+                    //@ts-ignore
+                    discountedPrice: discountsData[course.id] || 0
+                }));
                 
-                // Wait for all discount requests to complete
-                const coursesWithDiscounts = await Promise.all(coursesWithDiscountPromises);
-                
-                // Filter to only keep courses with active discounts
                 const discountedCourses = coursesWithDiscounts.filter(
                     course => course.discountedPrice > 0 && course.published
                 );
