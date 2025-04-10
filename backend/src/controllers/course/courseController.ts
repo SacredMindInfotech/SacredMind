@@ -95,12 +95,28 @@ export const getCourseByTitleController = async (req: Request, res: Response) =>
 export const getCourseByTitleFirstThreeLettersController = async (req: Request, res: Response) => {
   try {
     const { courseTitle } = req.params;
-    const course = await prisma.course.findFirst({
-      where: {
-        title: {
-          startsWith: courseTitle,
-        },
-      },
+    // const course = await prisma.course.findFirst({
+    //   where: {
+    //     title: {
+    //       startsWith: courseTitle,
+    //     },
+    //   },
+    //   include: {
+    //     category: true,
+    //     modules: {
+    //       orderBy: { serialNumber: "asc" },
+    //       include: {
+    //         topics: {
+    //           orderBy: { serialNumber: "asc" },
+    //           include: {
+    //             contents: true,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+    const allCourses = await prisma.course.findMany({
       include: {
         category: true,
         modules: {
@@ -114,8 +130,9 @@ export const getCourseByTitleFirstThreeLettersController = async (req: Request, 
             },
           },
         },
-      },
+      }
     });
+    const course = allCourses.find((course) => course.title.toLowerCase().startsWith(courseTitle.toLowerCase()));
     if (!course) {
       res.status(204).json({ message: "Course not found" });
       return;

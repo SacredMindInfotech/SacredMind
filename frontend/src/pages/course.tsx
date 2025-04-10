@@ -72,7 +72,7 @@ const Course = () => {
     // Decode the URL parameter to get the original title
     const decodedCourseTitle = courseTitle 
         ? courseTitle.replace(/-/g, ' ')         // First convert URL hyphens back to spaces
-                     .replace(/_/g, '-') // Then restore original hyphens
+                     .replace(/_/g, '-')         // Then restore original hyphens
         : '';
 
     useEffect(() => {
@@ -93,6 +93,7 @@ const Course = () => {
     // Fetching the course details by title from the URL
     const fetchCourse = async () => {
         try {
+            console.log(decodedCourseTitle);
             const res = await axios.get(`${backendUrl}api/v1/course/titlefirsttwo/${decodedCourseTitle}`);
             setCourse(res.data as Course);
             setLoading(false);
@@ -119,7 +120,7 @@ const Course = () => {
         setIsPurchased(res.data.purchased);
         } catch (error) {
             console.log("Error fetching is purchased:", error);
-            navigate("/");
+            // navigate("/");
         }
     }
     
