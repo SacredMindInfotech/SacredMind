@@ -148,8 +148,10 @@ export const getDiscountPriceByCourseIdController = async (
   }
 };
 
-
-export const getDiscountTokenByCourseIdController = async (req: Request, res: Response) => {
+export const getDiscountTokenByCourseIdController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { courseId } = req.params;
     const discountToken = await prisma.discountToken.findFirst({
@@ -162,6 +164,93 @@ export const getDiscountTokenByCourseIdController = async (req: Request, res: Re
     res.status(200).json(discountToken);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
+export const getCoursesByStringOfCategoryIdsController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { categoryIds, published } = req.query;
+
+    if (!categoryIds) {
+      res.status(400).json({ error: "categoryIds is required" });
+      return;
+    }
+
+    // Convert comma-separated string to array of strings
+    const categoryIdArray = (categoryIds as string)
+      .split(",")
+      .map((id) => id.trim());
+
+
+    const courses = await prisma.course.findMany({
+      where: {
+        categoryId: { in: categoryIdArray.map(Number) },
+        ...(published !== undefined && { published: published === "true" }),
+      },
+    });
+
+    res.status(200).json(courses);
+    return;
+  } catch (error) {
+    console.error("Error fetching courses by category:", error);
+    res.status(500).json({ error: "Internal server error" });
+    return;
+  }
+};
+
+
+export const getCoursesDiscountsByStringOfCourseIdsController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { courseIds } = req.query;
+    if (!courseIds) {
+      res.status(400).json({ error: "courseIds is required" });
+      return;
+    }
+    const courseIdArray = (courseIds as string)
+      .split(",")
+      .map((id) => id.trim());
+
+    const discountTokens = await prisma.discountToken.findMany({
+      where: {
+        courseIds: { hasSome: courseIdArray.map(Number) },
+      },
+    });
+
+    const courses = await prisma.course.findMany({
+      where: {
+        id: { in: courseIdArray.map(Number) },
+      },
+    });
+
+    // Create a map of course ID to discounted price
+    const discountedPricesMap: Record<number, number> = {};
+    
+    courses.forEach((course) => {
+      const discountToken = discountTokens.find((token) => 
+        token.courseIds.includes(course.id)
+      );
+      
+      if (discountToken) {
+        const discountPercentage = discountToken.discountPercentage;
+        const discountedPrice = Math.round(course.price * (1 - discountPercentage / 100));
+        discountedPricesMap[course.id] = discountedPrice;
+      } else {
+        discountedPricesMap[course.id] = 0; // No discount
+      }
+    });
+    
+    res.status(200).json(discountedPricesMap);
+    return;
+  } catch (error) {
+    console.error("Error fetching courses discounts:", error);
     res.status(500).json({ error: "Internal server error" });
     return;
   }

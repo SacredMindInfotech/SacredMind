@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllCoursesController, getCourseByIdController, getDiscountPriceByCourseIdController, getDiscountTokenByCourseIdController, getModulesByCourseIdController, getPopularCoursesController } from "../controllers/course/courseController";
+import { getAllCoursesController, getCourseByIdController, getCoursesByStringOfCategoryIdsController, getCoursesDiscountsByStringOfCourseIdsController, getDiscountPriceByCourseIdController, getDiscountTokenByCourseIdController, getModulesByCourseIdController, getPopularCoursesController } from "../controllers/course/courseController";
 
 const courseRouter = express.Router();
 
@@ -11,6 +11,10 @@ courseRouter.get("/", getAllCoursesController);
 //route to get popular courses  - by number of users enrolled
 // api/v1/course/popular
 courseRouter.get("/popular", getPopularCoursesController);
+
+courseRouter.get("/byCategories",getCoursesByStringOfCategoryIdsController);
+
+courseRouter.get("/batchDiscounts",getCoursesDiscountsByStringOfCourseIdsController);
 
 //route to get course by courseID of the course
 // api/v1/course/:courseId
@@ -28,8 +32,6 @@ courseRouter.get("/:courseId/discountAmount", getDiscountPriceByCourseIdControll
 //get discount token by course id if any
 // api/v1/course/:courseId/discountToken
 courseRouter.get("/:courseId/discountToken", getDiscountTokenByCourseIdController);
-
-
 
 
 
