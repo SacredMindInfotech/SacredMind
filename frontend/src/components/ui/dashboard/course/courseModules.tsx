@@ -90,7 +90,6 @@ const CourseModules = ({ course }: { course: Course }) => {
   useEffect(() => {
     if (course && course.modules) {
       setModules(course.modules);
-      console.log(course.modules)
     }
   }, [course]);
 
@@ -420,7 +419,6 @@ const CourseModules = ({ course }: { course: Course }) => {
 
     try {
       const token = await getToken();
-      console.log(currentContent.id)
 
       const response = await axios.put(
         `${backendUrl}api/v1/admin/content/${currentContent.id}`,

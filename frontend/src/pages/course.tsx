@@ -93,7 +93,7 @@ const Course = () => {
     // Fetching the course details by title from the URL
     const fetchCourse = async () => {
         try {
-            const res = await axios.get(`${backendUrl}api/v1/course/titlefirsttwo/${decodedCourseTitle}`);
+            const res = await axios.get(`${backendUrl}api/v1/course/titleFirstThree/${decodedCourseTitle}`);
             setCourse(res.data as Course);
             setLoading(false);
         } catch (error) {

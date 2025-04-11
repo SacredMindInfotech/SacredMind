@@ -5,10 +5,11 @@ import axios from "axios";
 
 
 const OnlyPaidUsers = ({ children }: any) => {
+    const { courseId } = useParams();
+
     const { user, isLoaded } = useUser();
     const navigate = useNavigate();
     const { getToken } = useAuth();
-    const { courseTitle } = useParams();
 
     useEffect(() => {
 
@@ -19,31 +20,35 @@ const OnlyPaidUsers = ({ children }: any) => {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
             try {
 
-                const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${courseTitle}`, {
+                console.log(courseId);
+                const course=await axios.get(`${backendUrl}api/v1/course/id/${courseId}`);
+                // @ts-ignore
+                const firstThreeWords=course.data.title.split(" ").slice(0, 3).join(" ");
+                
+                const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${firstThreeWords}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         clerkuserId: user.id
                     }
                 });
+                console.log(res.data);
 
                 // @ts-ignore
                 if (!res.data.purchased) {
-                    navigate(`/course/${courseTitle}`);
+                    // navigate(`/course/${courseId}`);
                     return;
                 }
 
-
-
             } catch (error: any) {
                 if (error.status !== 200) {
-                    navigate(`/course/${courseTitle}`);
+                    // navigate(`/course/${courseId}`);
                     return;
                 }
                 console.error("Error checking purchase:", error);
             }
         }
         fetchIsPurchased();
-    }, [courseTitle, isLoaded, user]);
+    }, [courseId, isLoaded, user]);
 
     return children;
 }

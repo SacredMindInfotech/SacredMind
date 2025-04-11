@@ -60,7 +60,10 @@ export const getPopularCoursesController = async (
   }
 };
 
-export const getCourseByTitleController = async (req: Request, res: Response) => {
+export const getCourseByTitleController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { courseTitle } = req.params;
     const course = await prisma.course.findUnique({
@@ -92,7 +95,10 @@ export const getCourseByTitleController = async (req: Request, res: Response) =>
   }
 };
 
-export const getCourseByTitleFirstThreeLettersController = async (req: Request, res: Response) => {
+export const getCourseByTitleFirstThreeLettersController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const { courseTitle } = req.params;
     // const course = await prisma.course.findFirst({
@@ -130,9 +136,11 @@ export const getCourseByTitleFirstThreeLettersController = async (req: Request, 
             },
           },
         },
-      }
+      },
     });
-    const course = allCourses.find((course) => course.title.toLowerCase().startsWith(courseTitle.toLowerCase()));
+    const course = allCourses.find((course) =>
+      course.title.toLowerCase().startsWith(courseTitle.toLowerCase())
+    );
     if (!course) {
       res.status(204).json({ message: "Course not found" });
       return;
@@ -144,7 +152,6 @@ export const getCourseByTitleFirstThreeLettersController = async (req: Request, 
     return;
   }
 };
-
 
 export const getModulesByCourseIdController = async (
   req: Request,
@@ -211,7 +218,6 @@ export const getCoursesByStringOfCategoryIdsController = async (
       .split(",")
       .map((id) => id.trim());
 
-
     const courses = await prisma.course.findMany({
       where: {
         categoryId: { in: categoryIdArray.map(Number) },
@@ -228,29 +234,38 @@ export const getCoursesByStringOfCategoryIdsController = async (
   }
 };
 
-
 export const getCourseByIdController = async (req: Request, res: Response) => {
-  try{
-    const {courseId} = req.params;
+  try {
+    const { courseId } = req.params;
     const course = await prisma.course.findUnique({
       where: { id: Number(courseId) },
       include: {
         category: true,
+        modules: {  
+          orderBy: { serialNumber: "asc" },
+          include: {
+            topics: {
+              orderBy: { serialNumber: "asc" },
+              include: {
+                contents: true,
+              },
+            },
+          },
+        },
       },
     });
-    if(!course){
+    if (!course) {
       res.status(204).json({ message: "Course not found" });
       return;
     }
     res.status(200).json(course);
     return;
-  }
-  catch(error){
+  } catch (error) {
     console.error("Error fetching course by id:", error);
     res.status(500).json({ error: "Internal server error" });
     return;
   }
-}
+};
 
 export const getCoursesDiscountsByStringOfCourseIdsController = async (
   req: Request,
@@ -280,21 +295,23 @@ export const getCoursesDiscountsByStringOfCourseIdsController = async (
 
     // Create a map of course ID to discounted price
     const discountedPricesMap: Record<number, number> = {};
-    
+
     courses.forEach((course) => {
-      const discountToken = discountTokens.find((token) => 
+      const discountToken = discountTokens.find((token) =>
         token.courseIds.includes(course.id)
       );
-      
+
       if (discountToken) {
         const discountPercentage = discountToken.discountPercentage;
-        const discountedPrice = Math.round(course.price * (1 - discountPercentage / 100));
+        const discountedPrice = Math.round(
+          course.price * (1 - discountPercentage / 100)
+        );
         discountedPricesMap[course.id] = discountedPrice;
       } else {
         discountedPricesMap[course.id] = 0; // No discount
       }
     });
-    
+
     res.status(200).json(discountedPricesMap);
     return;
   } catch (error) {
@@ -303,4 +320,3 @@ export const getCoursesDiscountsByStringOfCourseIdsController = async (
     return;
   }
 };
-

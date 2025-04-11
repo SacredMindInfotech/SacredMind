@@ -9,7 +9,7 @@ import { SecureVideo, VideoProtection } from "./videoPlayer";
 
 const ViewContent = () => {
 
-    const { id } = useParams();
+    const { courseId } = useParams();
     const [fileUrl, setFileUrl] = useState("");
     const { contentKey } = useParams();
     const { isLoaded, user } = useUser();
@@ -20,8 +20,8 @@ const ViewContent = () => {
     const fetchFile = async (filePath: string) => {
         try {
             const token = await getToken();
-            const backendUrl = import.meta.env.VITE_BACKEND_URL;
-            const response = await axios.get(`${backendUrl}api/v1/content/${id}/stream-file`, {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL; 
+            const response = await axios.get(`${backendUrl}api/v1/content/${courseId}/stream-file`, {
                 params: { filePath },
                 responseType: "blob", // Ensures response is treated as a binary file
                 headers: {
@@ -63,7 +63,7 @@ const ViewContent = () => {
         <div className="min-h-screen mt-10 flex flex-col items-center">
             <div className="w-full ml-4 flex justify-start">
                 <button 
-                    onClick={() => navigate(`/course/${id}/content`)} 
+                    onClick={() => navigate(`/course/${courseId}/content`)} 
                     className="w-full hidden md:flex max-w-44 px-4 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer  items-center justify-center sm:w-auto"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">

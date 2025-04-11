@@ -90,7 +90,7 @@ function App() {
     },
     {
       //id is required by onlyPaidUsers to check if the user has purchased the course
-      path: "/course/:id/content/:contentKey",
+      path: "/course/:courseId/content/:contentKey",
       element: <>
         <ProtectedRoutes>
           <OnlyPaidUsers>

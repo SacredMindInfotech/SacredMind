@@ -21,7 +21,7 @@ interface Course {
     updatedAt: Date;
     published: boolean;
     categoryId: number;
-    category: Category ;
+    category: Category;
     overview: string[];
     learningOutcomes: string[];
     requirements: string[];
@@ -29,7 +29,7 @@ interface Course {
     language: string;
     courseNotice: string | null;
     modules: Module[];
-    
+
 }
 interface Module {
     id: number;
@@ -71,7 +71,11 @@ const EditCourse = () => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const res = await axios.get(`${backendUrl}api/v1/course/${courseTitle}`);
+                const decodedCourseTitle = courseTitle
+                    ? courseTitle.replace(/-/g, ' ')         // First convert URL hyphens back to spaces
+                        .replace(/_/g, '-')         // Then restore original hyphens
+                    : '';
+                const res = await axios.get(`${backendUrl}api/v1/course/titleFirstThree/${decodedCourseTitle}`);
                 setCourse(res.data as Course);
             } catch (error) {
                 console.error("Error fetching course:", error);

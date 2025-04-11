@@ -29,7 +29,7 @@ courseRouter.get("/id/:courseId", getCourseByIdController);
 // api/v1/course/:courseTitle
 courseRouter.get("/title/:courseTitle", getCourseByTitleController);
 
-courseRouter.get("/titlefirsttwo/:courseTitle", getCourseByTitleFirstThreeLettersController);
+courseRouter.get("/titleFirstThree/:courseTitle", getCourseByTitleFirstThreeLettersController);
 
 
 // Get all modules for a course by course's id

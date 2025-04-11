@@ -77,12 +77,12 @@ const CourseContent = () => {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-                // if (res.status === 204) {
-                //     navigate("/");
-                // }
+                if (res.status === 204) {
+                    navigate("/");
+                }
                 setCourse(res.data as Course);
             } catch (error) {
-                // navigate("/");
+                navigate("/");
             }
         }
         fetchCourse();

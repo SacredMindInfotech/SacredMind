@@ -398,7 +398,13 @@ const CourseManagement = () => {
                 </div>
 
                 <button
-                    onClick={() => navigate(`/admin/course/${data.title}`)}
+                    onClick={() => {
+                        const firstThreeWords = data.title.toLowerCase().split(" ").slice(0, 3).join(" ");
+                        const encodedTitle = firstThreeWords
+                            .replace(/-/g, "_") // Temporarily replace existing hyphens
+                            .replace(/\s+/g, '-');
+                        navigate(`/admin/course/${encodedTitle}`);
+                    }}
                     className="px-6 py-3 rounded-md border border-white bg-gray-900 text-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer whitespace-nowrap"
                 >
                     View Course
