@@ -35,13 +35,13 @@ const OnlyPaidUsers = ({ children }: any) => {
 
                 // @ts-ignore
                 if (!res.data.purchased) {
-                    // navigate(`/course/${courseId}`);
+                    navigate(`/course/${courseId}`);
                     return;
                 }
 
             } catch (error: any) {
                 if (error.status !== 200) {
-                    // navigate(`/course/${courseId}`);
+                    navigate(`/course/${courseId}`);
                     return;
                 }
                 console.error("Error checking purchase:", error);
