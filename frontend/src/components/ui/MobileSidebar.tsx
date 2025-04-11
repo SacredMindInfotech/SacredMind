@@ -17,7 +17,8 @@ const MobileSidebar = ({
     const fetchSubcategories = async (categoryName: string) => {
         setLoading(true);
         try {
-            const res = await axios.get(`${backendUrl}api/v1/category/${categoryName}`);
+            const decodedCategoryName = categoryName.toLowerCase();
+            const res = await axios.get(`${backendUrl}api/v1/category/${decodedCategoryName}`);
             setSelectedCategory(res.data);
             //@ts-ignore
             setSubcategories(res.data.subcategories || []);

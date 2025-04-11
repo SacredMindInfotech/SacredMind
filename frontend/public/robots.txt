@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: https://sacredmind.in/
+Sitemap: https://sacredmind.in/sitemap.xml

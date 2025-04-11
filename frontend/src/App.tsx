@@ -77,15 +77,15 @@ function App() {
       </>
     },
     {
-      path: "/course/:id/content",
+      path: "/course/:courseId/content",
       element: <>
-        <ProtectedRoutes>
-          <OnlyPaidUsers>
+        {/* <ProtectedRoutes> */}
+          {/* <OnlyPaidUsers> */}
             <Navbar></Navbar>
             <CourseContent></CourseContent>
             <Footer />
-          </OnlyPaidUsers>
-        </ProtectedRoutes>
+          {/* </OnlyPaidUsers> */}
+        {/* </ProtectedRoutes> */}
       </>
     },
     {

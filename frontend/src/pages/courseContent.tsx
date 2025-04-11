@@ -50,7 +50,7 @@ interface Course {
 }
 
 const CourseContent = () => {
-    const { id } = useParams();
+    const { courseId } = useParams();
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(true);
     const { getToken } = useAuth();
@@ -72,22 +72,22 @@ const CourseContent = () => {
             try {
                 const backendUrl = import.meta.env.VITE_BACKEND_URL;
                 const token = await getToken();
-                const res = await axios.get(`${backendUrl}api/v1/course/${id}`, {
+                const res = await axios.get(`${backendUrl}api/v1/course/id/${courseId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-                if (res.status === 204) {
-                    navigate("/");
-                }
+                // if (res.status === 204) {
+                //     navigate("/");
+                // }
                 setCourse(res.data as Course);
             } catch (error) {
-                navigate("/");
+                // navigate("/");
             }
         }
         fetchCourse();
         setLoading(false);
-    }, [id]);
+    }, [courseId]);
 
 
     if (loading) return <CourseContentPageLoader />;
@@ -108,7 +108,13 @@ const CourseContent = () => {
                                 </p>
                                 <button
                                     className="w-full max-w-40 md:w-36 px-4 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer flex items-center justify-center sm:w-auto"
-                                    onClick={() => navigate(`/course/${id}`)}
+                                    onClick={() => {
+                                        const firstThreeWords = course!.title.toLowerCase().split(' ').slice(0, 3).join(' ');
+                                        const encodedTitle = firstThreeWords
+                                            .replace(/-/g, "_") 
+                                            .replace(/\s+/g, '-');
+                                        navigate(`/course/${encodedTitle}`);
+                                    }}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -199,7 +205,7 @@ const CourseContent = () => {
                                                                             </div>
                                                                             <button
                                                                                 className="w-full max-w-20 px-4 py-2 rounded-md border border-white bg-gray-900 text-white hover:shadow-[2px_2px_0px_0px_rgba(0,0,0)] hover:text-black hover:border-gray-900 hover:bg-white transition duration-200 montserrat-secondary cursor-pointer flex items-center justify-center"
-                                                                                onClick={() => navigate(`/course/${id}/content/${encodeURIComponent(content.key)}`)}
+                                                                                onClick={() => navigate(`/course/${courseId}/content/${encodeURIComponent(content.key)}`)}
                                                                             >
                                                                                 View
                                                                             </button>

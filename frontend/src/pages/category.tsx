@@ -87,7 +87,7 @@ const Category = () => {
                     // Apply discounts to courses
                     const coursesWithDiscounts = allCoursesData.map(course => ({
                         ...course,
-                        //@ts-ignore
+                //@ts-ignore
                         discountedPrice: discountsData[course.id] || 0
                     }));
 
@@ -159,18 +159,18 @@ const Category = () => {
                             <span className="text-gray-500">|</span>
                         </p>
                         <div className="flex overflow-x-auto whitespace-nowrap hide-scrollbar">
-                            {subcategories.map((subcategory) => (
-                                <button
-                                    key={subcategory.id}
+                        {subcategories.map((subcategory) => (
+                            <button
+                                key={subcategory.id}
                                     className={`px-4 py-3 cursor-pointer text-sm font-medium transition-colors duration-200 mr-1 mb-1 ${selectedSubcategoryId === subcategory.id
                                         ? 'text-violet-700'
                                         : 'border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300'
-                                        }`}
-                                    onClick={() => setSelectedSubcategoryId(subcategory.id)}
-                                >
-                                    {subcategory.name}
-                                </button>
-                            ))}
+                                    }`}
+                                onClick={() => setSelectedSubcategoryId(subcategory.id)}
+                            >
+                                {subcategory.name}
+                            </button>
+                        ))}
                         </div>
                     </div>
                 </div>
@@ -186,7 +186,7 @@ const Category = () => {
                         <p className="text-gray-600 text-sm montserrat-400">
                             {categoryDescription}
                         </p>
-                    </div>
+                </div>
                 )}
 
                 <div className="mb-8">
@@ -275,9 +275,9 @@ const Category = () => {
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100 rounded-lg">
-                        <h2 className="text-2xl font-semibold mb-4 montserrat-500">No courses available yet</h2>
-                        <p className="text-gray-600 montserrat-400">Check back soon for new courses in this category</p>
+                        <div className="text-center mb-16 min-h-[30vh] flex flex-col justify-center items-center bg-gray-100 rounded-lg">
+                            <h2 className="text-2xl font-semibold mb-4 montserrat-500">No courses available yet</h2>
+                            <p className="text-gray-600 montserrat-400">Check back soon for new courses in this category</p>
                     </div>
                 )}
 

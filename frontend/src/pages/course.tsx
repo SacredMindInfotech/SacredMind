@@ -93,13 +93,12 @@ const Course = () => {
     // Fetching the course details by title from the URL
     const fetchCourse = async () => {
         try {
-            console.log(decodedCourseTitle);
             const res = await axios.get(`${backendUrl}api/v1/course/titlefirsttwo/${decodedCourseTitle}`);
             setCourse(res.data as Course);
             setLoading(false);
         } catch (error) {
             console.log("Error fetching course details:", error);
-            // navigate("/");
+            navigate("/");
         }
     }
     
@@ -120,7 +119,7 @@ const Course = () => {
         setIsPurchased(res.data.purchased);
         } catch (error) {
             console.log("Error fetching is purchased:", error);
-            // navigate("/");
+            navigate("/");
         }
     }
     
@@ -224,7 +223,7 @@ const Course = () => {
                                             <motion.button
                                                 whileHover={{ scale: 1.05, boxShadow: "4px 4px 0px 0px rgba(0,0,0)" }}
                                                 whileTap={{ scale: 0.95 }}
-                                                onClick={() => navigate(`/course/${decodedCourseTitle}/content`)}
+                                                onClick={() => navigate(`/course/${course.id}/content`)}
                                                 className="cursor-pointer px-8 sm:px-12 py-2 sm:py-3 rounded-md border-2 border-gray-900 bg-gray-900 text-white text-sm sm:text-base hover:shadow-[4px_4px_0px_0px_rgba(0,0,0)] hover:text-black hover:bg-white transition-all duration-200 montserrat-secondary"
                                             >
                                                 View Course Content

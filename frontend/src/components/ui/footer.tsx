@@ -1,120 +1,289 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Footer = () => {
     const router = useNavigate();
+
     return (
-        <div className="flex flex-col bg-gray-100 w-full">
-            <section >
-                <div className="container px-4 py-8 mx-auto">
-                    <div className="mb-6">
-                        <div className="flex flex-row items-center gap-2 mb-4">
-                            <img src="/logo.svg" alt="logo" className="w-10 h-10" />
-                            <p className="text-xl text-gray-900 font-black montserrat-700">Sacred Mind Infotech Private Limited</p>
-                        </div>
-                        <p className="text-base font-medium text-yellow-600">Contact us</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="space-y-2">
-                                <span className="inline-block p-1.5 text-yellow-600 rounded-full bg-blue-100/80">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3 h-3">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                                    </svg>
-                                </span>
-
-                                <h2 className="text-sm font-medium text-gray-900">Email</h2>
-                                <p className="text-sm text-gray-500">Our friendly team is here to help.</p>
-                                <p className="text-sm text-yellow-600">info@sacredmind.in</p>
-                            </div>
-
-                            <div className="space-y-2">
-                                <span className="inline-block p-1.5 text-yellow-600 rounded-full bg-blue-100/80">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3 h-3">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                    </svg>
-                                </span>
-
-                                <h2 className="text-sm font-medium text-gray-900">Office</h2>
-                                <p className="text-sm text-gray-500">Come say hello at our office.</p>
-                                <p className="text-sm text-yellow-600">Zirakpur, Punjab</p>
-                            </div>
-
-                            <div className="space-y-2">
-                                <span className="inline-block p-1.5 text-yellow-600 rounded-full bg-blue-100/80">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3 h-3">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                                    </svg>
-                                </span>
-
-                                <h2 className="text-sm font-medium text-gray-900">Phone</h2>
-                                <p className="text-sm text-gray-500">Mon-Sat from 9am to 5pm.</p>
-                                <p className="text-sm text-yellow-600">+91 90567-23484</p>
-                            </div>
-                        </div>
-
-                        <div className=" h-[200px] lg:h-[300px] lg:-mt-28 w-full flex justify-center lg:justify-end">
-                            <iframe
-                                className="w-full max-w-[450px] lg:max-w-[500px] h-full border-2 border-gray-300 rounded-md"
-                                frameBorder="0"
-                                title="map"
-                                scrolling="no"
-                                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d201.97305239501404!2d76.82542242006092!3d30.64230343961996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzDCsDM4JzMyLjAiTiA3NsKwNDknMzEuNiJF!5e1!3m2!1sen!2sin!4v1740806407662!5m2!1sen!2sin">
-                            </iframe>
-                        </div>
-                    </div>
-
-                    <div className="mb-2">
-                        <h3 className="text-sm font-medium text-gray-900 montserrat-600 mb-3">Connect With Us</h3>
-                        <div className="flex space-x-5">
-                            <a href="https://www.facebook.com/sacredmindin" target="_blank" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
-                                <span className="sr-only">Facebook</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="h-6 w-6" viewBox="0 0 48 48">
-                                    <path fill="#039be5" d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"></path><path fill="#fff" d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"></path>
-                                </svg>
-                            </a>
-
-                            <a href="https://www.instagram.com/sacredmindinfotech/" target="_blank" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
-                                <span className="sr-only">Instagram</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="h-6 w-6" viewBox="0 0 64 64">
-                                    <radialGradient id="TGwjmZMm2W~B4yrgup6jda_119026_gr1" cx="32" cy="32.5" r="31.259" gradientTransform="matrix(1 0 0 -1 0 64)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#efdcb1"></stop><stop offset="0" stop-color="#f2e0bb"></stop><stop offset=".011" stop-color="#f2e0bc"></stop><stop offset=".362" stop-color="#f9edd2"></stop><stop offset=".699" stop-color="#fef4df"></stop><stop offset="1" stop-color="#fff7e4"></stop></radialGradient><path fill="url(#TGwjmZMm2W~B4yrgup6jda_119026_gr1)" d="M58,54c-1.1,0-2-0.9-2-2s0.9-2,2-2h2.5c1.9,0,3.5-1.6,3.5-3.5S62.4,43,60.5,43H50c-1.4,0-2.5-1.1-2.5-2.5	S48.6,38,50,38h8c1.7,0,3-1.3,3-3s-1.3-3-3-3H42v-6h18c2.3,0,4.2-2,4-4.4c-0.2-2.1-2.1-3.6-4.2-3.6H58c-1.1,0-2-0.9-2-2s0.9-2,2-2	h0.4c1.3,0,2.5-0.9,2.6-2.2c0.2-1.5-1-2.8-2.5-2.8h-14C43.7,9,43,8.3,43,7.5S43.7,6,44.5,6h3.9c1.3,0,2.5-0.9,2.6-2.2	C51.1,2.3,50,1,48.5,1H15.6c-1.3,0-2.5,0.9-2.6,2.2C12.9,4.7,14,6,15.5,6H19c1.1,0,2,0.9,2,2s-0.9,2-2,2H6.2c-2.1,0-4,1.5-4.2,3.6	C1.8,16,3.7,18,6,18h2.5c1.9,0,3.5,1.6,3.5,3.5S10.4,25,8.5,25H5.2c-2.1,0-4,1.5-4.2,3.6C0.8,31,2.7,33,5,33h17v11H6	c-1.7,0-3,1.3-3,3s1.3,3,3,3l0,0c1.1,0,2,0.9,2,2s-0.9,2-2,2H4.2c-2.1,0-4,1.5-4.2,3.6C-0.2,60,1.7,62,4,62h53.8	c2.1,0,4-1.5,4.2-3.6C62.2,56,60.3,54,58,54z"></path><radialGradient id="TGwjmZMm2W~B4yrgup6jdb_119026_gr2" cx="18.51" cy="66.293" r="69.648" gradientTransform="matrix(.6435 -.7654 .5056 .4251 -26.92 52.282)" gradientUnits="userSpaceOnUse"><stop offset=".073" stop-color="#eacc7b"></stop><stop offset=".184" stop-color="#ecaa59"></stop><stop offset=".307" stop-color="#ef802e"></stop><stop offset=".358" stop-color="#ef6d3a"></stop><stop offset=".46" stop-color="#f04b50"></stop><stop offset=".516" stop-color="#f03e58"></stop><stop offset=".689" stop-color="#db359e"></stop><stop offset=".724" stop-color="#ce37a4"></stop><stop offset=".789" stop-color="#ac3cb4"></stop><stop offset=".877" stop-color="#7544cf"></stop><stop offset=".98" stop-color="#2b4ff2"></stop></radialGradient><path fill="url(#TGwjmZMm2W~B4yrgup6jdb_119026_gr2)" d="M45,57H19c-5.5,0-10-4.5-10-10V21c0-5.5,4.5-10,10-10h26c5.5,0,10,4.5,10,10v26C55,52.5,50.5,57,45,57z"></path><path fill="#fff" d="M32,20c4.6,0,5.1,0,6.9,0.1c1.7,0.1,2.6,0.4,3.2,0.6c0.8,0.3,1.4,0.7,2,1.3c0.6,0.6,1,1.2,1.3,2 c0.2,0.6,0.5,1.5,0.6,3.2C46,28.9,46,29.4,46,34s0,5.1-0.1,6.9c-0.1,1.7-0.4,2.6-0.6,3.2c-0.3,0.8-0.7,1.4-1.3,2 c-0.6,0.6-1.2,1-2,1.3c-0.6,0.2-1.5,0.5-3.2,0.6C37.1,48,36.6,48,32,48s-5.1,0-6.9-0.1c-1.7-0.1-2.6-0.4-3.2-0.6 c-0.8-0.3-1.4-0.7-2-1.3c-0.6-0.6-1-1.2-1.3-2c-0.2-0.6-0.5-1.5-0.6-3.2C18,39.1,18,38.6,18,34s0-5.1,0.1-6.9 c0.1-1.7,0.4-2.6,0.6-3.2c0.3-0.8,0.7-1.4,1.3-2c0.6-0.6,1.2-1,2-1.3c0.6-0.2,1.5-0.5,3.2-0.6C26.9,20,27.4,20,32,20 M32,17 c-4.6,0-5.2,0-7,0.1c-1.8,0.1-3,0.4-4.1,0.8c-1.1,0.4-2.1,1-3,2s-1.5,1.9-2,3c-0.4,1.1-0.7,2.3-0.8,4.1C15,28.8,15,29.4,15,34 s0,5.2,0.1,7c0.1,1.8,0.4,3,0.8,4.1c0.4,1.1,1,2.1,2,3c0.9,0.9,1.9,1.5,3,2c1.1,0.4,2.3,0.7,4.1,0.8c1.8,0.1,2.4,0.1,7,0.1 s5.2,0,7-0.1c1.8-0.1,3-0.4,4.1-0.8c1.1-0.4,2.1-1,3-2c0.9-0.9,1.5-1.9,2-3c0.4-1.1,0.7-2.3,0.8-4.1c0.1-1.8,0.1-2.4,0.1-7 s0-5.2-0.1-7c-0.1-1.8-0.4-3-0.8-4.1c-0.4-1.1-1-2.1-2-3s-1.9-1.5-3-2c-1.1-0.4-2.3-0.7-4.1-0.8C37.2,17,36.6,17,32,17L32,17z"></path><path fill="#fff" d="M32,25c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S37,25,32,25z M32,40c-3.3,0-6-2.7-6-6s2.7-6,6-6s6,2.7,6,6S35.3,40,32,40 z"></path><circle cx="41" cy="25" r="2" fill="#fff"></circle>
-                                </svg>
-                            </a>
-
-                            <a href="https://x.com/sacredmindin" target="_blank" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
-                                <span className="sr-only">X</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="h-6 w-6" viewBox="0 0 30 30">
-                                    <path d="M 6 4 C 4.895 4 4 4.895 4 6 L 4 24 C 4 25.105 4.895 26 6 26 L 24 26 C 25.105 26 26 25.105 26 24 L 26 6 C 26 4.895 25.105 4 24 4 L 6 4 z M 8.6484375 9 L 13.259766 9 L 15.951172 12.847656 L 19.28125 9 L 20.732422 9 L 16.603516 13.78125 L 21.654297 21 L 17.042969 21 L 14.056641 16.730469 L 10.369141 21 L 8.8945312 21 L 13.400391 15.794922 L 8.6484375 9 z M 10.878906 10.183594 L 17.632812 19.810547 L 19.421875 19.810547 L 12.666016 10.183594 L 10.878906 10.183594 z"></path>
-                                </svg>
-                            </a>
-                            <a href="https://www.youtube.com/@sacredMindInfotechPrivateLimit" target="_blank" className="text-gray-600 hover:text-gray-900 transition-colors duration-200">
-                                <span className="sr-only">Youtube</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="h-6 w-6" viewBox="0 0 48 48">
-                                    <path fill="#FF3D00" d="M43.2,33.9c-0.4,2.1-2.1,3.7-4.2,4c-3.3,0.5-8.8,1.1-15,1.1c-6.1,0-11.6-0.6-15-1.1c-2.1-0.3-3.8-1.9-4.2-4C4.4,31.6,4,28.2,4,24c0-4.2,0.4-7.6,0.8-9.9c0.4-2.1,2.1-3.7,4.2-4C12.3,9.6,17.8,9,24,9c6.2,0,11.6,0.6,15,1.1c2.1,0.3,3.8,1.9,4.2,4c0.4,2.3,0.9,5.7,0.9,9.9C44,28.2,43.6,31.6,43.2,33.9z"></path><path fill="#FFF" d="M20 31L20 17 32 24z"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex flex-col text-white w-full"
+        >
+            {/* Top Banner - Similar to navbar promo banner */}
+            <div
+                onClick={() => router("/contact")}
+                className="flex justify-center items-center bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-white py-1 sm:py-1.5 md:py-2 cursor-pointer"
+            >
+                <div className="flex flex-col lg:flex-row justify-center items-center">
+                    <p className="montserrat-500 text-xs sm:text-sm animate-pulse">🎓 Looking for customized training?</p>
+                    <p className="montserrat-400 text-xs sm:text-sm text-gray-200 ml-2 md:ml-4">Contact our team for corporate training solutions</p>
                 </div>
-            </section>
+            </div>
 
-            <hr className="border-gray-300" />
-
-            <div className="bg-gray-100 py-4 montserrat-400">
+            {/* Main Footer Content */}
+            <div className="bg-white text-gray-900 py-10 border-t border-gray-100 shadow-inner">
                 <div className="container px-4 mx-auto">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2">
-                            <button onClick={() => router("/privacy-policy")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Privacy Policy</button>
-                            <button onClick={() => router("/terms-and-conditions")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Terms & Conditions</button>
-                            <button onClick={() => router("/sales-and-refunds")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Sales and Refunds</button>
-                            <button onClick={() => router("/pricing-policy")} className="text-sm text-gray-600 cursor-pointer hover:text-gray-900">Pricing Policy</button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                        {/* Company info */}
+                        <div className="col-span-1 md:col-span-2">
+                            <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.2, duration: 0.3 }}
+                                className="flex items-center gap-2 mb-4"
+                            >
+                                <img src="/logo.svg" alt="logo" className="w-8 h-8" />
+                                <span className="montserrat-700 font-bold text-base hover:text-gray-600 transition-colors">SACRED MIND</span>
+                            </motion.div>
+                            <p className="text-gray-600 mb-6 montserrat-400 text-sm">Empowering learners with skills for tomorrow's technology challenges.</p>
+
+                            <div className="grid grid-cols-1 gap-4 mb-6">
+                                {[
+                                    {
+                                        icon: (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                            </svg>
+                                        ),
+                                        title: "Email",
+                                        value: "info@sacredmind.in"
+                                    },
+                                    {
+                                        icon: (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                            </svg>
+                                        ),
+                                        title: "Office",
+                                        value: "Zirakpur, Punjab"
+                                    },
+                                    {
+                                        icon: (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                            </svg>
+                                        ),
+                                        title: "Phone",
+                                        value: "+91 90567-23484"
+                                    }
+                                ].map((item, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.3 + (index * 0.1), duration: 0.3 }}
+                                        className="flex items-start gap-3"
+                                    >
+                                        <span className="text-gray-900 p-1.5 bg-gray-100 rounded-full mt-1">
+                                            {item.icon}
+                                        </span>
+                                        <div>
+                                            <h2 className="text-sm font-medium text-gray-900 mb-1 montserrat-500">{item.title}</h2>
+                                            <p className="text-sm text-gray-600 montserrat-400">{item.value}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            <div className="mb-4">
+                                <h3 className="text-sm font-medium text-gray-900 mb-3 montserrat-600">Connect With Us</h3>
+                                <div className="flex space-x-4">
+                                    {[
+                                        {
+                                            name: "Facebook",
+                                            href: "https://www.facebook.com/sacredmindin",
+                                            icon: (
+                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="h-5 w-5" viewBox="0 0 48 48">
+                                                    <path fill="#039be5" d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"></path><path fill="#fff" d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"></path>
+                                                </svg>
+                                            )
+                                        },
+                                        {
+                                            name: "Instagram",
+                                            href: "https://www.instagram.com/sacredmindinfotech/",
+                                            icon: (
+                                                <svg className="h-5 w-5" viewBox="0 0 2500 2500" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="0" cx="332.14" cy="2511.81" r="3263.54" gradientUnits="userSpaceOnUse"><stop offset=".09" stop-color="#fa8f21" /><stop offset=".78" stop-color="#d82d7e" /></radialGradient><radialGradient id="1" cx="1516.14" cy="2623.81" r="2572.12" gradientUnits="userSpaceOnUse"><stop offset=".64" stop-color="#8c3aaa" stop-opacity="0" /><stop offset="1" stop-color="#8c3aaa" /></radialGradient></defs><path d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#0)" /><path d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#1)" /></svg>
+                                            )
+                                        },
+                                        {
+                                            name: "X",
+                                            href: "https://x.com/sacredmindin",
+                                            icon: (
+                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="h-5 w-5" viewBox="0 0 30 30">
+                                                    <path fill="currentColor" d="M 6 4 C 4.895 4 4 4.895 4 6 L 4 24 C 4 25.105 4.895 26 6 26 L 24 26 C 25.105 26 26 25.105 26 24 L 26 6 C 26 4.895 25.105 4 24 4 L 6 4 z M 8.6484375 9 L 13.259766 9 L 15.951172 12.847656 L 19.28125 9 L 20.732422 9 L 16.603516 13.78125 L 21.654297 21 L 17.042969 21 L 14.056641 16.730469 L 10.369141 21 L 8.8945312 21 L 13.400391 15.794922 L 8.6484375 9 z M 10.878906 10.183594 L 17.632812 19.810547 L 19.421875 19.810547 L 12.666016 10.183594 L 10.878906 10.183594 z"></path>
+                                                </svg>
+                                            )
+                                        },
+                                        {
+                                            name: "Youtube",
+                                            href: "https://www.youtube.com/@sacredMindInfotechPrivateLimit",
+                                            icon: (
+                                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" className="h-5 w-5" viewBox="0 0 48 48">
+                                                    <path fill="#FF3D00" d="M43.2,33.9c-0.4,2.1-2.1,3.7-4.2,4c-3.3,0.5-8.8,1.1-15,1.1c-6.1,0-11.6-0.6-15-1.1c-2.1-0.3-3.8-1.9-4.2-4C4.4,31.6,4,28.2,4,24c0-4.2,0.4-7.6,0.8-9.9c0.4-2.1,2.1-3.7,4.2-4C12.3,9.6,17.8,9,24,9c6.2,0,11.6,0.6,15,1.1c2.1,0.3,3.8,1.9,4.2,4c0.4,2.3,0.9,5.7,0.9,9.9C44,28.2,43.6,31.6,43.2,33.9z"></path><path fill="#FFF" d="M20 31L20 17 32 24z"></path>
+                                                </svg>
+                                            )
+                                        }
+                                    ].map((item, index) => (
+                                        <motion.a
+                                            key={index}
+                                            initial={{ y: 10, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            transition={{ delay: 0.6 + (index * 0.1), duration: 0.3 }}
+                                            whileHover={{ scale: 1.2, y: -2 }}
+                                            href={item.href}
+                                            target="_blank"
+                                            className="text-gray-600 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-200"
+                                        >
+                                            <span className="sr-only">{item.name}</span>
+                                            {item.icon}
+                                        </motion.a>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                        <p className="text-sm text-gray-600 text-center md:text-right mt-4 md:mt-0">© 2025 Sacred Mind Infotech Private Limited. All rights reserved.</p>
+
+                        {/* Site Links - Explore */}
+                        <div className="col-span-1">
+                            <motion.h3
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.7, duration: 0.3 }}
+                                className="text-base font-bold text-gray-900 mb-4 montserrat-600"
+                            >
+                                Explore
+                            </motion.h3>
+                            <ul className="space-y-3">
+                                {[
+                                    { path: "/", label: "Home" },
+                                    { path: "/services", label: "Services" },
+                                    { path: "/all-reviews", label: "Reviews" },
+                                    { path: "/teach-with-us", label: "Teach with us" },
+                                    { path: "/contact", label: "Contact us" },
+                                    { path: "/careers", label: "Careers" },
+                                    { path: "/purchases", label: "My Purchases" }
+                                ].map((item, index) => (
+                                    <motion.li
+                                        key={index}
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.8 + (index * 0.05), duration: 0.3 }}
+                                    >
+                                        <button
+                                            onClick={() => router(item.path)}
+                                            className="text-left px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md w-full transition-colors duration-200 montserrat-500"
+                                        >
+                                            {item.label}
+                                        </button>
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Legal Links */}
+                        <div className="col-span-1">
+                            <motion.h3
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.7, duration: 0.3 }}
+                                className="text-base font-bold text-gray-900 mb-4 montserrat-600"
+                            >
+                                Legal
+                            </motion.h3>
+                            <ul className="space-y-3">
+                                {[
+                                    { path: "/privacy-policy", label: "Privacy Policy" },
+                                    { path: "/terms-and-conditions", label: "Terms & Conditions" },
+                                    { path: "/sales-and-refunds", label: "Sales and Refunds" },
+                                    { path: "/pricing-policy", label: "Pricing Policy" }
+                                ].map((item, index) => (
+                                    <motion.li
+                                        key={index}
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.9 + (index * 0.05), duration: 0.3 }}
+                                    >
+                                        <button
+                                            onClick={() => router(item.path)}
+                                            className="text-left px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md w-full transition-colors duration-200 montserrat-500"
+                                        >
+                                            {item.label}
+                                        </button>
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Google Map Section */}
+                        <div className=" py-8 border-t border-gray-100">
+                            <div className="container mx-auto">
+                                <motion.h3
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 1.0, duration: 0.3 }}
+                                    className="text-base font-bold text-gray-900 mb-4 montserrat-600"
+                                >
+                                    Our Location
+                                </motion.h3>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 1.1, duration: 0.3 }}
+                                    whileHover={{ scale: 1.01 }}
+                                    className="w-full h-[250px] overflow-hidden rounded-lg shadow-md"
+                                >
+                                    <iframe
+                                        className="w-full h-full border-0"
+                                        frameBorder="0"
+                                        title="map"
+                                        scrolling="no"
+                                        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d201.97305239501404!2d76.82542242006092!3d30.64230343961996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzDCsDM4JzMyLjAiTiA3NsKwNDknMzEuNiJF!5e1!3m2!1sen!2sin!4v1740806407662!5m2!1sen!2sin">
+                                    </iframe>
+                                </motion.div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
+
+
+
+            {/* Bottom section with copyright */}
+            <div className="bg-gray-900 py-4">
+                <div className="container px-4 mx-auto">
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.2, duration: 0.3 }}
+                            className="text-sm text-gray-400 text-center md:text-left order-2 md:order-1"
+                        >
+                            © 2025 Sacred Mind Infotech Private Limited. All rights reserved.
+                        </motion.p>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.3, duration: 0.3 }}
+                            className="flex items-center space-x-4 order-1 md:order-2"
+                        >
+                            <motion.a
+                                whileHover={{ scale: 1.1 }}
+                                href="#"
+                                className="flex items-center px-3 py-1.5 rounded-md text-sm bg-gray-800 text-white hover:bg-gray-700 transition-colors duration-200"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-1">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                                </svg>
+                                <span className="montserrat-500">English</span>
+                            </motion.a>
+                        </motion.div>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
     );
 };
 

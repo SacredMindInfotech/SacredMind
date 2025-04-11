@@ -1,6 +1,11 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const TeachWithUs = () => {
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
+    
     return (
         <div className="w-full bg-white">
             {/* Hero Section with animated elements */}
