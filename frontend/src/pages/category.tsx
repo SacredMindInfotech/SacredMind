@@ -50,12 +50,14 @@ const Category = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
+    const decodedCategoryName = categoryName?.replace(/-/g, ' ');
+
     useEffect(() => {
         const fetchCategoryAndCourses = async () => {
             setLoading(true);
             try {
                 //fetch the category with its subcategories
-                const categoryRes = await axios.get(`${backendUrl}api/v1/category/${categoryName}`);
+                const categoryRes = await axios.get(`${backendUrl}api/v1/category/${decodedCategoryName}`);
                 const categoryData = categoryRes.data as Categories;
                 setCategoryDescription(categoryData.description);
 
@@ -106,7 +108,7 @@ const Category = () => {
             } catch (error) {
                 console.error("Error fetching category data:", error);
                 setLoading(false);
-                navigate("/");
+                // navigate("/");
             }
         };
 

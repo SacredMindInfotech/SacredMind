@@ -61,8 +61,8 @@ const MobileSidebar = ({
                     <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
                         <div className="flex justify-between items-center p-4">
                             {selectedCategory ? (
-                                <button 
-                                    onClick={handleBack} 
+                                <button
+                                    onClick={handleBack}
                                     className="flex items-center text-gray-700 font-medium"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,8 +73,8 @@ const MobileSidebar = ({
                             ) : (
                                 <h2 className="text-lg font-bold text-gray-900">Menu</h2>
                             )}
-                            <button 
-                                onClick={() => setIsMenuOpen(false)} 
+                            <button
+                                onClick={() => setIsMenuOpen(false)}
                                 className="bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition-colors"
                                 aria-label="Close menu"
                             >
@@ -83,7 +83,7 @@ const MobileSidebar = ({
                                 </svg>
                             </button>
                         </div>
-                        
+
                         {/* Category title when viewing subcategories */}
                         {selectedCategory && (
                             <div className="px-4 py-2 bg-gray-50">
@@ -111,7 +111,8 @@ const MobileSidebar = ({
                                             transition={{ duration: 0.2 }}
                                             onClick={() => {
                                                 setIsMenuOpen(false);
-                                                navigate(`/category/${subcat.name}`);
+                                                const decodedSubcategoryName = subcat.name.toLowerCase().replace(/\s+/g, '-');
+                                                navigate(`/category/${decodedSubcategoryName}`);
                                             }}
                                             className="w-full text-left py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg flex items-center transition-colors"
                                         >
@@ -127,7 +128,8 @@ const MobileSidebar = ({
                                         <button
                                             onClick={() => {
                                                 setIsMenuOpen(false);
-                                                navigate(`/category/${selectedCategory.name}`);
+                                                const decodedCategoryName = selectedCategory.name.toLowerCase().replace(/\s+/g, '-');
+                                                navigate(`/category/${decodedCategoryName}`);
                                             }}
                                             className="mt-4 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                                         >
@@ -191,7 +193,8 @@ const MobileSidebar = ({
                                             <button
                                                 onClick={() => {
                                                     setIsMenuOpen(false);
-                                                    navigate(`/category/${category.name}`);
+                                                    const decodedCategoryName = category.name.toLowerCase().replace(/\s+/g, '-');
+                                                    navigate(`/category/${decodedCategoryName}`);
                                                 }}
                                                 className="w-full text-left py-3 px-4 bg-white text-gray-800 font-medium flex items-center justify-between"
                                             >
@@ -200,7 +203,7 @@ const MobileSidebar = ({
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                 </svg>
                                             </button>
-                                            
+
                                             <button
                                                 onClick={() => handleCategoryClick(category.name)}
                                                 className="w-full text-left py-2 px-4 bg-gray-50 text-sm text-gray-600 flex items-center hover:bg-gray-100 transition-colors border-t border-gray-200"

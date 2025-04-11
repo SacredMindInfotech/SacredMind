@@ -111,8 +111,8 @@ const Navbar = () => {
         <div className="w-full flex flex-col">
             <div onClick={() => {
                 holiOfferBannerClickedEvent();
-                
-                navigate("/course/-HR-Payroll-Course-–-Master-Payroll-Management-&-Compliance")
+
+                navigate("/course/hr-payroll-course")
             }}
                 className="flex justify-center items-center bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-700 text-black py-1 sm:py-1.5 md:py-2 cursor-pointer">
                 <div className="flex flex-col lg:flex-row justify-center items-center">
@@ -174,7 +174,8 @@ const Navbar = () => {
                                         <div
                                             onClick={() => {
                                                 setIsExploreOpen(false);
-                                                navigate(`/category/${category.name.toLowerCase()}`);
+                                                const encodedTitle = category.name.toLowerCase().replace(/\s+/g, '-');         // Replace spaces with hyphens
+                                                navigate(`/category/${encodedTitle}`);
                                             }}
                                             key={category.id}
                                             className="relative group px-4 py-2 montserrat-500 text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 cursor-pointer rounded-md flex justify-between"
@@ -200,11 +201,11 @@ const Navbar = () => {
                             <button
                                 onClick={() => navigate('/about-us')}
                                 className="text-left px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-600 hover:bg-gray-200 hover:text-gray-900 flex items-center justify-between cursor-pointer rounded-md"
-                            >   
+                            >
                                 <p className="montserrat-500">About Us</p>
                             </button>
                         </div>
-                        
+
                     </div>
                 </div>
 

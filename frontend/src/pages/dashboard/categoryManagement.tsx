@@ -87,7 +87,8 @@ const CategoryManagement = () => {
                 res.data.filter((cat: Category) => cat.parentId === null).map(async (cat: Category) => {
                     try {
                         // Get category details including subcategories
-                        const categoryRes = await axios.get(`${backendUrl}api/v1/category/${cat.name}`);
+                        const lowerCaseCategoryName = cat.name.toLowerCase()
+                        const categoryRes = await axios.get(`${backendUrl}api/v1/category/${lowerCaseCategoryName}`);
                         const categoryData = categoryRes.data;
 
                         // Process subcategories to get course counts

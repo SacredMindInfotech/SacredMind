@@ -12,7 +12,7 @@ export const getParentCategoriesController = async (
         parentId: null,
       },
       orderBy: {
-        id: 'asc',
+        id: "asc",
       },
     });
     if (!categories) {
@@ -24,10 +24,10 @@ export const getParentCategoriesController = async (
       return;
     }
     res.status(200).json(categories);
-    return
+    return;
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
-    return
+    return;
   }
 };
 
@@ -38,29 +38,28 @@ export const getCategoryByNameController = async (
 ) => {
   try {
     const { categoryName } = req.params;
-    const upperCaseCategoryName = categoryName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    const category = await prisma.category.findUnique({
-      where: { name: upperCaseCategoryName },
+    const allCategories = await prisma.category.findMany({
       include: {
-        subcategories: {
-          orderBy: {
-            id: 'asc',
-          },
-        },
+        subcategories: true,
+      },
+      orderBy: {
+        id: "asc",
       },
     });
+    const category = allCategories.find(
+      (cat) => cat.name.toLowerCase() === categoryName
+    );
     if (!category) {
       res.status(404).json({ error: "Category not found" });
       return;
     }
     res.status(200).json(category);
-    return
+    return;
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
-    return
+    return;
   }
 };
-
 
 //this will return all courses of a sub-category
 export const getCoursesByCategoryIdController = async (
@@ -87,14 +86,17 @@ export const getCoursesByCategoryIdController = async (
     //   return;
     // }
     res.status(200).json(courses);
-    return
+    return;
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
-    return
+    return;
   }
 };
 
-export const getOnlySubcategoriesController = async (req: Request, res: Response) => {
+export const getOnlySubcategoriesController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const categories = await prisma.category.findMany({
       where: { parentId: { not: null } },
@@ -104,13 +106,13 @@ export const getOnlySubcategoriesController = async (req: Request, res: Response
       return;
     }
     if (categories.length === 0) {
-      res.status(204).json({ "Message": "No subcategories found" });
+      res.status(204).json({ Message: "No subcategories found" });
       return;
     }
     res.status(200).json(categories);
-    return
+    return;
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
-    return
+    return;
   }
 };
