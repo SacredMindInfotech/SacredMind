@@ -34,6 +34,7 @@ import NotFound from './pages/NotFound'
 import TeachWithUs from './pages/TeachWithUs'
 import AboutUs from './pages/AboutUs'
 import OurServices from './pages/OurServices'
+import OnlyAdmin from './routesProtection/onlyAdmin'
 function App() {
   const Router = createBrowserRouter([
 
@@ -44,8 +45,8 @@ function App() {
         <Landing></Landing>
         <Footer />
       </>
-    },{
-      path:"/about-us",
+    }, {
+      path: "/about-us",
       element: <>
         <Navbar></Navbar>
         <AboutUs />
@@ -103,7 +104,13 @@ function App() {
     },
     {
       path: "/admin",
-      element: <ProtectedRoutes><AdminLayout /></ProtectedRoutes>,
+      element:
+        <OnlyAdmin>
+          <ProtectedRoutes>
+            <AdminLayout />
+          </ProtectedRoutes>
+        </OnlyAdmin>
+      ,
       children: [
         { path: "", element: <AdminDashboard /> },
         { path: "users", element: <UserManagement /> },
@@ -185,9 +192,9 @@ function App() {
     {
       path: "/all-reviews",
       element: <>
-          <Navbar></Navbar>
-          <AllReviews />
-          <Footer />
+        <Navbar></Navbar>
+        <AllReviews />
+        <Footer />
       </>
     },
     {
@@ -202,7 +209,7 @@ function App() {
       path: "*",
       element: <>
         <Navbar></Navbar>
-        <NotFound/>
+        <NotFound />
         <Footer />
       </>
     }
