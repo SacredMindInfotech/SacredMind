@@ -8,7 +8,7 @@ const OnlyPaidUsers = ({ children }: any) => {
     const { user, isLoaded } = useUser();
     const navigate = useNavigate();
     const { getToken } = useAuth();
-    const { id } = useParams();
+    const { courseTitle } = useParams();
 
     useEffect(() => {
 
@@ -19,7 +19,7 @@ const OnlyPaidUsers = ({ children }: any) => {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
             try {
 
-                const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${id}`, {
+                const res = await axios.get(`${backendUrl}api/v1/user/isPurchase/${courseTitle}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         clerkuserId: user.id
@@ -28,7 +28,7 @@ const OnlyPaidUsers = ({ children }: any) => {
 
                 // @ts-ignore
                 if (!res.data.purchased) {
-                    navigate(`/course/${id}`);
+                    navigate(`/course/${courseTitle}`);
                     return;
                 }
 
@@ -36,14 +36,14 @@ const OnlyPaidUsers = ({ children }: any) => {
 
             } catch (error: any) {
                 if (error.status !== 200) {
-                    navigate(`/course/${id}`);
+                    navigate(`/course/${courseTitle}`);
                     return;
                 }
                 console.error("Error checking purchase:", error);
             }
         }
         fetchIsPurchased();
-    }, [id, isLoaded, user]);
+    }, [courseTitle, isLoaded, user]);
 
     return children;
 }

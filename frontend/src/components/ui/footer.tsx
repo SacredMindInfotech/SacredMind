@@ -23,11 +23,11 @@ const Footer = () => {
             </div>
 
             {/* Main Footer Content */}
-            <div className="bg-white text-gray-900 py-10 border-t border-gray-100 shadow-inner">
+            <div className="bg-white text-gray-900 py-6 sm:py-8 md:py-10 border-t border-gray-100 shadow-inner">
                 <div className="container px-4 mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
                         {/* Company info */}
-                        <div className="col-span-1 md:col-span-2">
+                        <div className="col-span-1 md:col-span-2 space-y-4 sm:space-y-6">
                             <motion.div
                                 initial={{ y: 20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
@@ -146,7 +146,7 @@ const Footer = () => {
                         </div>
 
                         {/* Site Links - Explore */}
-                        <div className="col-span-1">
+                        <div className="col-span-1 mt-6 md:mt-0">
                             <motion.h3
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -183,7 +183,7 @@ const Footer = () => {
                         </div>
 
                         {/* Legal Links */}
-                        <div className="col-span-1">
+                        <div className="col-span-1 mt-6 md:mt-0">
                             <motion.h3
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -217,69 +217,41 @@ const Footer = () => {
                         </div>
 
                         {/* Google Map Section */}
-                        <div className=" py-8 border-t border-gray-100">
-                            <div className="container mx-auto">
-                                <motion.h3
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 1.0, duration: 0.3 }}
-                                    className="text-base font-bold text-gray-900 mb-4 montserrat-600"
-                                >
-                                    Our Location
-                                </motion.h3>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 1.1, duration: 0.3 }}
-                                    whileHover={{ scale: 1.01 }}
-                                    className="w-full h-[250px] overflow-hidden rounded-lg shadow-md"
-                                >
-                                    <iframe
-                                        className="w-full h-full border-0"
-                                        frameBorder="0"
-                                        title="map"
-                                        scrolling="no"
-                                        src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d201.97305239501404!2d76.82542242006092!3d30.64230343961996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzDCsDM4JzMyLjAiTiA3NsKwNDknMzEuNiJF!5e1!3m2!1sen!2sin!4v1740806407662!5m2!1sen!2sin">
-                                    </iframe>
-                                </motion.div>
-                            </div>
+                        <div className="col-span-1 lg:col-span-1 mt-6 md:mt-0">
+                            <motion.h3
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 1.0, duration: 0.3 }}
+                                className="text-base font-bold text-gray-900 mb-3 sm:mb-4 montserrat-600"
+                            >
+                                Our Location
+                            </motion.h3>
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 1.1, duration: 0.3 }}
+                                whileHover={{ scale: 1.01 }}
+                                className="w-full h-[200px] sm:h-[250px] overflow-hidden rounded-lg shadow-md"
+                            >
+                                <iframe className="w-full h-full border-0" src="https://www.google.com/maps/embed?pb=!1m13!1m8!1m3!1d858.1759609649939!2d76.825422!3d30.642303!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzDCsDM4JzMyLjAiTiA3NsKwNDknMzEuNiJF!5e0!3m2!1sen!2sin!4v1744360160871!5m2!1sen!2sin" loading="lazy"></iframe>
+                            </motion.div>
                         </div>
-
                     </div>
                 </div>
             </div>
 
-
-
             {/* Bottom section with copyright */}
-            <div className="bg-gray-900 py-4">
+            <div className="bg-gray-900 py-3 sm:py-4">
                 <div className="container px-4 mx-auto">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-3 sm:gap-4">
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 1.2, duration: 0.3 }}
-                            className="text-sm text-gray-400 text-center md:text-left order-2 md:order-1"
+                            className="text-xs sm:text-sm text-gray-400 text-center md:text-left mt-3 md:mt-0"
                         >
                             © 2025 Sacred Mind Infotech Private Limited. All rights reserved.
                         </motion.p>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 1.3, duration: 0.3 }}
-                            className="flex items-center space-x-4 order-1 md:order-2"
-                        >
-                            <motion.a
-                                whileHover={{ scale: 1.1 }}
-                                href="#"
-                                className="flex items-center px-3 py-1.5 rounded-md text-sm bg-gray-800 text-white hover:bg-gray-700 transition-colors duration-200"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-1">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                                </svg>
-                                <span className="montserrat-500">English</span>
-                            </motion.a>
-                        </motion.div>
                     </div>
                 </div>
             </div>
